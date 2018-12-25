@@ -1,15 +1,10 @@
 [:page name="rootView"]
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Stream: Hello RSP</title>
-    <link href="theme.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <h1>Stream: Hello RSP</h1>
-    <p>Now is [=new DateTime.now()].</p>
-    <p>This page is served by Rikulo Stream [=connect.server.version].</p>
-    <p>Please refer to
-  <a href="https://github.com/rikulo/stream/tree/master/example/hello-rsp">Github</a> for how it is implemented.</a>
-  </body>
-</html>
+[:include "webapp/view/head.html" /]
+<div class="main">
+  [:if connect.dataset['status'] == 0]
+  <!-- Login form (user is logged out) -->
+  [:else if connect.dataset['status'] == 1]
+  <!-- Refresh button (user logged in recently) -->
+  [/if]
+</div>
+[:include "webapp/view/tail.html" /]

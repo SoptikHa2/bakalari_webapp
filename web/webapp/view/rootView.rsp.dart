@@ -12,30 +12,26 @@ Future rootView(HttpConnect connect) async {
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  response.write("""<!DOCTYPE html>
-<html>
-  <head>
-    <title>Stream: Hello RSP</title>
-    <link href="theme.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <h1>Stream: Hello RSP</h1>
-    <p>Now is """);
+  await connect.include("webapp/view/head.html");
 
-  response.write(Rsp.nnx(new DateTime.now()));
+  response.write("""<div class="main">
+""");
 
+  if (connect.dataset['status'] == 0) {
 
-  response.write(""".</p>
-    <p>This page is served by Rikulo Stream """);
+    response.write("""  <!-- Login form (user is logged out) -->
+""");
 
-  response.write(Rsp.nnx(connect.server.version));
+  } else if (connect.dataset['status'] == 1) {
 
+    response.write("""  <!-- Refresh button (user logged in recently) -->
+""");
+  } //if
 
-  response.write(""".</p>
-    <p>Please refer to
-  <a href="https://github.com/rikulo/stream/tree/master/example/hello-rsp">Github</a> for how it is implemented.</a>
-  </body>
-</html>""");
+  response.write("""</div>
+""");
+
+  await connect.include("webapp/view/tail.html");
 
   return null;
 }
