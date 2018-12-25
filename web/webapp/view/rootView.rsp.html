@@ -1,10 +1,62 @@
 [:page name="rootView"]
 [:include "webapp/view/head.html" /]
-<div class="main">
-  [:if connect.dataset['status'] == 0]
-  <!-- Login form (user is logged out) -->
-  [:else if connect.dataset['status'] == 1]
-  <!-- Refresh button (user logged in recently) -->
+<div class="content">
+  <h1>
+    Bakaláři <sup>lépe</sup>
+  </h1>
+
+  <form class="pure-form" action="/student" method="POST">
+    <fieldset>
+      <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
+
+      <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
+      <datalist id="schoolUrls">
+        [:if connect.dataset['urls'] != null]
+        [:for url in connect.dataset['urls']]
+        <option>[=url]</option>
+        [/for]
+        [/if]
+      </datalist>
+      <input name="login" type="text" placeholder="Uživatelské jméno">
+      <input name="password" type="password" placeholder="Heslo">
+
+      <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
+    </fieldset>
+  </form>
+</div>
+<div class="content">
+  <h1 class="content-subhead">Rozvrh</h1>
+  [:if connect.dataset['timetable'] == null]
+  <p>
+    Jakmile se v tomto prohlížeči alespoň jednou přihlásíte,
+    bude se zde zobrazovat aktuální rozvrh pro vaši třídu -
+    i pokud zrovna nebudete přihlášeni.
+  </p>
+  [:else]
+  <table class="pure-table">
+    <thead>
+      <tr></tr>
+      <tr>
+        [:for hour in connect.dataset['timetable'].times ]
+        <th>[= hour.caption ]</th>
+        [/for]
+      </tr>
+    </thead>
+    <tbody>
+      [:for day in connect.dataset['timetable'].days ]
+      <tr>
+        <th>[= day.shortName ]</th>
+      </tr>
+      [:for lesson in day.lessons]
+      <tr>
+        <th>
+          [= lesson.type ]
+        </th>
+      </tr>
+      [/for]
+      [/for]
+    </tbody>
+  </table>
   [/if]
 </div>
 [:include "webapp/view/tail.html" /]

@@ -14,17 +14,109 @@ Future rootView(HttpConnect connect) async {
 
   await connect.include("webapp/view/head.html");
 
-  response.write("""<div class="main">
+  response.write("""<div class="content">
+  <h1>
+    Bakaláři <sup>lépe</sup>
+  </h1>
+
+  <form class="pure-form" action="/student" method="POST">
+    <fieldset>
+      <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
+
+      <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
+      <datalist id="schoolUrls">
 """);
 
-  if (connect.dataset['status'] == 0) {
+  if (connect.dataset['urls'] != null) {
 
-    response.write("""  <!-- Login form (user is logged out) -->
+    for (var url in connect.dataset['urls']) {
+
+      response.write("""        <option>""");
+
+      response.write(Rsp.nnx(url));
+
+
+      response.write("""</option>
+""");
+    } //for
+  } //if
+
+  response.write("""      </datalist>
+      <input name="login" type="text" placeholder="Uživatelské jméno">
+      <input name="password" type="password" placeholder="Heslo">
+
+      <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
+    </fieldset>
+  </form>
+</div>
+<div class="content">
+  <h1 class="content-subhead">Rozvrh</h1>
 """);
 
-  } else if (connect.dataset['status'] == 1) {
+  if (connect.dataset['timetable'] == null) {
 
-    response.write("""  <!-- Refresh button (user logged in recently) -->
+    response.write("""  <p>
+    Jakmile se v tomto prohlížeči alespoň jednou přihlásíte,
+    bude se zde zobrazovat aktuální rozvrh pro vaši třídu -
+    i pokud zrovna nebudete přihlášeni.
+  </p>
+""");
+
+  } else {
+
+    response.write("""  <table class="pure-table">
+    <thead>
+      <tr></tr>
+      <tr>
+""");
+
+    for (var hour in connect.dataset['timetable'].times) {
+
+      response.write("""        <th>""");
+
+      response.write(Rsp.nnx(hour.caption));
+
+
+      response.write("""</th>
+""");
+    } //for
+
+    response.write("""      </tr>
+    </thead>
+    <tbody>
+""");
+
+    for (var day in connect.dataset['timetable'].days) {
+
+      response.write("""      <tr>
+        <th>""");
+
+      response.write(Rsp.nnx(day.shortName));
+
+
+      response.write("""</th>
+      </tr>
+""");
+
+      for (var lesson in day.lessons) {
+
+        response.write("""      <tr>
+        <th>
+          """);
+
+        response.write(Rsp.nnx(lesson.type));
+
+
+        response.write("""
+
+        </th>
+      </tr>
+""");
+      } //for
+    } //for
+
+    response.write("""    </tbody>
+  </table>
 """);
   } //if
 
