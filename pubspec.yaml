@@ -7,3 +7,4 @@ environment:
 dependencies:
         bakalari: ^0.1.2
         stream: ^2.1.0
+        sembast: ^1.12.0+1

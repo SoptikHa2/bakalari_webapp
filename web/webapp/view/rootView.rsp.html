@@ -2,8 +2,11 @@
 [:include "webapp/view/head.html" /]
 <div class="content">
   <h1>
-    Bakaláři <sup>lépe</sup>
+    Bakaláři
   </h1>
+  <p>
+    A tentokrát lépe.
+  </p>
 
   <form class="pure-form" action="/student" method="POST">
     <fieldset>
@@ -25,38 +28,53 @@
   </form>
 </div>
 <div class="content">
-  <h1 class="content-subhead">Rozvrh</h1>
-  [:if connect.dataset['timetable'] == null]
-  <p>
-    Jakmile se v tomto prohlížeči alespoň jednou přihlásíte,
-    bude se zde zobrazovat aktuální rozvrh pro vaši třídu -
-    i pokud zrovna nebudete přihlášeni.
-  </p>
-  [:else]
-  <table class="pure-table">
-    <thead>
-      <tr></tr>
-      <tr>
-        [:for hour in connect.dataset['timetable'].times ]
-        <th>[= hour.caption ]</th>
+  <h1 class="content-subhead">Funkce</h1>
+    <p>
+      Cílem projektu <i>Bakaláři: a tentokrát lépe</i>
+      je vytvořit webovou aplikaci, která by dokázala kompletně nahradit
+      původní aplikaci Bakalářů, která je pomalá a na telefonech často
+      téměř nepoužitelná.
+    </p>
+    <p>
+      Aplikace už teď podporuje zobrazování rozvrhu, známek (včetně průměrů), úkolů,
+      a přijatých zpráv. Další moduly budeme ještě přidávat.
+    </p>
+    <p>
+      Všechny data cachujeme, takže vše vidíte přehledně na jednom místě - a rychle.
+      I když zrovna nejste přihlášení, tak zde můžeme zobrazit rozvrh pro vaši třídu.
+    </p>
+    <h1 class="content-subhead">Rozvrh</h1>
+    [:if connect.dataset['timetable'] == null]
+    <p>
+      Jakmile se v tomto prohlížeči alespoň jednou přihlásíte,
+      bude se zde zobrazovat aktuální rozvrh pro vaši třídu -
+      i pokud zrovna nebudete přihlášeni.
+    </p>
+    [:else]
+    <table class="pure-table">
+      <thead>
+        <tr></tr>
+        <tr>
+          [:for hour in connect.dataset['timetable'].times ]
+          <th>[= hour.caption ]</th>
+          [/for]
+        </tr>
+      </thead>
+      <tbody>
+        [:for day in connect.dataset['timetable'].days ]
+        <tr>
+          <th>[= day.shortName ]</th>
+        </tr>
+        [:for lesson in day.lessons]
+        <tr>
+          <th>
+            [= lesson.type ]
+          </th>
+        </tr>
         [/for]
-      </tr>
-    </thead>
-    <tbody>
-      [:for day in connect.dataset['timetable'].days ]
-      <tr>
-        <th>[= day.shortName ]</th>
-      </tr>
-      [:for lesson in day.lessons]
-      <tr>
-        <th>
-          [= lesson.type ]
-        </th>
-      </tr>
-      [/for]
-      [/for]
-    </tbody>
-  </table>
-  [/if]
+        [/for]
+      </tbody>
+    </table>
+    [/if]
 </div>
 [:include "webapp/view/tail.html" /]

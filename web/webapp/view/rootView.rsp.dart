@@ -16,8 +16,11 @@ Future rootView(HttpConnect connect) async {
 
   response.write("""<div class="content">
   <h1>
-    Bakaláři <sup>lépe</sup>
+    Bakaláři
   </h1>
+  <p>
+    A tentokrát lépe.
+  </p>
 
   <form class="pure-form" action="/student" method="POST">
     <fieldset>
@@ -50,29 +53,44 @@ Future rootView(HttpConnect connect) async {
   </form>
 </div>
 <div class="content">
-  <h1 class="content-subhead">Rozvrh</h1>
+  <h1 class="content-subhead">Funkce</h1>
+    <p>
+      Cílem projektu <i>Bakaláři: a tentokrát lépe</i>
+      je vytvořit webovou aplikaci, která by dokázala kompletně nahradit
+      původní aplikaci Bakalářů, která je pomalá a na telefonech často
+      téměř nepoužitelná.
+    </p>
+    <p>
+      Aplikace už teď podporuje zobrazování rozvrhu, známek (včetně průměrů), úkolů,
+      a přijatých zpráv. Další moduly budeme ještě přidávat.
+    </p>
+    <p>
+      Všechny data cachujeme, takže vše vidíte přehledně na jednom místě - a rychle.
+      I když zrovna nejste přihlášení, tak zde můžeme zobrazit rozvrh pro vaši třídu.
+    </p>
+    <h1 class="content-subhead">Rozvrh</h1>
 """);
 
   if (connect.dataset['timetable'] == null) {
 
-    response.write("""  <p>
-    Jakmile se v tomto prohlížeči alespoň jednou přihlásíte,
-    bude se zde zobrazovat aktuální rozvrh pro vaši třídu -
-    i pokud zrovna nebudete přihlášeni.
-  </p>
+    response.write("""    <p>
+      Jakmile se v tomto prohlížeči alespoň jednou přihlásíte,
+      bude se zde zobrazovat aktuální rozvrh pro vaši třídu -
+      i pokud zrovna nebudete přihlášeni.
+    </p>
 """);
 
   } else {
 
-    response.write("""  <table class="pure-table">
-    <thead>
-      <tr></tr>
-      <tr>
+    response.write("""    <table class="pure-table">
+      <thead>
+        <tr></tr>
+        <tr>
 """);
 
     for (var hour in connect.dataset['timetable'].times) {
 
-      response.write("""        <th>""");
+      response.write("""          <th>""");
 
       response.write(Rsp.nnx(hour.caption));
 
@@ -81,42 +99,42 @@ Future rootView(HttpConnect connect) async {
 """);
     } //for
 
-    response.write("""      </tr>
-    </thead>
-    <tbody>
+    response.write("""        </tr>
+      </thead>
+      <tbody>
 """);
 
     for (var day in connect.dataset['timetable'].days) {
 
-      response.write("""      <tr>
-        <th>""");
+      response.write("""        <tr>
+          <th>""");
 
       response.write(Rsp.nnx(day.shortName));
 
 
       response.write("""</th>
-      </tr>
+        </tr>
 """);
 
       for (var lesson in day.lessons) {
 
-        response.write("""      <tr>
-        <th>
-          """);
+        response.write("""        <tr>
+          <th>
+            """);
 
         response.write(Rsp.nnx(lesson.type));
 
 
         response.write("""
 
-        </th>
-      </tr>
+          </th>
+        </tr>
 """);
       } //for
     } //for
 
-    response.write("""    </tbody>
-  </table>
+    response.write("""      </tbody>
+    </table>
 """);
   } //if
 
