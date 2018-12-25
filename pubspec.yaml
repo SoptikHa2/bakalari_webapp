@@ -1,0 +1,9 @@
+name: bakalari_webapp
+version: 0.9.0
+author: Petr Šťastný <petr.stastny01@gmail.com>
+homepage: https://github.com/SoptikHa2/bakalari_webapp
+environment:
+        sdk: '>=2.1.0 <3.0.0'
+dependencies:
+        bakalari: ^0.1.2
+        stream: ^2.1.0
