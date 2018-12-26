@@ -4,6 +4,7 @@ import 'package:rikulo_commons/io.dart';
 import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
 import '../model/complexStudent.dart';
+import '../tools/format.dart';
 import '../view/studentView.rsp.dart';
 import 'package:bakalari/bakalari.dart';
 import '../tools/db.dart';
@@ -62,24 +63,37 @@ class Student {
 
       ComplexStudent student = await DB.getStudent(guid);
       var timetable = student.timetable;
-      var timeSinceLastRefresh = DateTime.now().difference(student.refresh ?? DateTime.now());
+
+      // Refresh time
+      var timeSinceLastRefresh =
+          DateTime.now().difference(student.refresh ?? DateTime.now());
       String sinceLastRefresh = null;
-      if(timeSinceLastRefresh.inHours > 0){
-        if(timeSinceLastRefresh.inHours < 24)
+      if (timeSinceLastRefresh.inHours > 0) {
+        if (timeSinceLastRefresh.inHours < 24)
           sinceLastRefresh = "${timeSinceLastRefresh.inHours} hodin";
         else
           sinceLastRefresh = "${timeSinceLastRefresh.inDays} dní";
       }
 
+      // Averages
+      Map<String, double> averages = null;
+      if (student.grades != null) {
+        averages = Format.gradesToSubjectAverages(student.grades);
+      }
+
       // Change status code to 201 (Created) if we already have all the information we need,
       // so there is no need to ask for more
       // TODO: What if some school doesn't support one of the modules I'm checking here?
-      if(student.grades != null && student.homeworks != null && student.messages != null &&
-        student.subjects != null && student.timetable != null){
-          connect.response.statusCode = 201;
-        }
+      if (student.grades != null &&
+          student.homeworks != null &&
+          student.messages != null &&
+          student.subjects != null &&
+          student.timetable != null) {
+        connect.response.statusCode = 201;
+      }
 
-      return studentView(connect, timetable: timetable, lastRefresh: sinceLastRefresh);
+      return studentView(connect,
+          timetable: timetable, lastRefresh: sinceLastRefresh, averages: averages);
     } catch (e) {
       print(e);
       connect.response.cookies.clear();

@@ -1,4 +1,5 @@
-[:page name="studentView" args="String errorDescription, dynamic timetable, dynamic averages, String lastRefresh"]
+[:page name="studentView" args="String errorDescription, dynamic timetable, dynamic averages, String lastRefresh,
+String lastMailInfo, String urgentAbsentions, String urgentHomeworks"]
 [:include "webapp/view/head.html" /]
 <div class="content">
     [:if errorDescription != null]
@@ -72,19 +73,42 @@
             [:else]
             <table class="pure-table">
                 <tbody>
-                    [:for subject in averages]
+                    [:for subject in averages.keys]
                     <tr>
                         <td>
-                            <a href="/student/subject/[= subject['subjectName']]">[= subject['subjectName']]</a>
+                            <a href="/student/subject/[= subject]">[= subject]</a>
                         </td>
                         <td>
-                            [= subject['subjectAverage']]
+                            [= averages[subject].toStringAsPrecision(2)]
                         </td>
                     </tr>
                     [/for]
                 </tbody>
             </table>
             [/if]
+        </div>
+        <div class="pure-u-1-2" id="otherModules">
+            <h1 class="content-subhead">Ostatní moduly</h2>
+                <ul>
+                    <li>
+                        <a href="/student/grades">Přehled všech známek</a>
+                    </li>
+                    <li>
+                        <a href="/student/messages">Přehled zpráv</a> 
+                        [= lastMailInfo == null ? '' : '(poslední zpráva $lastMailInfo)' ]
+                    </li>
+                    <li>
+                        <a href="/student/absention">Přehled absencí</a> 
+                        [= urgentAbsentions == null ? '' : urgentAbsentions ]
+                    </li>
+                    <li>
+                        <a href="/student/homeworks">Přehled domácích úkolů</a> 
+                        [= urgentHomeworks == null ? '' : urgentHomeworks ]
+                    </li>
+                    <li>
+                        <a href="/student/subjects">Přehled předmětů</a>
+                    </li>
+                </ul>
         </div>
     </div>
 </div>

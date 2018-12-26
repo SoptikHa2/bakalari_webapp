@@ -40,6 +40,15 @@
     margin-top: 20px !important;
 }
 
+a{
+    color: rgb(31, 141, 214);
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
 
 @media (min-width: 48em) {
     .footer {

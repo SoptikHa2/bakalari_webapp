@@ -7,7 +7,8 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, studentView, for rendering the view. */
-Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic averages, String lastRefresh}) async {
+Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic averages, String lastRefresh,
+String lastMailInfo, String urgentAbsentions, String urgentHomeworks}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -170,18 +171,18 @@ Future studentView(HttpConnect connect, {String errorDescription, dynamic timeta
                 <tbody>
 """);
 
-    for (var subject in averages) {
+    for (var subject in averages.keys) {
 
       response.write("""                    <tr>
                         <td>
                             <a href="/student/subject/""");
 
-      response.write(Rsp.nnx(subject['subjectName']));
+      response.write(Rsp.nnx(subject));
 
 
       response.write("""">""");
 
-      response.write(Rsp.nnx(subject['subjectName']));
+      response.write(Rsp.nnx(subject));
 
 
       response.write("""</a>
@@ -189,7 +190,7 @@ Future studentView(HttpConnect connect, {String errorDescription, dynamic timeta
                         <td>
                             """);
 
-      response.write(Rsp.nnx(subject['subjectAverage']));
+      response.write(Rsp.nnx(averages[subject].toStringAsPrecision(2)));
 
 
       response.write("""
@@ -205,6 +206,47 @@ Future studentView(HttpConnect connect, {String errorDescription, dynamic timeta
   } //if
 
   response.write("""        </div>
+        <div class="pure-u-1-2" id="otherModules">
+            <h1 class="content-subhead">Ostatní moduly</h2>
+                <ul>
+                    <li>
+                        <a href="/student/grades">Přehled všech známek</a>
+                    </li>
+                    <li>
+                        <a href="/student/messages">Přehled zpráv</a> 
+                        """);
+
+  response.write(Rsp.nnx(lastMailInfo == null ? '' : '(poslední zpráva $lastMailInfo)'));
+
+
+  response.write("""
+
+                    </li>
+                    <li>
+                        <a href="/student/absention">Přehled absencí</a> 
+                        """);
+
+  response.write(Rsp.nnx(urgentAbsentions == null ? '' : urgentAbsentions));
+
+
+  response.write("""
+
+                    </li>
+                    <li>
+                        <a href="/student/homeworks">Přehled domácích úkolů</a> 
+                        """);
+
+  response.write(Rsp.nnx(urgentHomeworks == null ? '' : urgentHomeworks));
+
+
+  response.write("""
+
+                    </li>
+                    <li>
+                        <a href="/student/subjects">Přehled předmětů</a>
+                    </li>
+                </ul>
+        </div>
     </div>
 </div>
 
