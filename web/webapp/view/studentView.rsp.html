@@ -1,4 +1,93 @@
-[:page name="studentView"]
+[:page name="studentView" args="String errorDescription, dynamic timetable, dynamic averages, String lastRefresh"]
 [:include "webapp/view/head.html" /]
-[= connect.request.method]
+<div class="content">
+    [:if errorDescription != null]
+    <aside class="errorBar">
+        <p>
+            [= errorDescription]
+        </p>
+    </aside>
+    [/if]
+    <noscript>
+        <aside class="errorBar">
+            <p>
+                Nemáte zapnutý JavaScript, stránka tedy sama nenačítá
+                přijaté informace. Můžete je načíst manuálně obnovením
+                stránky (<span style="background-color: lightgray">F5</span>)
+            </p>
+        </aside>
+    </noscript>
+    <div class="pure-g" id="main">
+        [:if lastRefresh != null]
+        <p>
+            To, co vidíte na této stránce, je [= lastRefresh] staré.
+            <button class="pure-button">Obnovit</button>
+        </p>
+        [/if]
+        <div class="pure-u-1-1" id="rozvrh">
+            <h1 class="content-subhead">Rozvrh</h1>
+            [:if timetable == null]
+            <p>
+                Načítám rozvrh, za chvíli tady bude...
+            </p>
+            [:else]
+            <table class="pure-table">
+                <thead>
+                    <tr></tr>
+                    <tr>
+                        <th></th>
+                        [:for hour in timetable.times ]
+                        <th>
+                            [= hour.caption ]
+                        </th>
+                        [/for]
+                    </tr>
+                </thead>
+                <tbody>
+                    [:for day in timetable.days ]
+                    <tr>
+                        <th>[= day.shortName ]</th>
+                        [:for lesson in day.lessons]
+                        <td class="table-cell-small [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                            <div class="table-cell-main">[= lesson.subjectShort ]</div>
+                            <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort == null
+                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
+                                '' : '&nbsp;|&nbsp;'][= lesson.classroom ]</span>
+                        </td>
+                        [/for]
+                    </tr>
+                    [/for]
+                </tbody>
+            </table>
+            [/if]
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-2" id="prumery">
+            <h1 class="content-subhead">Průměry</h1>
+            [:if averages == null]
+            <p>
+                Načítám známky, za chvíli to bude...
+            </p>
+            [:else]
+            <table class="pure-table">
+                <tbody>
+                    [:for subject in averages]
+                    <tr>
+                        <td>
+                            <a href="/student/subject/[= subject['subjectName']]">[= subject['subjectName']]</a>
+                        </td>
+                        <td>
+                            [= subject['subjectAverage']]
+                        </td>
+                    </tr>
+                    [/for]
+                </tbody>
+            </table>
+            [/if]
+        </div>
+    </div>
+</div>
+
+<script src="../../js/studentRefresh.js"></script>
 [:include "webapp/view/tail.html" /]

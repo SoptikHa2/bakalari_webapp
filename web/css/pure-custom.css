@@ -18,6 +18,28 @@
     color: #fff;
 }
 
+.table-cell-small{
+    padding: 8px !important;
+    padding-top: 4px !important;
+}
+
+.table-cell-main{
+    text-align: center;
+    margin-bottom: -0.5em;
+}
+
+.table-cell-secondary{
+    font-size: 0.5em;
+}
+
+.lesson-change{
+    background-color: rgb(208, 164, 226) !important;
+}
+
+.content-subhead{
+    margin-top: 20px !important;
+}
+
 
 @media (min-width: 48em) {
     .footer {

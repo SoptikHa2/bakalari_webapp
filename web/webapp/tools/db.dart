@@ -47,18 +47,19 @@ class DB {
   static Future updateStudentInfo(
       String guid, ComplexStudent updateStudent(ComplexStudent student)) async {
     await _db.transaction((txn) async {
-      var studensStore = txn.getStore('students');
+      var studentsStore = txn.getStore('students');
       var student =
-          ComplexStudent.fromJson((await studensStore.getRecord(guid)).value['student']);
+          ComplexStudent.fromJson((await studentsStore.getRecord(guid)).value['student']);
       student = updateStudent(student);
-      await studensStore.put(student.toJson(), guid);
+      await studentsStore.put({'student': student.toJson()}, guid);
     });
   }
 
   static Future<ComplexStudent> getStudent(String guid) async {
     var record = await _students
         .findRecord(Finder(filter: Filter.byKey(guid)));
-    return ComplexStudent.fromJson(record.value['student']);
+    var value = record.value['student'];
+    return ComplexStudent.fromJson(value);
   }
 
   static Future<void> logRawAccess(HttpRequest request, Browser browser) async {

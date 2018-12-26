@@ -7,18 +7,208 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, studentView, for rendering the view. */
-Future studentView(HttpConnect connect) async {
+Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic averages, String lastRefresh}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
   await connect.include("webapp/view/head.html");
 
-  response.write(Rsp.nnx(connect.request.method));
+  response.write("""<div class="content">
+""");
+
+  if (errorDescription != null) {
+
+    response.write("""    <aside class="errorBar">
+        <p>
+            """);
+
+    response.write(Rsp.nnx(errorDescription));
 
 
-  response.write("""
+    response.write("""
 
+        </p>
+    </aside>
+""");
+  } //if
+
+  response.write("""    <noscript>
+        <aside class="errorBar">
+            <p>
+                Nemáte zapnutý JavaScript, stránka tedy sama nenačítá
+                přijaté informace. Můžete je načíst manuálně obnovením
+                stránky (<span style="background-color: lightgray">F5</span>)
+            </p>
+        </aside>
+    </noscript>
+    <div class="pure-g" id="main">
+""");
+
+  if (lastRefresh != null) {
+
+    response.write("""        <p>
+            To, co vidíte na této stránce, je """);
+
+    response.write(Rsp.nnx(lastRefresh));
+
+
+    response.write(""" staré.
+            <button class="pure-button">Obnovit</button>
+        </p>
+""");
+  } //if
+
+  response.write("""        <div class="pure-u-1-1" id="rozvrh">
+            <h1 class="content-subhead">Rozvrh</h1>
+""");
+
+  if (timetable == null) {
+
+    response.write("""            <p>
+                Načítám rozvrh, za chvíli tady bude...
+            </p>
+""");
+
+  } else {
+
+    response.write("""            <table class="pure-table">
+                <thead>
+                    <tr></tr>
+                    <tr>
+                        <th></th>
+""");
+
+    for (var hour in timetable.times) {
+
+      response.write("""                        <th>
+                            """);
+
+      response.write(Rsp.nnx(hour.caption));
+
+
+      response.write("""
+
+                        </th>
+""");
+    } //for
+
+    response.write("""                    </tr>
+                </thead>
+                <tbody>
+""");
+
+    for (var day in timetable.days) {
+
+      response.write("""                    <tr>
+                        <th>""");
+
+      response.write(Rsp.nnx(day.shortName));
+
+
+      response.write("""</th>
+""");
+
+      for (var lesson in day.lessons) {
+
+        response.write("""                        <td class="table-cell-small """);
+
+        response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
+
+
+        response.write("""">
+                            <div class="table-cell-main">""");
+
+        response.write(Rsp.nnx(lesson.subjectShort));
+
+
+        response.write("""</div>
+                            <span class="table-cell-secondary">""");
+
+        response.write(Rsp.nnx(lesson.teacherShort));
+
+
+        response.write(Rsp.nnx((lesson.teacherShort == null
+                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
+                                '' : '&nbsp;|&nbsp;'));
+
+
+        response.write(Rsp.nnx(lesson.classroom));
+
+
+        response.write("""</span>
+                        </td>
+""");
+      } //for
+
+      response.write("""                    </tr>
+""");
+    } //for
+
+    response.write("""                </tbody>
+            </table>
+""");
+  } //if
+
+  response.write("""        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-2" id="prumery">
+            <h1 class="content-subhead">Průměry</h1>
+""");
+
+  if (averages == null) {
+
+    response.write("""            <p>
+                Načítám známky, za chvíli to bude...
+            </p>
+""");
+
+  } else {
+
+    response.write("""            <table class="pure-table">
+                <tbody>
+""");
+
+    for (var subject in averages) {
+
+      response.write("""                    <tr>
+                        <td>
+                            <a href="/student/subject/""");
+
+      response.write(Rsp.nnx(subject['subjectName']));
+
+
+      response.write("""">""");
+
+      response.write(Rsp.nnx(subject['subjectName']));
+
+
+      response.write("""</a>
+                        </td>
+                        <td>
+                            """);
+
+      response.write(Rsp.nnx(subject['subjectAverage']));
+
+
+      response.write("""
+
+                        </td>
+                    </tr>
+""");
+    } //for
+
+    response.write("""                </tbody>
+            </table>
+""");
+  } //if
+
+  response.write("""        </div>
+    </div>
+</div>
+
+<script src="../../js/studentRefresh.js"></script>
 """);
 
   await connect.include("webapp/view/tail.html");

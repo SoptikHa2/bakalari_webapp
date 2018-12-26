@@ -14,47 +14,47 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
 
   await connect.include("webapp/view/head.html");
 
-  response.write("""<div class="content">
+  response.write("""  <div class="content">
 """);
 
   if (errorDescription != null) {
 
-    response.write("""  <aside class="errorBar">
-    <p>
-      """);
+    response.write("""    <aside class="errorBar">
+      <p>
+        """);
 
     response.write(Rsp.nnx(errorDescription));
 
 
     response.write("""
 
-    </p>
-  </aside>
+      </p>
+    </aside>
 """);
   } //if
 
   response.write("""
 
-  <h1>
-    Bakaláři
-  </h1>
-  <p>
-    A tentokrát lépe.
-  </p>
+    <h1>
+      Bakaláři
+    </h1>
+    <p>
+      A tentokrát lépe.
+    </p>
 
-  <form class="pure-form" action="/student" method="POST">
-    <fieldset>
-      <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
+    <form class="pure-form" action="/student" method="POST">
+      <fieldset>
+        <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-      <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
-      <datalist id="schoolUrls">
+        <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
+        <datalist id="schoolUrls">
 """);
 
   if (urls != null) {
 
     for (var url in urls) {
 
-      response.write("""        <option>""");
+      response.write("""          <option>""");
 
       response.write(Rsp.nnx(url));
 
@@ -64,16 +64,16 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
     } //for
   } //if
 
-  response.write("""      </datalist>
-      <input name="login" type="text" placeholder="Uživatelské jméno">
-      <input name="password" type="password" placeholder="Heslo">
+  response.write("""        </datalist>
+        <input name="login" type="text" placeholder="Uživatelské jméno">
+        <input name="password" type="password" placeholder="Heslo">
 
-      <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
-    </fieldset>
-  </form>
-</div>
-<div class="content">
-  <h1 class="content-subhead">Funkce</h1>
+        <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
+      </fieldset>
+    </form>
+  </div>
+  <div class="content">
+    <h1 class="content-subhead">Funkce</h1>
     <p>
       Cílem projektu <i>Bakaláři: a tentokrát lépe</i>
       je vytvořit webovou aplikaci, která by dokázala kompletně nahradit
@@ -158,7 +158,7 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
 """);
   } //if
 
-  response.write("""</div>
+  response.write("""  </div>
 """);
 
   await connect.include("webapp/view/tail.html");

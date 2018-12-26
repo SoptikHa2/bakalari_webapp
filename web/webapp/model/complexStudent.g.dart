@@ -28,6 +28,9 @@ ComplexStudent _$ComplexStudentFromJson(Map<String, dynamic> json) {
       schoolInfo: json['schoolInfo'] == null
           ? null
           : School.fromJson(json['schoolInfo'] as Map<String, dynamic>),
+      refresh: json['refresh'] == null
+          ? null
+          : DateTime.parse(json['refresh'] as String),
       studentInfo: json['studentInfo'] == null
           ? null
           : Student.fromJson(json['studentInfo'] as Map<String, dynamic>),
@@ -46,5 +49,6 @@ Map<String, dynamic> _$ComplexStudentToJson(ComplexStudent instance) =>
       'grades': instance.grades?.map((m) => m.toJson())?.toList(),
       'subjects': instance.subjects?.map((s) => s.toJson())?.toList(),
       'homeworks': instance.homeworks?.map((h) => h.toJson())?.toList(),
-      'messages': instance.messages?.map((m) => m.toJson())?.toList()
+      'messages': instance.messages?.map((m) => m.toJson())?.toList(),
+      'refresh': instance.refresh?.toIso8601String()
     };

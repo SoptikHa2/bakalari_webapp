@@ -8,7 +8,8 @@ class Config {
     "get:/": Root.root,
     "get:/privacy_policy": PrivacyPolicy.getPolicy,
     "post:/student": Student.login,
-    "get:/student": Student.getInfo
+    "get:/student": Student.getInfo,
+    "get:/běla": "/htm/451.html"
     //"/admin/": admin
   };
   static dynamic filterRouting = {

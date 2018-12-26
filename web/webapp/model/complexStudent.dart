@@ -21,6 +21,7 @@ class ComplexStudent {
   List<Subject> subjects;
   List<Homework> homeworks;
   List<PrivateMessage> messages;
+  DateTime refresh;
 
   ComplexStudent(
       {this.guid,
@@ -30,11 +31,13 @@ class ComplexStudent {
       this.messages,
       this.schoolInfo,
       this.studentInfo,
-      this.subjects});
+      this.subjects,
+      this.refresh});
 
   ComplexStudent.create(Student studentInfo, School schoolInfo) {
     this.studentInfo = studentInfo;
     this.schoolInfo = schoolInfo;
+    this.refresh = DateTime.now();
     this.guid = Uuid().v4();
   }
 
@@ -48,7 +51,8 @@ class ComplexStudent {
       List<Grade> grades,
       List<Subject> subjects,
       List<Homework> homeworks,
-      List<PrivateMessage> messages}) {
+      List<PrivateMessage> messages,
+      DateTime refresh}) {
     this.studentInfo = studentInfo ?? this.studentInfo;
     this.schoolInfo = schoolInfo ?? this.schoolInfo;
     this.timetable = timetable ?? this.timetable;
@@ -56,6 +60,7 @@ class ComplexStudent {
     this.subjects = subjects ?? this.subjects;
     this.homeworks = homeworks ?? this.homeworks;
     this.messages = messages ?? this.messages;
+    this.refresh = refresh ?? this.refresh;
 
     return this;
   }
