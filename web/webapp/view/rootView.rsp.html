@@ -1,6 +1,14 @@
-[:page name="rootView"]
+[:page name="rootView" args="List<String> urls, dynamic timetable, String errorDescription"]
 [:include "webapp/view/head.html" /]
 <div class="content">
+  [:if errorDescription != null]
+  <aside class="errorBar">
+    <p>
+      [= errorDescription]
+    </p>
+  </aside>
+  [/if]
+
   <h1>
     Bakaláři
   </h1>
@@ -14,8 +22,8 @@
 
       <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
       <datalist id="schoolUrls">
-        [:if connect.dataset['urls'] != null]
-        [:for url in connect.dataset['urls']]
+        [:if urls != null]
+        [:for url in urls]
         <option>[=url]</option>
         [/for]
         [/if]
@@ -44,10 +52,10 @@
       I když zrovna nejste přihlášení, tak zde můžeme zobrazit rozvrh pro vaši třídu.
     </p>
     <h1 class="content-subhead">Rozvrh</h1>
-    [:if connect.dataset['timetable'] == null]
+    [:if timetable == null]
     <p>
       Jakmile se v tomto prohlížeči alespoň jednou přihlásíte,
-      bude se zde zobrazovat aktuální rozvrh pro vaši třídu -
+      uvidíte zde aktuální rozvrh pro vaši třídu -
       i pokud zrovna nebudete přihlášeni.
     </p>
     [:else]
@@ -55,13 +63,13 @@
       <thead>
         <tr></tr>
         <tr>
-          [:for hour in connect.dataset['timetable'].times ]
+          [:for hour in timetable.times ]
           <th>[= hour.caption ]</th>
           [/for]
         </tr>
       </thead>
       <tbody>
-        [:for day in connect.dataset['timetable'].days ]
+        [:for day in timetable.days ]
         <tr>
           <th>[= day.shortName ]</th>
         </tr>

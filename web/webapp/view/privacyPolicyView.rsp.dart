@@ -22,7 +22,7 @@ Future privacyPolicyView(HttpConnect connect) async {
     Kliknutím na tlačítko odhlásit jsou údaje odstraňeny i z Vašeho prohlížeče.
   </p>
   <p>
-    Dočasně ukládáme na serveru informace přijaté ze serveru, abychom je mohli průběžně zobrazovat a nemuseli jste
+    Dočasně ukládáme na serveru informace přijaté ze serveru školy, abychom je mohli průběžně zobrazovat a nemuseli jste
     při každém dalším načtení stránky znovu zadávat heslo.
   </p>
   <p>

@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, rootView, for rendering the view. */
-Future rootView(HttpConnect connect) async {
+Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, String errorDescription}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -15,6 +15,26 @@ Future rootView(HttpConnect connect) async {
   await connect.include("webapp/view/head.html");
 
   response.write("""<div class="content">
+""");
+
+  if (errorDescription != null) {
+
+    response.write("""  <aside class="errorBar">
+    <p>
+      """);
+
+    response.write(Rsp.nnx(errorDescription));
+
+
+    response.write("""
+
+    </p>
+  </aside>
+""");
+  } //if
+
+  response.write("""
+
   <h1>
     Bakaláři
   </h1>
@@ -30,9 +50,9 @@ Future rootView(HttpConnect connect) async {
       <datalist id="schoolUrls">
 """);
 
-  if (connect.dataset['urls'] != null) {
+  if (urls != null) {
 
-    for (var url in connect.dataset['urls']) {
+    for (var url in urls) {
 
       response.write("""        <option>""");
 
@@ -71,11 +91,11 @@ Future rootView(HttpConnect connect) async {
     <h1 class="content-subhead">Rozvrh</h1>
 """);
 
-  if (connect.dataset['timetable'] == null) {
+  if (timetable == null) {
 
     response.write("""    <p>
       Jakmile se v tomto prohlížeči alespoň jednou přihlásíte,
-      bude se zde zobrazovat aktuální rozvrh pro vaši třídu -
+      uvidíte zde aktuální rozvrh pro vaši třídu -
       i pokud zrovna nebudete přihlášeni.
     </p>
 """);
@@ -88,7 +108,7 @@ Future rootView(HttpConnect connect) async {
         <tr>
 """);
 
-    for (var hour in connect.dataset['timetable'].times) {
+    for (var hour in timetable.times) {
 
       response.write("""          <th>""");
 
@@ -104,7 +124,7 @@ Future rootView(HttpConnect connect) async {
       <tbody>
 """);
 
-    for (var day in connect.dataset['timetable'].days) {
+    for (var day in timetable.days) {
 
       response.write("""        <tr>
           <th>""");

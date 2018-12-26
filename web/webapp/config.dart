@@ -6,10 +6,10 @@ import 'controller/privacyPolicy.dart';
 
 class Config {
   static Map<String, dynamic> routing = {
-    "get:/": root,
-    "get:/privacy_policy": privacyPolicy,
-    "post:/student": loginStudent,
-    "get:/student": getStudent
+    "get:/": Root.root,
+    "get:/privacy_policy": PrivacyPolicy.getPolicy,
+    "post:/student": Student.login,
+    "get:/student": Student.getInfo
     //"/admin/": admin
   };
   static dynamic filterRouting = {
