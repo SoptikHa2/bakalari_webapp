@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:path/path.dart';
 import 'package:rikulo_commons/browser.dart';
-import 'package:rikulo_commons/io.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import '../model/complexStudent.dart';
@@ -15,7 +15,7 @@ class DB {
   static Store _logStudent;
 
   static Future<void> initializeDb() async {
-    _db = await databaseFactoryIo.openDatabase('main.db');
+    _db = await databaseFactoryIo.openDatabase(join("..", "..", dirname(Platform.script.toFilePath()), "main.db"));
     _students = _db.getStore('students');
     _schools = _db.getStore('schools');
     _logRaw = _db.getStore('logRaw');
