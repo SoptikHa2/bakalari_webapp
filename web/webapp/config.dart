@@ -1,5 +1,4 @@
 import 'tools/log.dart';
-import 'tools/auth.dart';
 import 'controller/root.dart';
 import 'controller/student.dart';
 import 'controller/privacyPolicy.dart';
@@ -14,8 +13,6 @@ class Config {
   };
   static dynamic filterRouting = {
     "/.*": log,
-    "post:/student/.*": auth,
-    "post:/admin/.*": authAdmin
   };
   static Map<String, dynamic> errorRouting = {
     "404": "/html/404.html",

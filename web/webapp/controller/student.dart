@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:rikulo_commons/io.dart';
 import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
+import '../model/complexStudent.dart';
 import '../view/studentView.rsp.dart';
 import 'package:bakalari/bakalari.dart';
 import '../tools/db.dart';
@@ -11,9 +12,10 @@ class Student {
   // POST
   static Future login(HttpConnect connect) async {
     // Decode
+    var postParameters = await HttpUtil.decodePostedParameters(connect.request);
     var post = StudentLoginPostParams();
     ObjectUtil.inject(
-        post, await HttpUtil.decodePostedParameters(connect.request));
+        post, postParameters);
     if (!post.validate()) {
       return connect.redirect("/?error=invalid_structure");
     }
@@ -23,18 +25,22 @@ class Student {
       bakaweb = new Bakalari(Uri().resolve(post.bakawebUrl));
       await bakaweb.logIn(post.login, post.password);
       // refresh info, write it into DB and add access token into cookies
-      var timetable = await bakaweb.getTimetable();
-      var grades = await bakaweb.getGrades();
-      var subjects = await bakaweb.getSubjects();
-      var homeworks = await bakaweb.getHomeworks();
-      var messages = await bakaweb.getMessages();
-      var guid = await DB.addStudent(timetable, grades, subjects, homeworks, messages, bakaweb.student, bakaweb.school);
+      var guid = await DB.saveStudentInfo(ComplexStudent.create(bakaweb.student, bakaweb.school));
+      DB.logLogin(postParameters, guid);
+      DB.addSchool(post.bakawebUrl);
+
+      bakaweb.getTimetable().then((t) => DB.updateStudentInfo(guid, ((student) => student.update(timetable: t))));
+      bakaweb.getGrades().then((g) => DB.updateStudentInfo(guid, ((student) => student.update(grades: g))));
+      bakaweb.getSubjects().then((s) => DB.updateStudentInfo(guid, ((student) => student.update(subjects: s))));
+      bakaweb.getHomeworks().then((h) => DB.updateStudentInfo(guid, ((student) => student.update(homeworks: h))));
+      bakaweb.getMessages().then((m) => DB.updateStudentInfo(guid, ((student) => student.update(messages: m))));
       connect.response.cookies.add(Cookie("studentID", guid));
     } catch (e) {
+      print(e);
       return connect.redirect('/?error=cannot_connect');
     }
 
-    // If succ: forward to itself, just GET
+    // Forward to itself, just GET
     return await getInfo(connect);
   }
 

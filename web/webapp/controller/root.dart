@@ -10,9 +10,8 @@ class Root {
 
 
   static Future root(HttpConnect connect) async {
-    if (false) {
-      // User.loggedIn
-      connect.redirect('student');
+    if (connect.request.cookies.any((c) => c.name == "studentID")) {
+      return connect.redirect('student');
     }
 
     String errorMessage = null;
