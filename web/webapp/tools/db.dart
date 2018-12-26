@@ -30,8 +30,7 @@ class DB {
   }
 
   static Future<void> addSchool(String url) async {
-    if((await getSchools()).any((u) => u == url))
-      return;
+    if ((await getSchools()).any((u) => u == url)) return;
     await _schools.put({'url': url});
   }
 
@@ -39,33 +38,44 @@ class DB {
   /// Return access GUID.
   ///
   /// Once you retrieve more info, run this again.
-  /// If the object `student` has the same `student.guid`, 
+  /// If the object `student` has the same `student.guid`,
   /// it's value in database will be updated.
   static Future<String> saveStudentInfo(ComplexStudent student) async {
     return await _students.put({'student': student.toJson()}, student.guid);
   }
 
-  static Future updateStudentInfo(String guid, ComplexStudent updateStudent(ComplexStudent student)) async{
+  static Future updateStudentInfo(
+      String guid, ComplexStudent updateStudent(ComplexStudent student)) async {
     await _db.transaction((txn) async {
       var studensStore = txn.getStore('students');
-      var student = ComplexStudent.fromJson((await studensStore.getRecord(guid)).value);
+      var student =
+          ComplexStudent.fromJson((await studensStore.getRecord(guid)).value['student']);
       student = updateStudent(student);
-      studensStore.put(student.toJson(), guid);
+      await studensStore.put(student.toJson(), guid);
     });
   }
 
   static Future<ComplexStudent> getStudent(String guid) async {
-    return await _students
-        .findRecord(Finder(filter: Filter.byKey(guid)))
-        .then((r) => ComplexStudent.fromJson(r.value['student']));
+    var record = await _students
+        .findRecord(Finder(filter: Filter.byKey(guid)));
+    return ComplexStudent.fromJson(record.value['student']);
   }
 
-  static Future<void> logRawAccess(HttpRequest request, Browser browser) async{
-    await _logRaw.put(
-        {'request': request.uri.toString(), 'browser': browser.userAgent, 'ip': request.connectionInfo.remoteAddress.toString(), 'timestamp': DateTime.now().millisecondsSinceEpoch});
+  static Future<void> logRawAccess(HttpRequest request, Browser browser) async {
+    await _logRaw.put({
+      'request': request.uri.toString(),
+      'browser': browser.userAgent,
+      'ip': request.connectionInfo.remoteAddress.toString(),
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
   }
 
-  static Future<void> logLogin(Map<String, String> requestData, String studentGuid) async {
-    await _logStudent.put({'data': requestData, 'student': studentGuid, 'timestamp': DateTime.now().millisecondsSinceEpoch});
+  static Future<void> logLogin(
+      Map<String, String> requestData, String studentGuid) async {
+    await _logStudent.put({
+      'data': requestData,
+      'student': studentGuid,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
   }
 }

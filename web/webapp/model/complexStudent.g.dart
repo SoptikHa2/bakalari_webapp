@@ -43,8 +43,8 @@ Map<String, dynamic> _$ComplexStudentToJson(ComplexStudent instance) =>
       'studentInfo': instance.studentInfo?.toJson(),
       'schoolInfo': instance.schoolInfo?.toJson(),
       'timetable': instance.timetable?.toJson(),
-      'grades': instance.grades?.map((m) => m.toJson()),
-      'subjects': instance.subjects?.map((s) => s.toJson()),
-      'homeworks': instance.homeworks?.map((h) => h.toJson()),
-      'messages': instance.messages?.map((m) => m.toJson())
+      'grades': instance.grades?.map((m) => m.toJson())?.toList(),
+      'subjects': instance.subjects?.map((s) => s.toJson())?.toList(),
+      'homeworks': instance.homeworks?.map((h) => h.toJson())?.toList(),
+      'messages': instance.messages?.map((m) => m.toJson())?.toList()
     };
