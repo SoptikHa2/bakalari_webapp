@@ -1,7 +1,8 @@
 function update() {
     // http://youmightnotneedjquery.com/
     var request = new XMLHttpRequest();
-    request.open('GET', '/student', true);
+    // Do not log access
+    request.open('GET', '/student?log=0', true);
 
     request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
@@ -27,4 +28,4 @@ function update() {
     request.send();
 }
 
-intervalId = setInterval(update, 2000);
+intervalId = setInterval(update, 1000);

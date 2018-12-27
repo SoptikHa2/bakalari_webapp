@@ -8,7 +8,7 @@ import 'package:stream/stream.dart';
 
 /** Template, studentView, for rendering the view. */
 Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic averages, String lastRefresh,
-String lastMailInfo, String urgentAbsentions, String urgentHomeworks}) async {
+String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -44,23 +44,59 @@ String lastMailInfo, String urgentAbsentions, String urgentHomeworks}) async {
         </aside>
     </noscript>
     <div class="pure-g" id="main">
+        <div class="pure-u-1 pure-u-md-1-4" id="znamky">
+            <h1 class="content-subhead">Průměry</h1>
 """);
 
-  if (lastRefresh != null) {
+  if (averages == null) {
 
-    response.write("""        <p>
-            To, co vidíte na této stránce, je """);
+    response.write("""            <p>
+                Načítám známky, za chvíli to bude...
+            </p>
+""");
 
-    response.write(Rsp.nnx(lastRefresh));
+  } else {
+
+    response.write("""            <table class="pure-table">
+                <tbody>
+""");
+
+    for (var subject in averages.keys) {
+
+      response.write("""                    <tr>
+                        <td>
+                            <a href="/student/subject/""");
+
+      response.write(Rsp.nnx(subject));
 
 
-    response.write(""" staré.
-            <button class="pure-button">Obnovit</button>
-        </p>
+      response.write("""">""");
+
+      response.write(Rsp.nnx(subject));
+
+
+      response.write("""</a>
+                        </td>
+                        <td>
+                            """);
+
+      response.write(Rsp.nnx(averages[subject].toStringAsPrecision(3)));
+
+
+      response.write("""
+
+                        </td>
+                    </tr>
+""");
+    } //for
+
+    response.write("""                </tbody>
+            </table>
 """);
   } //if
 
-  response.write("""        <div class="pure-u-1-1" id="rozvrh">
+  response.write("""        </div>
+        <div class="pure-u-1 pure-u-md-2-3" id="rozvrh">
             <h1 class="content-subhead">Rozvrh</h1>
 """);
 
@@ -82,7 +118,17 @@ String lastMailInfo, String urgentAbsentions, String urgentHomeworks}) async {
 
     for (var hour in timetable.times) {
 
-      response.write("""                        <th>
+      response.write("""                        <th title=\"""");
+
+      response.write(Rsp.nnx(hour.beginTime));
+
+
+      response.write(""" - """);
+
+      response.write(Rsp.nnx(hour.endTime));
+
+
+      response.write("""">
                             """);
 
       response.write(Rsp.nnx(hour.caption));
@@ -151,69 +197,14 @@ String lastMailInfo, String urgentAbsentions, String urgentHomeworks}) async {
 """);
   } //if
 
-  response.write("""        </div>
-    </div>
-    <div class="pure-g">
-        <div class="pure-u-1-2" id="prumery">
-            <h1 class="content-subhead">Průměry</h1>
-""");
-
-  if (averages == null) {
-
-    response.write("""            <p>
-                Načítám známky, za chvíli to bude...
-            </p>
-""");
-
-  } else {
-
-    response.write("""            <table class="pure-table">
-                <tbody>
-""");
-
-    for (var subject in averages.keys) {
-
-      response.write("""                    <tr>
-                        <td>
-                            <a href="/student/subject/""");
-
-      response.write(Rsp.nnx(subject));
-
-
-      response.write("""">""");
-
-      response.write(Rsp.nnx(subject));
-
-
-      response.write("""</a>
-                        </td>
-                        <td>
-                            """);
-
-      response.write(Rsp.nnx(averages[subject].toStringAsPrecision(2)));
-
-
-      response.write("""
-
-                        </td>
-                    </tr>
-""");
-    } //for
-
-    response.write("""                </tbody>
-            </table>
-""");
-  } //if
-
-  response.write("""        </div>
-        <div class="pure-u-1-2" id="otherModules">
-            <h1 class="content-subhead">Ostatní moduly</h2>
+  response.write("""            <div class="pure-u-1 pure-u-md-1-2" id="otherModules">
+                <h1 class="content-subhead">Ostatní moduly</h1>
                 <ul>
                     <li>
-                        <a href="/student/grades">Přehled všech známek</a>
+                        <a href="/student/grade">Přehled všech známek</a>
                     </li>
                     <li>
-                        <a href="/student/messages">Přehled zpráv</a> 
+                        <a href="/student/message">Přehled zpráv</a>
                         """);
 
   response.write(Rsp.nnx(lastMailInfo == null ? '' : '(poslední zpráva $lastMailInfo)'));
@@ -223,17 +214,17 @@ String lastMailInfo, String urgentAbsentions, String urgentHomeworks}) async {
 
                     </li>
                     <li>
-                        <a href="/student/absention">Přehled absencí</a> 
+                        <a href="/student/absention">Přehled absencí</a>
                         """);
 
-  response.write(Rsp.nnx(urgentAbsentions == null ? '' : urgentAbsentions));
+  response.write(Rsp.nnx(urgentAbsence == null ? '' : urgentAbsence));
 
 
   response.write("""
 
                     </li>
                     <li>
-                        <a href="/student/homeworks">Přehled domácích úkolů</a> 
+                        <a href="/student/homework">Přehled domácích úkolů</a>
                         """);
 
   response.write(Rsp.nnx(urgentHomeworks == null ? '' : urgentHomeworks));
@@ -243,12 +234,30 @@ String lastMailInfo, String urgentAbsentions, String urgentHomeworks}) async {
 
                     </li>
                     <li>
-                        <a href="/student/subjects">Přehled předmětů</a>
+                        <a href="/student/subject">Přehled předmětů</a>
                     </li>
                 </ul>
+            </div>
         </div>
     </div>
 </div>
+""");
+
+  if (lastRefresh != null) {
+
+    response.write("""<p style="text-align: center">
+    To, co vidíte na této stránce, je """);
+
+    response.write(Rsp.nnx(lastRefresh));
+
+
+    response.write(""" staré.
+    <button class="pure-button">Obnovit</button>
+</p>
+""");
+  } //if
+
+  response.write("""
 
 <script src="../../js/studentRefresh.js"></script>
 """);

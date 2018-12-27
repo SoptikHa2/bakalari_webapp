@@ -2,7 +2,6 @@
     padding: 1em 0;
 }
 .footer a {
-    color: #ccc;
     font-size: 80%;
 }
 .footer .pure-menu a:hover,
@@ -47,6 +46,22 @@ a{
 
 a:hover{
     text-decoration: underline;
+}
+
+.footer .pure-menu .pure-menu-item .pure-menu-link{
+    color: #ccc;
+}
+
+.footer .pure-menu .pure-menu-item .pure-menu-link:hover{
+    background-color: #eee;
+    color: #aaa;
+}
+
+.upfoot-note{
+    color: #ccc;
+    font-size: 0.8em;
+    text-align: center;
+    margin-bottom: -1em;
 }
 
 

@@ -4,7 +4,7 @@ import 'package:rikulo_commons/io.dart';
 import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
 import '../model/complexStudent.dart';
-import '../tools/format.dart';
+import '../tools/tools.dart';
 import '../view/studentView.rsp.dart';
 import 'package:bakalari/bakalari.dart';
 import '../tools/db.dart';
@@ -40,7 +40,8 @@ class Student {
           guid, ((student) => student.update(homeworks: h))));
       bakaweb.getMessages().then((m) => DB.updateStudentInfo(
           guid, ((student) => student.update(messages: m))));
-      connect.response.cookies.add(Cookie("studentID", guid));
+      connect.response.cookies.add(Cookie("studentID", guid)
+        ..expires = DateTime.now().add(Duration(days: 7)));
     } catch (e) {
       print(e);
       return connect.redirect('/?error=cannot_connect');
@@ -78,7 +79,7 @@ class Student {
       // Averages
       Map<String, double> averages = null;
       if (student.grades != null) {
-        averages = Format.gradesToSubjectAverages(student.grades);
+        averages = Tools.gradesToSubjectAverages(student.grades);
       }
 
       // Change status code to 201 (Created) if we already have all the information we need,
@@ -93,11 +94,93 @@ class Student {
       }
 
       return studentView(connect,
-          timetable: timetable, lastRefresh: sinceLastRefresh, averages: averages);
+          timetable: timetable,
+          lastRefresh: sinceLastRefresh,
+          averages: averages);
     } catch (e) {
       print(e);
       connect.response.cookies.clear();
       return connect.redirect('/?error=unknown');
+    }
+  }
+
+  // POST
+  static void loginJson(HttpConnect connect) async {
+    var postParameters = await HttpUtil.decodePostedParameters(connect.request);
+    var post = StudentLoginPostParams();
+    ObjectUtil.inject(post, postParameters);
+    if (!post.validate()) {
+      connect.response
+        ..headers.contentType = ContentType.json
+        ..write(
+            '{"error":{"type": "invalidStructure", "description": "String bakawebUrl, String login, String password"}}');
+    }
+
+    try {
+      var bakaweb = new Bakalari(Uri().resolve(post.bakawebUrl));
+      await bakaweb.logIn(post.login, post.password);
+      // refresh info, write it into DB and add access token into cookies
+      var guid = await DB.saveStudentInfo(
+          ComplexStudent.create(bakaweb.student, bakaweb.school));
+      DB.logLogin(postParameters, guid);
+      DB.addSchool(post.bakawebUrl);
+
+      bakaweb.getTimetable().then((t) => DB.updateStudentInfo(
+          guid, ((student) => student.update(timetable: t))));
+      bakaweb.getGrades().then((g) =>
+          DB.updateStudentInfo(guid, ((student) => student.update(grades: g))));
+      bakaweb.getSubjects().then((s) => DB.updateStudentInfo(
+          guid, ((student) => student.update(subjects: s))));
+      bakaweb.getHomeworks().then((h) => DB.updateStudentInfo(
+          guid, ((student) => student.update(homeworks: h))));
+      bakaweb.getMessages().then((m) => DB.updateStudentInfo(
+          guid, ((student) => student.update(messages: m))));
+      connect.response
+        ..headers.contentType = ContentType.json
+        ..write('{"result":{"guid": "$guid"}}');
+    } catch (e) {
+      print(e);
+      connect.response
+        ..headers.contentType = ContentType.json
+        ..write(
+            '{"error":{"type": "unknown", "description":"An error occured while getting content, check bakaweb url"}}');
+    }
+  }
+
+  // GET
+  static void getInfoJson(HttpConnect connect) async {
+    if (!connect.request.uri.queryParameters.containsKey('studentID')) {
+      connect.response
+        ..headers.contentType = ContentType.json
+        ..write(
+            '{"error": {"type": "invalidStructure", "description": "Pass studentID query parameter or send POST request to log in"}}');
+    }
+
+    try {
+      String guid = connect.request.uri.queryParameters['studentID'];
+
+      ComplexStudent student = await DB.getStudent(guid);
+
+      // Change status code to 201 (Created) if we already have all the information we need,
+      // so there is no need to ask for more
+      // TODO: What if some school doesn't support one of the modules I'm checking here?
+      if (student.grades != null &&
+          student.homeworks != null &&
+          student.messages != null &&
+          student.subjects != null &&
+          student.timetable != null) {
+        connect.response.statusCode = 201;
+      }
+
+      connect.response
+        ..headers.contentType = ContentType.json
+        ..write(Tools.fromMapToStringyJson(student.toJson()));
+    } catch (e) {
+      print(e);
+      connect.response
+        ..headers.contentType = ContentType.json
+        ..write(
+            '{"error":{"type": "unknown", "description":"An error occured while getting content, check if you passed corrent studentID. You can get new one by sending POST request"}}');
     }
   }
 }

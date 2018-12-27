@@ -1,5 +1,5 @@
 [:page name="studentView" args="String errorDescription, dynamic timetable, dynamic averages, String lastRefresh,
-String lastMailInfo, String urgentAbsentions, String urgentHomeworks"]
+String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
 [:include "webapp/view/head.html" /]
 <div class="content">
     [:if errorDescription != null]
@@ -19,13 +19,30 @@ String lastMailInfo, String urgentAbsentions, String urgentHomeworks"]
         </aside>
     </noscript>
     <div class="pure-g" id="main">
-        [:if lastRefresh != null]
-        <p>
-            To, co vidíte na této stránce, je [= lastRefresh] staré.
-            <button class="pure-button">Obnovit</button>
-        </p>
-        [/if]
-        <div class="pure-u-1-1" id="rozvrh">
+        <div class="pure-u-1 pure-u-md-1-4" id="znamky">
+            <h1 class="content-subhead">Průměry</h1>
+            [:if averages == null]
+            <p>
+                Načítám známky, za chvíli to bude...
+            </p>
+            [:else]
+            <table class="pure-table">
+                <tbody>
+                    [:for subject in averages.keys]
+                    <tr>
+                        <td>
+                            <a href="/student/subject/[= subject]">[= subject]</a>
+                        </td>
+                        <td>
+                            [= averages[subject].toStringAsPrecision(3)]
+                        </td>
+                    </tr>
+                    [/for]
+                </tbody>
+            </table>
+            [/if]
+        </div>
+        <div class="pure-u-1 pure-u-md-2-3" id="rozvrh">
             <h1 class="content-subhead">Rozvrh</h1>
             [:if timetable == null]
             <p>
@@ -38,7 +55,7 @@ String lastMailInfo, String urgentAbsentions, String urgentHomeworks"]
                     <tr>
                         <th></th>
                         [:for hour in timetable.times ]
-                        <th>
+                        <th title="[= hour.beginTime ] - [= hour.endTime ]">
                             [= hour.caption ]
                         </th>
                         [/for]
@@ -61,57 +78,38 @@ String lastMailInfo, String urgentAbsentions, String urgentHomeworks"]
                 </tbody>
             </table>
             [/if]
-        </div>
-    </div>
-    <div class="pure-g">
-        <div class="pure-u-1-2" id="prumery">
-            <h1 class="content-subhead">Průměry</h1>
-            [:if averages == null]
-            <p>
-                Načítám známky, za chvíli to bude...
-            </p>
-            [:else]
-            <table class="pure-table">
-                <tbody>
-                    [:for subject in averages.keys]
-                    <tr>
-                        <td>
-                            <a href="/student/subject/[= subject]">[= subject]</a>
-                        </td>
-                        <td>
-                            [= averages[subject].toStringAsPrecision(2)]
-                        </td>
-                    </tr>
-                    [/for]
-                </tbody>
-            </table>
-            [/if]
-        </div>
-        <div class="pure-u-1-2" id="otherModules">
-            <h1 class="content-subhead">Ostatní moduly</h2>
+            <div class="pure-u-1 pure-u-md-1-2" id="otherModules">
+                <h1 class="content-subhead">Ostatní moduly</h1>
                 <ul>
                     <li>
-                        <a href="/student/grades">Přehled všech známek</a>
+                        <a href="/student/grade">Přehled všech známek</a>
                     </li>
                     <li>
-                        <a href="/student/messages">Přehled zpráv</a> 
+                        <a href="/student/message">Přehled zpráv</a>
                         [= lastMailInfo == null ? '' : '(poslední zpráva $lastMailInfo)' ]
                     </li>
                     <li>
-                        <a href="/student/absention">Přehled absencí</a> 
-                        [= urgentAbsentions == null ? '' : urgentAbsentions ]
+                        <a href="/student/absention">Přehled absencí</a>
+                        [= urgentAbsence == null ? '' : urgentAbsence]
                     </li>
                     <li>
-                        <a href="/student/homeworks">Přehled domácích úkolů</a> 
+                        <a href="/student/homework">Přehled domácích úkolů</a>
                         [= urgentHomeworks == null ? '' : urgentHomeworks ]
                     </li>
                     <li>
-                        <a href="/student/subjects">Přehled předmětů</a>
+                        <a href="/student/subject">Přehled předmětů</a>
                     </li>
                 </ul>
+            </div>
         </div>
     </div>
 </div>
+[:if lastRefresh != null]
+<p style="text-align: center">
+    To, co vidíte na této stránce, je [= lastRefresh] staré.
+    <button class="pure-button">Obnovit</button>
+</p>
+[/if]
 
 <script src="../../js/studentRefresh.js"></script>
 [:include "webapp/view/tail.html" /]

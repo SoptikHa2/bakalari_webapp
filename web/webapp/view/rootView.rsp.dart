@@ -159,6 +159,10 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
   } //if
 
   response.write("""  </div>
+
+  <p class="upfoot-note">
+    Neoficiální webová aplikace pro přístup k Bakalářům.
+  </p>
 """);
 
   await connect.include("webapp/view/tail.html");
