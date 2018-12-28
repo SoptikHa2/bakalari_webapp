@@ -1,5 +1,5 @@
 import 'package:stream/stream.dart';
-import '../view/refreshStudentInfoView.rsp.dart';
+import '../view/main/refreshStudentInfoView.rsp.dart';
 import '../tools/db.dart';
 
 class RefreshStudentInfo {

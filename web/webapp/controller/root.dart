@@ -1,5 +1,5 @@
 import 'package:stream/stream.dart';
-import '../view/rootView.rsp.dart';
+import '../view/main/rootView.rsp.dart';
 import '../tools/db.dart';
 import '../tools/tools.dart';
 

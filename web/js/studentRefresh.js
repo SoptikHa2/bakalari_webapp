@@ -7,8 +7,9 @@ function update() {
     request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
             var resp = this.response;
-            document.body.innerHTML = resp;
             console.log('Updating content...');
+            document.body.innerHTML = resp;
+            registerSwitches();
 
             if(this.status == 201){ // Everything is done
                 console.log('Received 201 status code from server, quiting update process.');

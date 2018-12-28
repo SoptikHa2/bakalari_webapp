@@ -3,8 +3,8 @@ import 'tools/log.dart';
 import 'controller/root.dart';
 import 'controller/student.dart';
 import 'controller/logout.dart';
-import 'view/privacyPolicyView.rsp.dart';
-import 'view/restApi.rsp.dart';
+import 'view/general/privacyPolicyView.rsp.dart';
+import 'view/general/restApi.rsp.dart';
 
 class Config {
   static Map<String, dynamic> routing = {

@@ -5,7 +5,7 @@ import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
 import '../model/complexStudent.dart';
 import '../tools/tools.dart';
-import '../view/studentView.rsp.dart';
+import '../view/student/studentView.rsp.dart';
 import 'package:bakalari/bakalari.dart';
 import '../tools/db.dart';
 
