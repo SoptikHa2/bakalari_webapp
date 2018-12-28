@@ -1,4 +1,4 @@
-[:page name="rootView" args="List<String> urls, dynamic timetable, String errorDescription"]
+[:page name="rootView" args="List<String> urls, dynamic timetable, String errorDescription, String timetableOld"]
   [:include "webapp/view/head.html" /]
   <div class="content">
     [:if errorDescription != null]
@@ -59,12 +59,20 @@
       i pokud zrovna nebudete přihlášeni.
     </p>
     [:else]
+    [:if timetableOld != '']
+    <p>
+      [= timetableOld]
+    </p>
+    [/if]
     <table class="pure-table">
       <thead>
         <tr></tr>
         <tr>
+          <th></th>
           [:for hour in timetable.times ]
-          <th>[= hour.caption ]</th>
+          <th title="[= hour.beginTime ] - [= hour.endTime ]">
+            [= hour.caption ]
+          </th>
           [/for]
         </tr>
       </thead>
@@ -72,21 +80,19 @@
         [:for day in timetable.days ]
         <tr>
           <th>[= day.shortName ]</th>
+          [:for lesson in day.lessons]
+          <td class="table-cell-small [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+            <div class="table-cell-main">[= lesson.subjectShort ]</div>
+            <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort == null
+              || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
+              '' : '&nbsp;|&nbsp;'][= lesson.classroom ]</span>
+          </td>
+          [/for]
         </tr>
-        [:for lesson in day.lessons]
-        <tr>
-          <th>
-            [= lesson.type ]
-          </th>
-        </tr>
-        [/for]
         [/for]
       </tbody>
     </table>
     [/if]
   </div>
-
-  <p class="upfoot-note">
-    Neoficiální webová aplikace pro přístup k Bakalářům.
-  </p>
+  
   [:include "webapp/view/tail.html" /]

@@ -1,3 +1,4 @@
+import 'controller/refreshStudentInfo.dart';
 import 'tools/log.dart';
 import 'controller/root.dart';
 import 'controller/student.dart';
@@ -11,6 +12,7 @@ class Config {
     "get:/privacy_policy": privacyPolicyView,
     "get:/api": restApiView,
     "get:/logout": Logout.logoutUser,
+    "get:/refresh": RefreshStudentInfo.refresh,
 
     "post:/student": Student.login,
     "get:/student": Student.getInfo,

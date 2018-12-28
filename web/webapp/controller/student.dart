@@ -17,6 +17,9 @@ class Student {
     var post = StudentLoginPostParams();
     ObjectUtil.inject(post, postParameters);
     if (!post.validate()) {
+      if(connect.request.uri.queryParameters.keys.contains('refresh') && connect.request.uri.queryParameters['refresh'] == '1'){
+        return connect.redirect('/refresh?error=invalid_structure');
+      }
       return connect.redirect("/?error=invalid_structure");
     }
 
@@ -32,18 +35,30 @@ class Student {
 
       bakaweb.getTimetable().then((t) => DB.updateStudentInfo(
           guid, ((student) => student.update(timetable: t))));
-      bakaweb.getGrades().then((g) =>
-          DB.updateStudentInfo(guid, ((student) => student.update(grades: g))));
+      bakaweb.getTimetablePermanent().then((t) => DB.updateStudentInfo(
+          guid, ((student) => student.update(permTimetable: t))));
+      bakaweb.getGrades().then((g) => DB.updateStudentInfo(
+          guid, ((student) => student.update(grades: g))));
       bakaweb.getSubjects().then((s) => DB.updateStudentInfo(
           guid, ((student) => student.update(subjects: s))));
       bakaweb.getHomeworks().then((h) => DB.updateStudentInfo(
           guid, ((student) => student.update(homeworks: h))));
       bakaweb.getMessages().then((m) => DB.updateStudentInfo(
           guid, ((student) => student.update(messages: m))));
+
       connect.response.cookies.add(Cookie("studentID", guid)
         ..expires = DateTime.now().add(Duration(days: 7)));
+      connect.response.cookies.add(
+          Cookie("schoolName", Tools.encodeCookieValue(bakaweb.school.name))
+            ..expires = DateTime.now().add(Duration(days: 365)));
+      connect.response.cookies.add(Cookie(
+          "className", Tools.encodeCookieValue(bakaweb.student.schoolClass))
+        ..expires = DateTime.now().add(Duration(days: 365)));
     } catch (e) {
       print(e);
+      if(connect.request.uri.queryParameters.keys.contains('refresh') && connect.request.uri.queryParameters['refresh'] == '1'){
+        return connect.redirect('/refresh?error=cannot_connect');
+      }
       return connect.redirect('/?error=cannot_connect');
     }
 

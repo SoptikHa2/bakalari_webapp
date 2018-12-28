@@ -1,4 +1,4 @@
-[:page name="studentView" args="String errorDescription, dynamic timetable, dynamic averages, String lastRefresh,
+[:page name="studentView" args="String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages, String lastRefresh,
 String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
 [:include "webapp/view/head.html" /]
 <div class="content">
@@ -49,7 +49,11 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
                 Načítám rozvrh, za chvíli tady bude...
             </p>
             [:else]
-            <table class="pure-table">
+            [:if timetable != null && permTimetable != null ]
+            <button class="pure-button pure-button-primary button-switch" toggleon="tabletoday" toggleoff="tableperm">Dnešní</button>
+            <button class="pure-button button-switch" toggleon="tableperm" togleoff="tabletoday">Stálý</button>
+            [/if]
+            <table class="pure-table" id="tabletoday">
                 <thead>
                     <tr></tr>
                     <tr>
@@ -77,6 +81,36 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
                     [/for]
                 </tbody>
             </table>
+            [:if permTimetable != null]
+            <table class="pure-table" id="tableperm">
+                <thead>
+                    <tr></tr>
+                    <tr>
+                        <th></th>
+                        [:for hour in permTimetable.times ]
+                        <th title="[= hour.beginTime ] - [= hour.endTime ]">
+                            [= hour.caption ]
+                        </th>
+                        [/for]
+                    </tr>
+                </thead>
+                <tbody>
+                    [:for day in permTimetable.days ]
+                    <tr>
+                        <th>[= day.shortName ]</th>
+                        [:for lesson in day.lessons]
+                        <td class="table-cell-small [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                            <div class="table-cell-main">[= lesson.subjectShort ]</div>
+                            <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort == null
+                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
+                                '' : '&nbsp;|&nbsp;'][= lesson.classroom ]</span>
+                        </td>
+                        [/for]
+                    </tr>
+                    [/for]
+                </tbody>
+            </table>
+            [/if]
             [/if]
             <div class="pure-u-1 pure-u-md-1-2" id="otherModules">
                 <h1 class="content-subhead">Ostatní moduly</h1>
@@ -111,5 +145,6 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
 </p>
 [/if]
 
+<script src="../../js/buttonSwitch.js"></script>
 <script src="../../js/studentRefresh.js"></script>
 [:include "webapp/view/tail.html" /]

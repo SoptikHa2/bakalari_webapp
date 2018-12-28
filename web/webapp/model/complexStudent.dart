@@ -17,6 +17,7 @@ class ComplexStudent {
   Student studentInfo;
   School schoolInfo;
   Timetable timetable;
+  Timetable permTimetable;
   List<Grade> grades;
   List<Subject> subjects;
   List<Homework> homeworks;
@@ -26,6 +27,7 @@ class ComplexStudent {
   ComplexStudent(
       {this.guid,
       this.timetable,
+      this.permTimetable,
       this.grades,
       this.homeworks,
       this.messages,
@@ -48,6 +50,7 @@ class ComplexStudent {
       {Student studentInfo,
       School schoolInfo,
       Timetable timetable,
+      Timetable permTimetable,
       List<Grade> grades,
       List<Subject> subjects,
       List<Homework> homeworks,
@@ -56,6 +59,7 @@ class ComplexStudent {
     this.studentInfo = studentInfo ?? this.studentInfo;
     this.schoolInfo = schoolInfo ?? this.schoolInfo;
     this.timetable = timetable ?? this.timetable;
+    this.permTimetable = permTimetable ?? this.permTimetable;
     this.grades = grades ?? this.grades;
     this.subjects = subjects ?? this.subjects;
     this.homeworks = homeworks ?? this.homeworks;

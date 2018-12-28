@@ -48,9 +48,13 @@ class Tools {
           json[key].runtimeType == List<double>().runtimeType ||
           json[key].runtimeType == List<String>().runtimeType ||
           json[key].runtimeType == List<Map<String, dynamic>>().runtimeType) {
-        result += fromListToStringyJson(json[key]).replaceAll('\n', '').replaceAll('\r', '');
+        result += fromListToStringyJson(json[key])
+            .replaceAll('\n', '')
+            .replaceAll('\r', '');
       } else {
-        result += fromMapToStringyJson(json[key]).replaceAll('\n', '').replaceAll('\r', '');
+        result += fromMapToStringyJson(json[key])
+            .replaceAll('\n', '')
+            .replaceAll('\r', '');
       }
       if (key != json.keys.last) {
         result += ",";
@@ -60,7 +64,7 @@ class Tools {
   }
 
   static String fromListToStringyJson(List<dynamic> json) {
-    if(json == null) return 'null';
+    if (json == null) return 'null';
     String result = "[";
     for (var item in json) {
       if (item.runtimeType == int || item.runtimeType == double) {
@@ -71,13 +75,94 @@ class Tools {
           item.runtimeType == List<double>().runtimeType ||
           item.runtimeType == List<String>().runtimeType ||
           item.runtimeType == List<Map<String, dynamic>>().runtimeType) {
-        result += fromListToStringyJson(item).replaceAll('\n', '').replaceAll('\r', '');
+        result += fromListToStringyJson(item)
+            .replaceAll('\n', '')
+            .replaceAll('\r', '');
       } else {
-        result += fromMapToStringyJson(item).replaceAll('\n', '').replaceAll('\r', '');
+        result += fromMapToStringyJson(item)
+            .replaceAll('\n', '')
+            .replaceAll('\r', '');
       }
 
       if (item != json.last) result += ",";
     }
     return result + "]";
+  }
+
+  static T maxWhere<T>(Iterable<T> list, double score(T source)) {
+    T value = null;
+    double currentScore = double.negativeInfinity;
+    for (var item in list) {
+      double scoreOfThisItem = score(item);
+      if (scoreOfThisItem >= currentScore) {
+        currentScore = scoreOfThisItem;
+        value = item;
+      }
+    }
+    return value;
+  }
+
+  static Map<String, String> _cookieValueEncoding = {
+    ",": "AAAAAAACARKAAAAAAAA",
+    ".": "AAAAAAATECKAAAAAAAA",
+    "|": "AAAAAAAPIPAAAAAAAA",
+    ":": "AAAAAAADVOJTECKAAAAAAAA",
+    ";": "AAAAAAASTREDNIKAAAAAAA",
+    "@": "AAAAAAAZAVINACAAAAAAA",
+    "#": "AAAAAAAKRIZEKAAAAAAA",
+    "%": "AAAAAAAPROCENTOAAAAAAA",
+    "&": "AAAAAAAAMPERAAAAAAA",
+    "*": "AAAAAAAHVEZDICKAAAAAAAA",
+    "(": "AAAAAAALZAVORKAAAAAAAA",
+    ")": "AAAAAAAPZAVORKAAAAAAAA",
+    " ": "AAAAAAAMEZERAAAAAAAA",
+    "=": "AAAAAAAROVNASEAAAAAAA",
+    "ě": "AAAAAAAE1AAAAAAA",
+    "š": "AAAAAAASAAAAAAA",
+    "č": "AAAAAAACAAAAAAA",
+    "ř": "AAAAAAARAAAAAAA",
+    "ž": "AAAAAAAZAAAAAAA",
+    "ý": "AAAAAAAYAAAAAAA",
+    "á": "AAAAAAAAAAAAAAA",
+    "í": "AAAAAAAIAAAAAAA",
+    "é": "AAAAAAAE2AAAAAAA",
+    "ů": "AAAAAAAU1AAAAAAA",
+    "ú": "AAAAAAAU2AAAAAAA",
+    "ä": "AAAAAAAAPAAAAAAA",
+    "ö": "AAAAAAAOPAAAAAAA",
+    "ü": "AAAAAAAUPAAAAAAA",
+    "Ě": "AAAAAAAE1VAAAAAAA",
+    "Š": "AAAAAAASVAAAAAAA",
+    "Č": "AAAAAAACVAAAAAAA",
+    "Ř": "AAAAAAARVAAAAAAA",
+    "Ž": "AAAAAAAZVAAAAAAA",
+    "Ý": "AAAAAAAYVAAAAAAA",
+    "Á": "AAAAAAAAVAAAAAAA",
+    "Í": "AAAAAAAIVAAAAAAA",
+    "É": "AAAAAAAE2VAAAAAAA",
+    "Ů": "AAAAAAAU1VAAAAAAA",
+    "Ú": "AAAAAAAU2VAAAAAAA",
+    "Ä": "AAAAAAAAPVAAAAAAA",
+    "Ö": "AAAAAAAOPVAAAAAAA",
+    "Ü": "AAAAAAAUPVAAAAAAA"
+  };
+  static String encodeCookieValue(String value) {
+    String encoded = value;
+    for (var key in _cookieValueEncoding.keys) {
+      var value = _cookieValueEncoding[key];
+
+      encoded = encoded.replaceAll(key, value);
+    }
+    return encoded;
+  }
+
+  static String decodeCookieValue(String value) {
+    String encoded = value;
+    for (var key in _cookieValueEncoding.keys) {
+      var value = _cookieValueEncoding[key];
+
+      encoded = encoded.replaceAll(value, key);
+    }
+    return encoded;
   }
 }

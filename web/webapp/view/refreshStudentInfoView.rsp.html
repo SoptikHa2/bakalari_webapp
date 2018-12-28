@@ -1,0 +1,31 @@
+[:page name="refreshStudentInfoView" args="List<String> urls, String errorDescription"]
+    [:include "webapp/view/head.html" /]
+    <div class="content">
+        [:if errorDescription != null]
+        <aside class="errorBar">
+            <p>
+                [= errorDescription]
+            </p>
+        </aside>
+        [/if]
+
+        <form class="pure-form" action="/student?refresh=1" method="POST">
+            <fieldset>
+                <legend>Obnovit údaje (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
+
+                <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
+                <datalist id="schoolUrls">
+                    [:if urls != null]
+                    [:for url in urls]
+                    <option>[=url]</option>
+                    [/for]
+                    [/if]
+                </datalist>
+                <input name="login" type="text" placeholder="Uživatelské jméno">
+                <input name="password" type="password" placeholder="Heslo">
+
+                <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
+            </fieldset>
+        </form>
+    </div>
+    [:include "webapp/view/tail.html" /]

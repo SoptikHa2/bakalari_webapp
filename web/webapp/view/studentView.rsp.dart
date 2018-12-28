@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, studentView, for rendering the view. */
-Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic averages, String lastRefresh,
+Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages, String lastRefresh,
 String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
@@ -109,7 +109,14 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
   } else {
 
-    response.write("""            <table class="pure-table">
+    if (timetable != null && permTimetable != null) {
+
+      response.write("""            <button class="pure-button pure-button-primary button-switch" toggleon="tabletoday" toggleoff="tableperm">Dnešní</button>
+            <button class="pure-button button-switch" toggleon="tableperm" togleoff="tabletoday">Stálý</button>
+""");
+    } //if
+
+    response.write("""            <table class="pure-table" id="tabletoday">
                 <thead>
                     <tr></tr>
                     <tr>
@@ -195,6 +202,96 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
     response.write("""                </tbody>
             </table>
 """);
+
+    if (permTimetable != null) {
+
+      response.write("""            <table class="pure-table" id="tableperm">
+                <thead>
+                    <tr></tr>
+                    <tr>
+                        <th></th>
+""");
+
+      for (var hour in permTimetable.times) {
+
+        response.write("""                        <th title=\"""");
+
+        response.write(Rsp.nnx(hour.beginTime));
+
+
+        response.write(""" - """);
+
+        response.write(Rsp.nnx(hour.endTime));
+
+
+        response.write("""">
+                            """);
+
+        response.write(Rsp.nnx(hour.caption));
+
+
+        response.write("""
+
+                        </th>
+""");
+      } //for
+
+      response.write("""                    </tr>
+                </thead>
+                <tbody>
+""");
+
+      for (var day in permTimetable.days) {
+
+        response.write("""                    <tr>
+                        <th>""");
+
+        response.write(Rsp.nnx(day.shortName));
+
+
+        response.write("""</th>
+""");
+
+        for (var lesson in day.lessons) {
+
+          response.write("""                        <td class="table-cell-small """);
+
+          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
+
+
+          response.write("""">
+                            <div class="table-cell-main">""");
+
+          response.write(Rsp.nnx(lesson.subjectShort));
+
+
+          response.write("""</div>
+                            <span class="table-cell-secondary">""");
+
+          response.write(Rsp.nnx(lesson.teacherShort));
+
+
+          response.write(Rsp.nnx((lesson.teacherShort == null
+                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
+                                '' : '&nbsp;|&nbsp;'));
+
+
+          response.write(Rsp.nnx(lesson.classroom));
+
+
+          response.write("""</span>
+                        </td>
+""");
+        } //for
+
+        response.write("""                    </tr>
+""");
+      } //for
+
+      response.write("""                </tbody>
+            </table>
+""");
+    } //if
   } //if
 
   response.write("""            <div class="pure-u-1 pure-u-md-1-2" id="otherModules">
@@ -259,6 +356,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
   response.write("""
 
+<script src="../../js/buttonSwitch.js"></script>
 <script src="../../js/studentRefresh.js"></script>
 """);
 

@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, rootView, for rendering the view. */
-Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, String errorDescription}) async {
+Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, String errorDescription, String timetableOld}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -102,20 +102,48 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
 
   } else {
 
+    if (timetableOld != '') {
+
+      response.write("""    <p>
+      """);
+
+      response.write(Rsp.nnx(timetableOld));
+
+
+      response.write("""
+
+    </p>
+""");
+    } //if
+
     response.write("""    <table class="pure-table">
       <thead>
         <tr></tr>
         <tr>
+          <th></th>
 """);
 
     for (var hour in timetable.times) {
 
-      response.write("""          <th>""");
+      response.write("""          <th title=\"""");
+
+      response.write(Rsp.nnx(hour.beginTime));
+
+
+      response.write(""" - """);
+
+      response.write(Rsp.nnx(hour.endTime));
+
+
+      response.write("""">
+            """);
 
       response.write(Rsp.nnx(hour.caption));
 
 
-      response.write("""</th>
+      response.write("""
+
+          </th>
 """);
     } //for
 
@@ -133,24 +161,42 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
 
 
       response.write("""</th>
-        </tr>
 """);
 
       for (var lesson in day.lessons) {
 
-        response.write("""        <tr>
-          <th>
-            """);
+        response.write("""          <td class="table-cell-small """);
 
-        response.write(Rsp.nnx(lesson.type));
+        response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
 
 
-        response.write("""
+        response.write("""">
+            <div class="table-cell-main">""");
 
-          </th>
-        </tr>
+        response.write(Rsp.nnx(lesson.subjectShort));
+
+
+        response.write("""</div>
+            <span class="table-cell-secondary">""");
+
+        response.write(Rsp.nnx(lesson.teacherShort));
+
+
+        response.write(Rsp.nnx((lesson.teacherShort == null
+              || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
+              '' : '&nbsp;|&nbsp;'));
+
+
+        response.write(Rsp.nnx(lesson.classroom));
+
+
+        response.write("""</span>
+          </td>
 """);
       } //for
+
+      response.write("""        </tr>
+""");
     } //for
 
     response.write("""      </tbody>
@@ -159,10 +205,7 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
   } //if
 
   response.write("""  </div>
-
-  <p class="upfoot-note">
-    Neoficiální webová aplikace pro přístup k Bakalářům.
-  </p>
+  
 """);
 
   await connect.include("webapp/view/tail.html");

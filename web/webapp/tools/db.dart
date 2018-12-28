@@ -5,6 +5,7 @@ import 'package:rikulo_commons/browser.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import '../model/complexStudent.dart';
+import 'tools.dart';
 
 /// Class that takes care of Database
 class DB {
@@ -60,6 +61,12 @@ class DB {
         .findRecord(Finder(filter: Filter.byKey(guid)));
     var value = record.value['student'];
     return ComplexStudent.fromJson(value);
+  }
+
+  static Future<ComplexStudent> getLatestStudent(String school, String studentClass) async{
+    var records = (await _students.findRecords(Finder())).map((r) => ComplexStudent.fromJson(r.value['student']));
+    //(await _students.findRecords(Finder(filter: Filter.matchesRegExp('student', RegExp(r'^.*' + RegExp.escape(school) + r'.*' + RegExp.escape(studentClass) + r'.*$'))))).map((r) => ComplexStudent.fromJson(r.value['student']));
+    return Tools.maxWhere<ComplexStudent>(records, (r) => r.refresh.millisecondsSinceEpoch.toDouble());
   }
 
   static Future<void> logRawAccess(HttpRequest request, Browser browser) async {
