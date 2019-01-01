@@ -12,7 +12,7 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("webapp/view/head.html");
+  await connect.include("webapp/view/templates/head.html");
 
   response.write("""    <div class="content">
 """);
@@ -37,7 +37,7 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
 
         <form class="pure-form" action="/student?refresh=1" method="POST">
             <fieldset>
-                <legend>Obnovit údaje (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
+                <legend>Obnovení údajů o studentovi (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
                 <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
                 <datalist id="schoolUrls">
@@ -67,7 +67,7 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
     </div>
 """);
 
-  await connect.include("webapp/view/tail.html");
+  await connect.include("webapp/view/templates/tail.html");
 
   return null;
 }

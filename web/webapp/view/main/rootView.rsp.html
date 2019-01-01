@@ -1,5 +1,5 @@
 [:page name="rootView" args="List<String> urls, dynamic timetable, String errorDescription, String timetableOld"]
-  [:include "webapp/view/head.html" /]
+  [:include "webapp/view/templates/head.html" /]
   <div class="content">
     [:if errorDescription != null]
     <aside class="errorBar">
@@ -95,4 +95,4 @@
     [/if]
   </div>
   
-  [:include "webapp/view/tail.html" /]
+  [:include "webapp/view/templates/tail.html" /]

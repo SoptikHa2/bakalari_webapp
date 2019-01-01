@@ -12,7 +12,7 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("webapp/view/head.html");
+  await connect.include("webapp/view/templates/head.html");
 
   response.write("""  <div class="content">
 """);
@@ -208,7 +208,7 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
   
 """);
 
-  await connect.include("webapp/view/tail.html");
+  await connect.include("webapp/view/templates/tail.html");
 
   return null;
 }

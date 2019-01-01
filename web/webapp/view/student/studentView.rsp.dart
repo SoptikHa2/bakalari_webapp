@@ -13,7 +13,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("webapp/view/head.html");
+  await connect.include("webapp/view/templates/head.html");
 
   response.write("""<div class="content">
 """);
@@ -360,7 +360,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 <script src="../../js/studentRefresh.js"></script>
 """);
 
-  await connect.include("webapp/view/tail.html");
+  await connect.include("webapp/view/templates/tail.html");
 
   return null;
 }

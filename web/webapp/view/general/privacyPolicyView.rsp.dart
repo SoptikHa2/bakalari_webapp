@@ -12,7 +12,7 @@ Future privacyPolicyView(HttpConnect connect) async {
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("webapp/view/head.html");
+  await connect.include("webapp/view/templates/head.html");
 
   response.write("""<div class="content">
   <h1>Ochrana osobních údajů</h1>
@@ -38,7 +38,7 @@ Future privacyPolicyView(HttpConnect connect) async {
 </div>
 """);
 
-  await connect.include("webapp/view/tail.html");
+  await connect.include("webapp/view/templates/tail.html");
 
   return null;
 }

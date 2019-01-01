@@ -1,5 +1,5 @@
 [:page name="refreshStudentInfoView" args="List<String> urls, String errorDescription"]
-    [:include "webapp/view/head.html" /]
+    [:include "webapp/view/templates/head.html" /]
     <div class="content">
         [:if errorDescription != null]
         <aside class="errorBar">
@@ -28,4 +28,4 @@
             </fieldset>
         </form>
     </div>
-    [:include "webapp/view/tail.html" /]
+    [:include "webapp/view/templates/tail.html" /]
