@@ -5,6 +5,8 @@ library privacyPolicyView_rsp;
 import 'dart:async';
 import 'dart:io';
 import 'package:stream/stream.dart';
+import '../../config.dart';
+import '../../tools/tools.dart';
 
 /** Template, privacyPolicyView, for rendering the view. */
 Future privacyPolicyView(HttpConnect connect) async {
@@ -13,9 +15,14 @@ Future privacyPolicyView(HttpConnect connect) async {
     return null;
 
   await connect.include("webapp/view/templates/head.html");
+var sessionCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsSessionCookieStored);
+var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIdentifierCookieStored);
 
-  response.write("""<div class="content">
-  <h1>Ochrana osobních údajů</h1>
+  response.write("""
+
+
+<div class="content">
+  <h1>Ochrana osobních údajů a cookies</h1>
   <p>
     Přihlášením na web předáváte své přihlašovací údaje na zpracování tomuto serveru. Server k nim má přístup pouze po
     dobu zpracování Vašeho požadavku.
@@ -23,13 +30,24 @@ Future privacyPolicyView(HttpConnect connect) async {
   <p>
     Dočasně ukládáme na serveru informace přijaté ze serveru školy, abychom je mohli průběžně zobrazovat a nemuseli
     jste při každém dalším načtení stránky znovu zadávat heslo. Přístupový kód k těmto údajům ukládáme po dobu jednoho
-    týdne ve vašem prohlížeči v souborech cookies. Tento přístupový kód bude vymazán po 7 dnech nebo po kliknutí na
-    tlačítko Odhlásit. Samotné informace přijaté ze serveru školy jsou také periodicky mazány.
+    týdne ve vašem prohlížeči v souborech cookies. Tento přístupový kód bude ve vašem prohlížeči uložen """);
+
+  response.write(Rsp.nnx(sessionCookieLength));
+
+
+  response.write("""
+
+    nebo dokud se neodhlásíte.
   </p>
   <p>
     Po přihlášení uložíme do vašeho prohlížeče identifikátor školy a třídy. Díky tomu můžeme na hlavní stránce
-    zobrazovat rozvrh pro vaši třídu, i když zrovna nejste přihlášeni. Tyto informace budou automaticky vymazány po 365
-    dnech od posledního přihlášení.
+    zobrazovat rozvrh pro vaši třídu, i když zrovna nejste přihlášeni. Tyto informace budou po každém novém
+    přihlášení uloženy """);
+
+  response.write(Rsp.nnx(classCookieLength));
+
+
+  response.write(""".
   </p>
   <p>
     Zároveň zaznamenáváme informace o přístupu a využívání těchto webových stránek kvůli analýze návštěvnosti těchto

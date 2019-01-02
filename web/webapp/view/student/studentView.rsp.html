@@ -1,6 +1,10 @@
-[:page name="studentView" args="String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages, String lastRefresh,
+[:page name="studentView" args="String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages,
+String lastRefresh,
 String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
 [:include "webapp/view/templates/head.html" /]
+[:dart]
+String nbsp = "\u{00A0}";
+[/dart]
 <div class="content">
     [:if errorDescription != null]
     <aside class="errorBar">
@@ -50,8 +54,8 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
             </p>
             [:else]
             [:if timetable != null && permTimetable != null ]
-            <button class="pure-button pure-button-primary button-switch" toggleon="tabletoday" toggleoff="tableperm">Dnešní</button>
-            <button class="pure-button button-switch" toggleon="tableperm" togleoff="tabletoday">Stálý</button>
+            <button id="butSwitchTimetableToToday" class="pure-button pure-button-primary button-switch" toggleon="tabletoday" toggleoff="tableperm" oppButton="butSwitchTimetableToPerm">Dnešní</button>
+            <button id="butSwitchTimetableToPerm" class="pure-button button-switch" toggleon="tableperm" toggleoff="tabletoday" oppButton="butSwitchTimetableToToday">Stálý</button>
             [/if]
             <table class="pure-table" id="tabletoday">
                 <thead>
@@ -69,12 +73,18 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
                     [:for day in timetable.days ]
                     <tr>
                         <th>[= day.shortName ]</th>
-                        [:for lesson in day.lessons]
-                        <td class="table-cell-small [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
-                            <div class="table-cell-main">[= lesson.subjectShort ]</div>
-                            <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort == null
-                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
-                                '' : '&nbsp;|&nbsp;'][= lesson.classroom ]</span>
+                        [:for lessons in day.lessons]
+                        <td class="table-cell-small">
+                            [:for lesson in lessons]
+                            <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                                <div class="table-cell-main">[= lesson.subjectShort ]</div>
+                                <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
+                                    null
+                                    || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
+                                    ?
+                                    '' : '$nbsp|$nbsp'][= lesson.classroom ]</span>
+                            </div>
+                            [/for]
                         </td>
                         [/for]
                     </tr>
@@ -82,7 +92,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
                 </tbody>
             </table>
             [:if permTimetable != null]
-            <table class="pure-table" id="tableperm">
+            <table class="pure-table" id="tableperm" style="display: none;">
                 <thead>
                     <tr></tr>
                     <tr>
@@ -98,12 +108,18 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
                     [:for day in permTimetable.days ]
                     <tr>
                         <th>[= day.shortName ]</th>
-                        [:for lesson in day.lessons]
-                        <td class="table-cell-small [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
-                            <div class="table-cell-main">[= lesson.subjectShort ]</div>
-                            <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort == null
-                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
-                                '' : '&nbsp;|&nbsp;'][= lesson.classroom ]</span>
+                        [:for lessons in day.lessons]
+                        <td class="table-cell-small">
+                            [:for lesson in lessons]
+                            <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                                <div class="table-cell-main">[= lesson.subjectShort ]</div>
+                                <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
+                                    null
+                                    || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
+                                    ?
+                                    '' : '$nbsp|$nbsp'][= lesson.classroom ]</span>
+                            </div>
+                            [/for]
                         </td>
                         [/for]
                     </tr>
@@ -141,7 +157,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
 [:if lastRefresh != null]
 <p style="text-align: center">
     To, co vidíte na této stránce, je [= lastRefresh] staré.
-    <button class="pure-button">Obnovit</button>
+    <a href="/refresh"><button class="pure-button">Obnovit</button></a>
 </p>
 [/if]
 

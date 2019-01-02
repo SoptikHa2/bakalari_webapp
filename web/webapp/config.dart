@@ -28,4 +28,8 @@ class Config {
     "404": "/html/404.html",
     "500": "/html/500.html"
   };
+
+  static int hoursUntilRefreshButtonIsShown = 12;
+  static int daysHowLongIsSessionCookieStored = 7;
+  static int daysHowLongIsClassIdentifierCookieStored = 365;
 }

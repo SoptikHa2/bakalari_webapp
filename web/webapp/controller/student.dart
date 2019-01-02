@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:rikulo_commons/io.dart';
 import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
+import '../config.dart';
 import '../model/complexStudent.dart';
 import '../tools/tools.dart';
 import '../view/student/studentView.rsp.dart';
@@ -17,7 +18,8 @@ class Student {
     var post = StudentLoginPostParams();
     ObjectUtil.inject(post, postParameters);
     if (!post.validate()) {
-      if(connect.request.uri.queryParameters.keys.contains('refresh') && connect.request.uri.queryParameters['refresh'] == '1'){
+      if (connect.request.uri.queryParameters.keys.contains('refresh') &&
+          connect.request.uri.queryParameters['refresh'] == '1') {
         return connect.redirect('/refresh?error=invalid_structure');
       }
       return connect.redirect("/?error=invalid_structure");
@@ -37,8 +39,8 @@ class Student {
           guid, ((student) => student.update(timetable: t))));
       bakaweb.getTimetablePermanent().then((t) => DB.updateStudentInfo(
           guid, ((student) => student.update(permTimetable: t))));
-      bakaweb.getGrades().then((g) => DB.updateStudentInfo(
-          guid, ((student) => student.update(grades: g))));
+      bakaweb.getGrades().then((g) =>
+          DB.updateStudentInfo(guid, ((student) => student.update(grades: g))));
       bakaweb.getSubjects().then((s) => DB.updateStudentInfo(
           guid, ((student) => student.update(subjects: s))));
       bakaweb.getHomeworks().then((h) => DB.updateStudentInfo(
@@ -47,16 +49,20 @@ class Student {
           guid, ((student) => student.update(messages: m))));
 
       connect.response.cookies.add(Cookie("studentID", guid)
-        ..expires = DateTime.now().add(Duration(days: 7)));
-      connect.response.cookies.add(
-          Cookie("schoolName", Tools.encodeCookieValue(bakaweb.school.name))
-            ..expires = DateTime.now().add(Duration(days: 365)));
+        ..expires = DateTime.now()
+            .add(Duration(days: Config.daysHowLongIsSessionCookieStored)));
+      connect.response.cookies.add(Cookie(
+          "schoolName", Tools.encodeCookieValue(bakaweb.school.name))
+        ..expires = DateTime.now().add(
+            Duration(days: Config.daysHowLongIsClassIdentifierCookieStored)));
       connect.response.cookies.add(Cookie(
           "className", Tools.encodeCookieValue(bakaweb.student.schoolClass))
-        ..expires = DateTime.now().add(Duration(days: 365)));
+        ..expires = DateTime.now().add(
+            Duration(days: Config.daysHowLongIsClassIdentifierCookieStored)));
     } catch (e) {
       print(e);
-      if(connect.request.uri.queryParameters.keys.contains('refresh') && connect.request.uri.queryParameters['refresh'] == '1'){
+      if (connect.request.uri.queryParameters.keys.contains('refresh') &&
+          connect.request.uri.queryParameters['refresh'] == '1') {
         return connect.redirect('/refresh?error=cannot_connect');
       }
       return connect.redirect('/?error=cannot_connect');
@@ -79,16 +85,20 @@ class Student {
 
       ComplexStudent student = await DB.getStudent(guid);
       var timetable = student.timetable;
+      var permTimetable = student.permTimetable;
 
       // Refresh time
       var timeSinceLastRefresh =
           DateTime.now().difference(student.refresh ?? DateTime.now());
       String sinceLastRefresh = null;
-      if (timeSinceLastRefresh.inHours > 0) {
+      if (timeSinceLastRefresh.inHours >=
+          Config.hoursUntilRefreshButtonIsShown) {
         if (timeSinceLastRefresh.inHours < 24)
-          sinceLastRefresh = "${timeSinceLastRefresh.inHours} hodin";
+          sinceLastRefresh =
+              Tools.hoursToStringWithUnit(timeSinceLastRefresh.inHours);
         else
-          sinceLastRefresh = "${timeSinceLastRefresh.inDays} dní";
+          sinceLastRefresh =
+              Tools.daysToStringWithUnit(timeSinceLastRefresh.inDays);
       }
 
       // Averages
@@ -99,23 +109,28 @@ class Student {
 
       // Change status code to 201 (Created) if we already have all the information we need,
       // so there is no need to ask for more
-      // TODO: What if some school doesn't support one of the modules I'm checking here?
-      if (student.grades != null &&
-          student.homeworks != null &&
-          student.messages != null &&
-          student.subjects != null &&
-          student.timetable != null) {
+      if ((student.grades != null &&
+              student.homeworks != null &&
+              student.messages != null &&
+              student.subjects != null &&
+              student.timetable != null) ||
+          // If some problem happens, pretend everything is OK
+          // after 2 minutes
+          DateTime.now()
+                  .difference(student.refresh ?? DateTime.now())
+                  .inMinutes >=
+              2) {
         connect.response.statusCode = 201;
       }
 
       return studentView(connect,
           timetable: timetable,
+          permTimetable: permTimetable,
           lastRefresh: sinceLastRefresh,
           averages: averages);
     } catch (e) {
       print(e);
-      connect.response.cookies.clear();
-      return connect.redirect('/?error=unknown');
+      return connect.redirect('/logout');
     }
   }
 
@@ -178,12 +193,17 @@ class Student {
 
       // Change status code to 201 (Created) if we already have all the information we need,
       // so there is no need to ask for more
-      // TODO: What if some school doesn't support one of the modules I'm checking here?
-      if (student.grades != null &&
-          student.homeworks != null &&
-          student.messages != null &&
-          student.subjects != null &&
-          student.timetable != null) {
+      if ((student.grades != null &&
+              student.homeworks != null &&
+              student.messages != null &&
+              student.subjects != null &&
+              student.timetable != null) ||
+          // If some problem happens, pretend everything is OK
+          // after 2 minutes
+          DateTime.now()
+                  .difference(student.refresh ?? DateTime.now())
+                  .inMinutes >=
+              2) {
         connect.response.statusCode = 201;
       }
 

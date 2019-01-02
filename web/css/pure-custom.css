@@ -57,13 +57,13 @@ a:hover{
     color: #aaa;
 }
 
-.upfoot-note{
-    color: #ccc;
-    font-size: 0.8em;
-    text-align: center;
-    margin-bottom: -1em;
+tr{
+    border: 1px solid rgb(223, 223, 223);
 }
 
+.pure-button:hover{
+    background-image: none !important;
+}
 
 @media (min-width: 48em) {
     .footer {

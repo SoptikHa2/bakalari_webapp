@@ -7,15 +7,19 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, studentView, for rendering the view. */
-Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages, String lastRefresh,
+Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages,
+String lastRefresh,
 String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
   await connect.include("webapp/view/templates/head.html");
+String nbsp = "\u{00A0}";
 
-  response.write("""<div class="content">
+  response.write("""
+
+<div class="content">
 """);
 
   if (errorDescription != null) {
@@ -111,8 +115,8 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
     if (timetable != null && permTimetable != null) {
 
-      response.write("""            <button class="pure-button pure-button-primary button-switch" toggleon="tabletoday" toggleoff="tableperm">Dnešní</button>
-            <button class="pure-button button-switch" toggleon="tableperm" togleoff="tabletoday">Stálý</button>
+      response.write("""            <button id="butSwitchTimetableToToday" class="pure-button pure-button-primary button-switch" toggleon="tabletoday" toggleoff="tableperm" oppButton="butSwitchTimetableToPerm">Dnešní</button>
+            <button id="butSwitchTimetableToPerm" class="pure-button button-switch" toggleon="tableperm" toggleoff="tabletoday" oppButton="butSwitchTimetableToToday">Stálý</button>
 """);
     } //if
 
@@ -163,35 +167,46 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
       response.write("""</th>
 """);
 
-      for (var lesson in day.lessons) {
+      for (var lessons in day.lessons) {
 
-        response.write("""                        <td class="table-cell-small """);
+        response.write("""                        <td class="table-cell-small">
+""");
 
-        response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
+        for (var lesson in lessons) {
 
+          response.write("""                            <div class="table-cell-standalone """);
 
-        response.write("""">
-                            <div class="table-cell-main">""");
-
-        response.write(Rsp.nnx(lesson.subjectShort));
-
-
-        response.write("""</div>
-                            <span class="table-cell-secondary">""");
-
-        response.write(Rsp.nnx(lesson.teacherShort));
+          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
 
 
-        response.write(Rsp.nnx((lesson.teacherShort == null
-                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
-                                '' : '&nbsp;|&nbsp;'));
+          response.write("""">
+                                <div class="table-cell-main">""");
+
+          response.write(Rsp.nnx(lesson.subjectShort));
 
 
-        response.write(Rsp.nnx(lesson.classroom));
+          response.write("""</div>
+                                <span class="table-cell-secondary">""");
+
+          response.write(Rsp.nnx(lesson.teacherShort));
 
 
-        response.write("""</span>
-                        </td>
+          response.write(Rsp.nnx((lesson.teacherShort ==
+                                    null
+                                    || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
+                                    ?
+                                    '' : '$nbsp|$nbsp'));
+
+
+          response.write(Rsp.nnx(lesson.classroom));
+
+
+          response.write("""</span>
+                            </div>
+""");
+        } //for
+
+        response.write("""                        </td>
 """);
       } //for
 
@@ -205,7 +220,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
     if (permTimetable != null) {
 
-      response.write("""            <table class="pure-table" id="tableperm">
+      response.write("""            <table class="pure-table" id="tableperm" style="display: none;">
                 <thead>
                     <tr></tr>
                     <tr>
@@ -252,35 +267,46 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
         response.write("""</th>
 """);
 
-        for (var lesson in day.lessons) {
+        for (var lessons in day.lessons) {
 
-          response.write("""                        <td class="table-cell-small """);
+          response.write("""                        <td class="table-cell-small">
+""");
 
-          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
+          for (var lesson in lessons) {
 
+            response.write("""                            <div class="table-cell-standalone """);
 
-          response.write("""">
-                            <div class="table-cell-main">""");
-
-          response.write(Rsp.nnx(lesson.subjectShort));
-
-
-          response.write("""</div>
-                            <span class="table-cell-secondary">""");
-
-          response.write(Rsp.nnx(lesson.teacherShort));
+            response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
 
 
-          response.write(Rsp.nnx((lesson.teacherShort == null
-                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
-                                '' : '&nbsp;|&nbsp;'));
+            response.write("""">
+                                <div class="table-cell-main">""");
+
+            response.write(Rsp.nnx(lesson.subjectShort));
 
 
-          response.write(Rsp.nnx(lesson.classroom));
+            response.write("""</div>
+                                <span class="table-cell-secondary">""");
+
+            response.write(Rsp.nnx(lesson.teacherShort));
 
 
-          response.write("""</span>
-                        </td>
+            response.write(Rsp.nnx((lesson.teacherShort ==
+                                    null
+                                    || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
+                                    ?
+                                    '' : '$nbsp|$nbsp'));
+
+
+            response.write(Rsp.nnx(lesson.classroom));
+
+
+            response.write("""</span>
+                            </div>
+""");
+          } //for
+
+          response.write("""                        </td>
 """);
         } //for
 
@@ -349,7 +375,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
 
     response.write(""" staré.
-    <button class="pure-button">Obnovit</button>
+    <a href="/refresh"><button class="pure-button">Obnovit</button></a>
 </p>
 """);
   } //if

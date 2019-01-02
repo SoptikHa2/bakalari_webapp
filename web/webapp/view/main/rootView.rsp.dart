@@ -11,6 +11,7 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
+String nbsp = "\u{00A0}";
 
   await connect.include("webapp/view/templates/head.html");
 
@@ -163,35 +164,44 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
       response.write("""</th>
 """);
 
-      for (var lesson in day.lessons) {
+      for (var lessons in day.lessons) {
 
-        response.write("""          <td class="table-cell-small """);
+        response.write("""          <td class="table-cell-small">
+""");
 
-        response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
+        for (var lesson in lessons) {
 
+          response.write("""            <div class="table-cell-standalone """);
 
-        response.write("""">
-            <div class="table-cell-main">""");
-
-        response.write(Rsp.nnx(lesson.subjectShort));
-
-
-        response.write("""</div>
-            <span class="table-cell-secondary">""");
-
-        response.write(Rsp.nnx(lesson.teacherShort));
+          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
 
 
-        response.write(Rsp.nnx((lesson.teacherShort == null
-              || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
-              '' : '&nbsp;|&nbsp;'));
+          response.write("""">
+              <div class="table-cell-main">""");
+
+          response.write(Rsp.nnx(lesson.subjectShort));
 
 
-        response.write(Rsp.nnx(lesson.classroom));
+          response.write("""</div>
+              <span class="table-cell-secondary">""");
+
+          response.write(Rsp.nnx(lesson.teacherShort));
 
 
-        response.write("""</span>
-          </td>
+          response.write(Rsp.nnx((lesson.teacherShort == null
+                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "") ?
+                '' : '$nbsp|$nbsp'));
+
+
+          response.write(Rsp.nnx(lesson.classroom));
+
+
+          response.write("""</span>
+            </div>
+""");
+        } //for
+
+        response.write("""          </td>
 """);
       } //for
 
@@ -205,7 +215,7 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
   } //if
 
   response.write("""  </div>
-  
+
 """);
 
   await connect.include("webapp/view/templates/tail.html");

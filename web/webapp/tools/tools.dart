@@ -165,4 +165,26 @@ class Tools {
     }
     return encoded;
   }
+
+  static String hoursToStringWithUnit(int hours){
+    if(hours == 0)
+      return "$hours hodin";
+    if(hours == 1)
+      return "$hours hodina";
+    if(hours <= 4)
+      return "$hours hodiny";
+
+    return "$hours hodin";
+  }
+
+  static String daysToStringWithUnit(int days){
+    if(days == 0)
+      return "$days dní";
+    if(days == 1)
+      return "$days den";
+    if(days <= 4)
+      return "$days dny";
+    
+    return "$days dní";
+  }
 }
