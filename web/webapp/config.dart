@@ -3,6 +3,7 @@ import 'tools/log.dart';
 import 'controller/root.dart';
 import 'controller/student.dart';
 import 'controller/logout.dart';
+import 'controller/subject.dart';
 import 'view/general/privacyPolicyView.rsp.dart';
 import 'view/general/restApi.rsp.dart';
 
@@ -16,6 +17,8 @@ class Config {
 
     "post:/student": Student.login,
     "get:/student": Student.getInfo,
+    "get:/student/subject" : Subject.getList,
+    "get:/student/subject/(identifier:[^/]*)" : Subject.getSubject,
     //"/admin/": admin
 
     "post:/student/json": Student.loginJson,
@@ -26,6 +29,7 @@ class Config {
   };
   static Map<String, dynamic> errorRouting = {
     "404": "/html/404.html",
+    "451": "/html/451.html",
     "500": "/html/500.html"
   };
 

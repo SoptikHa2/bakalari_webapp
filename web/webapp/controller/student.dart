@@ -74,64 +74,61 @@ class Student {
 
   // GET
   static Future getInfo(HttpConnect connect) async {
-    if (!connect.request.cookies.any((c) => c.name == "studentID")) {
-      return connect.redirect('/?error=not_logged_in');
+    var result = await Tools.loginAsStudent(connect.request.cookies);
+    var student = null;
+    if (result.success) {
+      student = result.result;
+    }else{
+      if(result.requestLogout){
+        return connect.redirect('/logout');
+      }else{
+        return connect.redirect('/?error=not_logged_in');
+      }
     }
 
-    try {
-      String guid = connect.request.cookies
-          .singleWhere((c) => c.name == 'studentID')
-          .value;
+    var timetable = student.timetable;
+    var permTimetable = student.permTimetable;
 
-      ComplexStudent student = await DB.getStudent(guid);
-      var timetable = student.timetable;
-      var permTimetable = student.permTimetable;
-
-      // Refresh time
-      var timeSinceLastRefresh =
-          DateTime.now().difference(student.refresh ?? DateTime.now());
-      String sinceLastRefresh = null;
-      if (timeSinceLastRefresh.inHours >=
-          Config.hoursUntilRefreshButtonIsShown) {
-        if (timeSinceLastRefresh.inHours < 24)
-          sinceLastRefresh =
-              Tools.hoursToStringWithUnit(timeSinceLastRefresh.inHours);
-        else
-          sinceLastRefresh =
-              Tools.daysToStringWithUnit(timeSinceLastRefresh.inDays);
-      }
-
-      // Averages
-      Map<String, double> averages = null;
-      if (student.grades != null) {
-        averages = Tools.gradesToSubjectAverages(student.grades);
-      }
-
-      // Change status code to 201 (Created) if we already have all the information we need,
-      // so there is no need to ask for more
-      if ((student.grades != null &&
-              student.homeworks != null &&
-              student.messages != null &&
-              student.subjects != null &&
-              student.timetable != null) ||
-          // If some problem happens, pretend everything is OK
-          // after 2 minutes
-          DateTime.now()
-                  .difference(student.refresh ?? DateTime.now())
-                  .inMinutes >=
-              2) {
-        connect.response.statusCode = 201;
-      }
-
-      return studentView(connect,
-          timetable: timetable,
-          permTimetable: permTimetable,
-          lastRefresh: sinceLastRefresh,
-          averages: averages);
-    } catch (e) {
-      print(e);
-      return connect.redirect('/logout');
+    // Refresh time
+    var timeSinceLastRefresh =
+        DateTime.now().difference(student.refresh ?? DateTime.now());
+    String sinceLastRefresh = null;
+    if (timeSinceLastRefresh.inHours >= Config.hoursUntilRefreshButtonIsShown) {
+      if (timeSinceLastRefresh.inHours < 24)
+        sinceLastRefresh =
+            Tools.hoursToStringWithUnit(timeSinceLastRefresh.inHours);
+      else
+        sinceLastRefresh =
+            Tools.daysToStringWithUnit(timeSinceLastRefresh.inDays);
     }
+
+    // Averages
+    Map<String, double> averages = null;
+    if (student.grades != null) {
+      averages = Tools.gradesToSubjectAverages(student.grades);
+    }
+
+    // Change status code to 201 (Created) if we already have all the information we need,
+    // so there is no need to ask for more
+    if ((student.grades != null &&
+            student.homeworks != null &&
+            student.messages != null &&
+            student.subjects != null &&
+            student.timetable != null) ||
+        // If some problem happens, pretend everything is OK
+        // after 2 minutes
+        DateTime.now()
+                .difference(student.refresh ?? DateTime.now())
+                .inMinutes >=
+            2) {
+      connect.response.statusCode = 201;
+    }
+
+    return studentView(connect,
+        timetable: timetable,
+        permTimetable: permTimetable,
+        lastRefresh: sinceLastRefresh,
+        averages: averages);
   }
 
   // POST

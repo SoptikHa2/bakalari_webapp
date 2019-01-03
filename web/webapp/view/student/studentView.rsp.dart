@@ -369,7 +369,7 @@ String nbsp = "\u{00A0}";
   if (lastRefresh != null) {
 
     response.write("""<p style="text-align: center">
-    To, co vidíte na této stránce, je """);
+    To co vidíte na této stránce je """);
 
     response.write(Rsp.nnx(lastRefresh));
 
