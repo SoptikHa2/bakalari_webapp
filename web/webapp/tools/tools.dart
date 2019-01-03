@@ -1,5 +1,9 @@
 import 'dart:collection';
+import 'dart:io';
 import 'package:bakalari/src/modules/gradeModule.dart';
+
+import '../model/complexStudent.dart';
+import 'db.dart';
 
 class Tools {
   static LinkedHashMap<String, double> gradesToSubjectAverages(
@@ -187,4 +191,32 @@ class Tools {
     
     return "$days dní";
   }
+
+  static Future<LoginStatus> loginAsStudent(List<Cookie> cookies) async{
+    if (!cookies.any((c) => c.name == "studentID")) {
+      return LoginStatus(false, false, 'not_logged_in', null);
+    }
+
+    try {
+      String guid = cookies
+          .singleWhere((c) => c.name == 'studentID')
+          .value;
+
+      ComplexStudent student = await DB.getStudent(guid);
+      return LoginStatus(true, false, '', student);
+    }catch(e){
+      print(e);
+      return LoginStatus(false, true, 'unknown', null);
+    }
+  }
+}
+
+
+class LoginStatus{
+  bool success;
+  bool requestLogout;
+  String errorMessage;
+  ComplexStudent result;
+
+  LoginStatus(this.success, this.requestLogout, this.errorMessage, this.result);
 }
