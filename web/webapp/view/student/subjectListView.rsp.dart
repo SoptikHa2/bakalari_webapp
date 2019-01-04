@@ -18,12 +18,15 @@ Future subjectListView(HttpConnect connect, {List<dynamic> subjects, List<dynami
     <h1 class="content-subhead">Předměty</h1>
 """);
 var i = 0;
+    var grade = null;
 
   response.write("""
 
 """);
 
   for (var subject in subjects) {
+if(grades != null)
+        grade = grades[i];
 
     response.write("""
 
@@ -49,7 +52,21 @@ var i = 0;
 
         </p>
         <p>
-        </p>
+""");
+
+    if (grade != null) {
+
+      response.write("""            """);
+
+      response.write(Rsp.nnx(grade));
+
+
+      response.write("""
+
+""");
+    } //if
+
+    response.write("""        </p>
         <p>
         </p>
     </div>

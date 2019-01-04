@@ -1,0 +1,15 @@
+[:page name="adminLoginView"]
+[:include "/webapp/view/templates/head.html" /]
+<div class="content">
+    <h1>Administrační sekce</h1>
+    <form class="pure-form" action="/admin" method="POST">
+        <fieldset>
+            <legend>Zadejte dvoufaktorový kód. Heslo bude vyžadováno v příštím kroku přihlášení.</legend>
+
+            <input name="twofa" type="text" placeholder="041 268" autocomplete="off">
+
+            <button type="submit" class="pure-button pure-button-primary">Další</button>
+        </fieldset>
+    </form>
+</div>
+[:include "/webapp/view/templates/tail.html" /]

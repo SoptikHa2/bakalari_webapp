@@ -1,7 +1,11 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 import 'package:bakalari/src/modules/gradeModule.dart';
+import 'package:uuid/uuid.dart';
+import 'package:pointycastle/pointycastle.dart';
 
+import '../config.dart';
 import '../model/complexStudent.dart';
 import 'db.dart';
 
@@ -170,49 +174,97 @@ class Tools {
     return encoded;
   }
 
-  static String hoursToStringWithUnit(int hours){
-    if(hours == 0)
-      return "$hours hodin";
-    if(hours == 1)
-      return "$hours hodina";
-    if(hours <= 4)
-      return "$hours hodiny";
+  static String hoursToStringWithUnit(int hours) {
+    if (hours == 0) return "$hours hodin";
+    if (hours == 1) return "$hours hodina";
+    if (hours <= 4) return "$hours hodiny";
 
     return "$hours hodin";
   }
 
-  static String daysToStringWithUnit(int days){
-    if(days == 0)
-      return "$days dní";
-    if(days == 1)
-      return "$days den";
-    if(days <= 4)
-      return "$days dny";
-    
+  static String daysToStringWithUnit(int days) {
+    if (days == 0) return "$days dní";
+    if (days == 1) return "$days den";
+    if (days <= 4) return "$days dny";
+
     return "$days dní";
   }
 
-  static Future<LoginStatus> loginAsStudent(List<Cookie> cookies) async{
+  static Future<LoginStatus> loginAsStudent(List<Cookie> cookies) async {
     if (!cookies.any((c) => c.name == "studentID")) {
       return LoginStatus(false, false, 'not_logged_in', null);
     }
 
     try {
-      String guid = cookies
-          .singleWhere((c) => c.name == 'studentID')
-          .value;
+      String guid = cookies.singleWhere((c) => c.name == 'studentID').value;
 
       ComplexStudent student = await DB.getStudent(guid);
       return LoginStatus(true, false, '', student);
-    }catch(e){
+    } catch (e) {
       print(e);
       return LoginStatus(false, true, 'unknown', null);
     }
   }
+
+  /// Verify 2FA. If correct, return guid that can be used as proof that 2fa was successful.
+  static String loginAsAdmin2FA(String twoFA) {
+    if (Config.totp.verify(twoFA.replaceAll(' ', ''))) {
+      String guid = Uuid().v4();
+      Config.currentTwoFAtoken = guid;
+      DateTime selectedDateTime = DateTime.now();
+      selectedDateTime =
+          selectedDateTime.add(Duration(minutes: Config.twoFAMinutesDuration));
+      Config.currentTwoFAtokenValid = selectedDateTime;
+      return guid;
+    }
+    return null;
+  }
+
+  static bool _verify2FAtoken(String twoFAguid) {
+    if (Config.currentTwoFAtokenValid.isBefore(DateTime.now())) {
+      Config.currentTwoFAtoken = null;
+      return false;
+    }
+    if (Config.currentTwoFAtoken == twoFAguid) {
+      return true;
+    }
+    return false;
+  }
+
+  static final Digest _sha256 = Digest("SHA-256");
+  static String hashPassword(String password, String username) {
+    return base64.encode(
+        _sha256.process(utf8.encode(password + username + "dartlangislove")));
+  }
+
+  /// Verify username and password. twoFAguid has to be passed from cookie as proof that 2fa was successful.
+  static AdminLoginStatus _verifyAsAdmin(
+      String username, String password, String twoFAguid) {
+    bool twoFACorrect = _verify2FAtoken(twoFAguid);
+    if (!twoFACorrect) {
+      return AdminLoginStatus.TwoFAIncorrect;
+    } else {
+      if (username == "Petr Šťastný" &&
+          hashPassword(password, username) ==
+              "wtkuDB/iOI3wkla2uvKTNJSdlal14yLZa8I6wfZB5z4=") {
+        return AdminLoginStatus.OK;
+      }
+      return AdminLoginStatus.PasswordIncorrect;
+    }
+  }
+
+  static AdminLoginStatus verifyAsAdmin(
+      String authHeaderValue, String twoFAguid) {
+    var nameColonPassword = authHeaderValue.replaceFirst('Basic ', '');
+    var unbase64ed = utf8.decode(base64.decode(nameColonPassword));
+    var username = unbase64ed.split(':')[0];
+    var password = unbase64ed.split(':')[1];
+
+    return _verifyAsAdmin(username, password, twoFAguid);
+  }
 }
 
-
-class LoginStatus{
+class LoginStatus {
   bool success;
   bool requestLogout;
   String errorMessage;
@@ -220,3 +272,5 @@ class LoginStatus{
 
   LoginStatus(this.success, this.requestLogout, this.errorMessage, this.result);
 }
+
+enum AdminLoginStatus { OK, TwoFAIncorrect, PasswordIncorrect }

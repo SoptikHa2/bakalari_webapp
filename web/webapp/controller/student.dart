@@ -128,7 +128,8 @@ class Student {
         timetable: timetable,
         permTimetable: permTimetable,
         lastRefresh: sinceLastRefresh,
-        averages: averages);
+        averages: averages,
+        test: Config.totp.now());
   }
 
   // POST

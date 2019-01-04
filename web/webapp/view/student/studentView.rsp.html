@@ -1,10 +1,11 @@
 [:page name="studentView" args="String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages,
 String lastRefresh,
-String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
+String lastMailInfo, String urgentAbsence, String urgentHomeworks, String test"]
 [:include "webapp/view/templates/head.html" /]
 [:dart]
 String nbsp = "\u{00A0}";
 [/dart]
+[= test]
 <div class="content">
     [:if errorDescription != null]
     <aside class="errorBar">

@@ -13,3 +13,4 @@ dependencies:
 dev_dependencies:
         json_serializable: ^2.0.1
         build_runner: ^1.1.2
+        dotp: ^1.0.2
