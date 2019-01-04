@@ -78,10 +78,10 @@ class Student {
     var student = null;
     if (result.success) {
       student = result.result;
-    }else{
-      if(result.requestLogout){
+    } else {
+      if (result.requestLogout) {
         return connect.redirect('/logout');
-      }else{
+      } else {
         return connect.redirect('/?error=not_logged_in');
       }
     }
@@ -139,8 +139,10 @@ class Student {
     if (!post.validate()) {
       connect.response
         ..headers.contentType = ContentType.json
+        ..statusCode = 400
         ..write(
             '{"error":{"type": "invalidStructure", "description": "String bakawebUrl, String login, String password"}}');
+      return;
     }
 
     try {
@@ -169,6 +171,7 @@ class Student {
       print(e);
       connect.response
         ..headers.contentType = ContentType.json
+        ..statusCode = 500
         ..write(
             '{"error":{"type": "unknown", "description":"An error occured while getting content, check bakaweb url"}}');
     }
@@ -179,41 +182,44 @@ class Student {
     if (!connect.request.uri.queryParameters.containsKey('studentID')) {
       connect.response
         ..headers.contentType = ContentType.json
+        ..statusCode = 400
         ..write(
             '{"error": {"type": "invalidStructure", "description": "Pass studentID query parameter or send POST request to log in"}}');
+      return;
     }
 
-    try {
-      String guid = connect.request.uri.queryParameters['studentID'];
-
-      ComplexStudent student = await DB.getStudent(guid);
-
-      // Change status code to 201 (Created) if we already have all the information we need,
-      // so there is no need to ask for more
-      if ((student.grades != null &&
-              student.homeworks != null &&
-              student.messages != null &&
-              student.subjects != null &&
-              student.timetable != null) ||
-          // If some problem happens, pretend everything is OK
-          // after 2 minutes
-          DateTime.now()
-                  .difference(student.refresh ?? DateTime.now())
-                  .inMinutes >=
-              2) {
-        connect.response.statusCode = 201;
-      }
-
+    var result = await Tools.loginAsStudent(connect.request.cookies);
+    var student = null;
+    if (result.success) {
+      student = result.result;
+    } else {
       connect.response
         ..headers.contentType = ContentType.json
-        ..write(Tools.fromMapToStringyJson(student.toJson()));
-    } catch (e) {
-      print(e);
-      connect.response
-        ..headers.contentType = ContentType.json
+        ..statusCode = 500
         ..write(
             '{"error":{"type": "unknown", "description":"An error occured while getting content, check if you passed corrent studentID. You can get new one by sending POST request"}}');
+      return;
     }
+
+    // Change status code to 201 (Created) if we already have all the information we need,
+    // so there is no need to ask for more
+    if ((student.grades != null &&
+            student.homeworks != null &&
+            student.messages != null &&
+            student.subjects != null &&
+            student.timetable != null) ||
+        // If some problem happens, pretend everything is OK
+        // after 2 minutes
+        DateTime.now()
+                .difference(student.refresh ?? DateTime.now())
+                .inMinutes >=
+            2) {
+      connect.response.statusCode = 201;
+    }
+
+    connect.response
+      ..headers.contentType = ContentType.json
+      ..write(Tools.fromMapToStringyJson(student.toJson()));
   }
 }
 
@@ -250,6 +256,10 @@ class StudentLoginPostParams {
       // add it there. Let's assume https
       if (!bakawebUrl.startsWith(new RegExp('http(s)?:\\/\\/'))) {
         bakawebUrl = "https://" + bakawebUrl;
+      }
+      // Add /login.aspx if it ends with domain
+      if(r"\.[a-z]{2,3}$".allMatches(bakawebUrl).length > 0){
+        bakawebUrl = bakawebUrl + '/login.aspx';
       }
     }
 

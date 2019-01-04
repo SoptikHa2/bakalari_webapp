@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:stream/stream.dart';
 
 import '../model/complexStudent.dart';
@@ -24,8 +26,16 @@ class Subject {
       }
     }
 
+    Map<String, double> averages = null;
+    if (student.grades != null) {
+      averages = Tools.gradesToSubjectAverages(student.grades);
+    }
+    var sortedKeys = averages.keys.toList(growable: false)
+      ..sort((k1, k2) => student.subjects.indexWhere((s) => s.subjectShort == k1).compareTo(student.subjects.indexWhere((s) => s.subjectShort == k2)));
+    var sortedAverages = new LinkedHashMap<String, double>.fromIterable(sortedKeys,
+        key: (k) => k, value: (k) => averages[k]);
 
-    return subjectListView(connect, subjects: student.subjects);
+    return subjectListView(connect, subjects: student.subjects, grades: sortedAverages.values.toList());
   }
 
   static void getSubject(HttpConnect connect){

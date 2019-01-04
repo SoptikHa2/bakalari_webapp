@@ -4,9 +4,12 @@
     <h1 class="content-subhead">Předměty</h1>
     [:dart]
     var i = 0;
+    var grade = null;
     [/dart]
     [:for subject in subjects]
     [:dart]
+    if(grades != null)
+        grade = grades[i];
     [/dart]
     <div class="listDiv">
         <h2><a href="/student/subject/[= subject.subjectShort]">[= subject.subjectLong ]</a></h2>
@@ -14,6 +17,9 @@
             [= subject.teacherName ]
         </p>
         <p>
+            [:if grade != null]
+            [=grade]
+            [/if]
         </p>
         <p>
         </p>
