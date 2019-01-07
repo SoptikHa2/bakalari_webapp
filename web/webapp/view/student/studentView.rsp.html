@@ -1,11 +1,10 @@
 [:page name="studentView" args="String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages,
 String lastRefresh,
-String lastMailInfo, String urgentAbsence, String urgentHomeworks, String test"]
-[:include "webapp/view/templates/head.html" /]
+String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
+[:include "/webapp/view/templates/head.html" /]
 [:dart]
 String nbsp = "\u{00A0}";
 [/dart]
-[= test]
 <div class="content">
     [:if errorDescription != null]
     <aside class="errorBar">
@@ -164,4 +163,4 @@ String nbsp = "\u{00A0}";
 
 <script src="../../js/buttonSwitch.js"></script>
 <script src="../../js/studentRefresh.js"></script>
-[:include "webapp/view/templates/tail.html" /]
+[:include "/webapp/view/templates/tail.html" /]

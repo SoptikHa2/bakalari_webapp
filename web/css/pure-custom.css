@@ -91,7 +91,14 @@ a:hover{
 /* MISC */
 
 .errorBar{
-    background: red;
+    background: rgb(202, 60, 60);
+    margin: 1em 0;
+    padding: 0.3em 1em;
+    border-radius: 3px;
+    color: #fff;
+}
+.successBar{
+    background: rgb(28, 184, 65);
     margin: 1em 0;
     padding: 0.3em 1em;
     border-radius: 3px;
@@ -109,4 +116,7 @@ a:hover{
 
 .button-error{
     background: rgb(202, 60, 60);
+}
+.button-success {
+    background: rgb(28, 184, 65);
 }

@@ -13,7 +13,7 @@ Future rootView(HttpConnect connect, {List<String> urls, dynamic timetable, Stri
     return null;
 String nbsp = "\u{00A0}";
 
-  await connect.include("webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/head.html");
 
   response.write("""  <div class="content">
 """);
@@ -218,7 +218,7 @@ String nbsp = "\u{00A0}";
 
 """);
 
-  await connect.include("webapp/view/templates/tail.html");
+  await connect.include("/webapp/view/templates/tail.html");
 
   return null;
 }

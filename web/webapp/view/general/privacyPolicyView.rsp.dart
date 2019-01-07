@@ -14,7 +14,7 @@ Future privacyPolicyView(HttpConnect connect) async {
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/head.html");
 var sessionCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsSessionCookieStored);
 var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIdentifierCookieStored);
 
@@ -37,7 +37,7 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
 
   response.write("""
 
-    nebo dokud se neodhlásíte.
+    nebo dokud se neodhlásíte. Údaje přijaté ze stránek školy po stejné době mažeme.
   </p>
   <p>
     Po přihlášení uložíme do vašeho prohlížeče identifikátor školy a třídy. Díky tomu můžeme na hlavní stránce
@@ -56,7 +56,7 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
 </div>
 """);
 
-  await connect.include("webapp/view/templates/tail.html");
+  await connect.include("/webapp/view/templates/tail.html");
 
   return null;
 }

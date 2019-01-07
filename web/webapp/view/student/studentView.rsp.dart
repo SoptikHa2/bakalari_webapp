@@ -9,16 +9,13 @@ import 'package:stream/stream.dart';
 /** Template, studentView, for rendering the view. */
 Future studentView(HttpConnect connect, {String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages,
 String lastRefresh,
-String lastMailInfo, String urgentAbsence, String urgentHomeworks, String test}) async {
+String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/head.html");
 String nbsp = "\u{00A0}";
-
-  response.write(Rsp.nnx(test));
-
 
   response.write("""
 
@@ -389,7 +386,7 @@ String nbsp = "\u{00A0}";
 <script src="../../js/studentRefresh.js"></script>
 """);
 
-  await connect.include("webapp/view/templates/tail.html");
+  await connect.include("/webapp/view/templates/tail.html");
 
   return null;
 }

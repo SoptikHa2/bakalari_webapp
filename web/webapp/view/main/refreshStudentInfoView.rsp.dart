@@ -12,7 +12,7 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/head.html");
 
   response.write("""    <div class="content">
 """);
@@ -67,7 +67,7 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
     </div>
 """);
 
-  await connect.include("webapp/view/templates/tail.html");
+  await connect.include("/webapp/view/templates/tail.html");
 
   return null;
 }

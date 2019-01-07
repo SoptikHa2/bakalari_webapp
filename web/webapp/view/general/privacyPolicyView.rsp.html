@@ -1,5 +1,5 @@
 [:page name="privacyPolicyView" import="../../config.dart, ../../tools/tools.dart"]
-[:include "webapp/view/templates/head.html" /]
+[:include "/webapp/view/templates/head.html" /]
 
 [!-- Prepare string units for privacy policy --]
 [:dart]
@@ -17,7 +17,7 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
     Dočasně ukládáme na serveru informace přijaté ze serveru školy, abychom je mohli průběžně zobrazovat a nemuseli
     jste při každém dalším načtení stránky znovu zadávat heslo. Přístupový kód k těmto údajům ukládáme po dobu jednoho
     týdne ve vašem prohlížeči v souborech cookies. Tento přístupový kód bude ve vašem prohlížeči uložen [= sessionCookieLength]
-    nebo dokud se neodhlásíte.
+    nebo dokud se neodhlásíte. Údaje přijaté ze stránek školy po stejné době mažeme.
   </p>
   <p>
     Po přihlášení uložíme do vašeho prohlížeče identifikátor školy a třídy. Díky tomu můžeme na hlavní stránce
@@ -29,4 +29,4 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
     webových stránek a způsobu jejich využívání.
   </p>
 </div>
-[:include "webapp/view/templates/tail.html" /]
+[:include "/webapp/view/templates/tail.html" /]

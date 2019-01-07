@@ -4,6 +4,9 @@ import 'package:path/path.dart';
 import 'package:rikulo_commons/browser.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
+import 'package:bakalari/src/school.dart';
+import 'package:bakalari/src/student.dart';
+import '../config.dart';
 import '../model/complexStudent.dart';
 import 'tools.dart';
 
@@ -16,7 +19,8 @@ class DB {
   static Store _logStudent;
 
   static Future<void> initializeDb() async {
-    _db = await databaseFactoryIo.openDatabase(join("..", "..", dirname(Platform.script.toFilePath()), "main.db"));
+    _db = await databaseFactoryIo.openDatabase(
+        join("..", "..", dirname(Platform.script.toFilePath()), "main.db"));
     _students = _db.getStore('students');
     _schools = _db.getStore('schools');
     _logRaw = _db.getStore('logRaw');
@@ -49,24 +53,26 @@ class DB {
       String guid, ComplexStudent updateStudent(ComplexStudent student)) async {
     await _db.transaction((txn) async {
       var studentsStore = txn.getStore('students');
-      var student =
-          ComplexStudent.fromJson((await studentsStore.getRecord(guid)).value['student']);
+      var student = ComplexStudent.fromJson(
+          (await studentsStore.getRecord(guid)).value['student']);
       student = updateStudent(student);
       await studentsStore.put({'student': student.toJson()}, guid);
     });
   }
 
   static Future<ComplexStudent> getStudent(String guid) async {
-    var record = await _students
-        .findRecord(Finder(filter: Filter.byKey(guid)));
+    var record = await _students.findRecord(Finder(filter: Filter.byKey(guid)));
     var value = record.value['student'];
     return ComplexStudent.fromJson(value);
   }
 
-  static Future<ComplexStudent> getLatestStudent(String school, String studentClass) async{
-    var records = (await _students.findRecords(Finder())).map((r) => ComplexStudent.fromJson(r.value['student']));
+  static Future<ComplexStudent> getLatestStudent(
+      String school, String studentClass) async {
+    var records = (await _students.findRecords(Finder()))
+        .map((r) => ComplexStudent.fromJson(r.value['student']));
     //(await _students.findRecords(Finder(filter: Filter.matchesRegExp('student', RegExp(r'^.*' + RegExp.escape(school) + r'.*' + RegExp.escape(studentClass) + r'.*$'))))).map((r) => ComplexStudent.fromJson(r.value['student']));
-    return Tools.maxWhere<ComplexStudent>(records, (r) => r.refresh.millisecondsSinceEpoch.toDouble());
+    return Tools.maxWhere<ComplexStudent>(
+        records, (r) => r.refresh.millisecondsSinceEpoch.toDouble());
   }
 
   static Future<void> logRawAccess(HttpRequest request, Browser browser) async {
@@ -79,11 +85,25 @@ class DB {
   }
 
   static Future<void> logLogin(
-      Map<String, String> requestData, String studentGuid) async {
+      Student student, School school, String studentGuid) async {
     await _logStudent.put({
-      'data': requestData,
-      'student': studentGuid,
+      'studentName': student.name,
+      'studentClass': student.schoolClass,
+      'school': school.name,
+      'studentGuid': studentGuid,
       'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  static Future<void> purgeSavedStudents(
+      [int timeInDaysToKeep = Config.daysHowLongIsSessionCookieStored]) async {
+    await _db.transaction((txn) async {
+      var studentsStore = txn.getStore('students');
+      var recordsToDelete = (await _students.findRecords(Finder()))
+          .map((r) => ComplexStudent.fromJson(r.value['student']))
+          .where((s) => s.refresh.add(Duration(days: timeInDaysToKeep)).isBefore(DateTime.now()));
+      studentsStore.deleteAll(recordsToDelete.map((s) => s.guid));
+      print('Purged ${recordsToDelete.length} students from cache');
     });
   }
 }

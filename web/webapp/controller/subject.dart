@@ -4,6 +4,7 @@ import 'package:stream/stream.dart';
 
 import '../model/complexStudent.dart';
 import '../tools/tools.dart';
+import '../view/student/subjectDetails.rsp.dart';
 import '../view/student/subjectListView.rsp.dart';
 
 /// This controllers handles both
@@ -38,8 +39,22 @@ class Subject {
     return subjectListView(connect, subjects: student.subjects, grades: sortedAverages.values.toList());
   }
 
-  static void getSubject(HttpConnect connect){
-    String identifier = connect.dataset['identifier'];
-
+  static Future getSubject(HttpConnect connect) async{
+    String identifier = Uri.decodeComponent(connect.dataset['identifier']);
+    var result = await Tools.loginAsStudent(connect.request.cookies);
+    ComplexStudent student = null;
+    if (result.success) {
+      student = result.result;
+    }else{
+      if(result.requestLogout){
+        return connect.redirect('/logout');
+      }else{
+        return connect.redirect('/?error=not_logged_in');
+      }
+    }
+    if(!student.subjects.any((s) => s.subjectShort == identifier)){
+      throw new Http404(connect.request.uri.toString());
+    }
+    return subjectDetailsView(connect, subject: student.subjects.singleWhere((s) => s.subjectShort == identifier));
   }
 }

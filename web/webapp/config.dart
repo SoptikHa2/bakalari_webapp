@@ -1,3 +1,4 @@
+import 'controller/general.dart';
 import 'controller/refreshStudentInfo.dart';
 import 'controller/shutdown.dart';
 import 'tools/filter.dart';
@@ -18,22 +19,21 @@ class Config {
     "get:/api": restApiView,
     "get:/logout": Logout.logoutUser,
     "get:/refresh": RefreshStudentInfo.refresh,
-
     "post:/student": Student.login,
     "get:/student": Student.getInfo,
-    "get:/student/subject" : Subject.getList,
-    "get:/student/subject/(identifier:[^/]*)" : Subject.getSubject,
-
+    "get:/student/subject": Subject.getList,
+    "get:/student/subject/(identifier:[^/]*)": Subject.getSubject,
     "post:/student/json": Student.loginJson,
     "get:/student/json": Student.getInfoJson,
-
     "get:/admin": Admin.adminRootPage,
     "get:/admin/login": Admin.loginForm,
     "get:/admin/logout": Logout.logoutAdmin,
     "post:/admin": Admin.verify2FA,
     "post:/admin/shutdown": Admin.shutdownWebsite,
-
     "get:/shutdown": Shutdown.showShutdown,
+    "/.+/": General.redirectToNoLeadingSlash,
+    "/admin/purgeInactiveStudents/security/in/obscurity/5432058437104547123501":
+        General.purgeStudents,
   };
   static final filterRouting = {
     "/.*": Filter.process,
@@ -44,12 +44,12 @@ class Config {
     "500": "/html/500.html"
   };
 
-  static final int hoursUntilRefreshButtonIsShown = 12;
-  static final int daysHowLongIsSessionCookieStored = 7;
-  static final int daysHowLongIsClassIdentifierCookieStored = 365;
+  static const int hoursUntilRefreshButtonIsShown = 12;
+  static const int daysHowLongIsSessionCookieStored = 7;
+  static const int daysHowLongIsClassIdentifierCookieStored = 365;
 
   static final TOTP totp = TOTP("NEOFBAKALARIADMIN");
-  static final int twoFAMinutesDuration = 10;
+  static const int twoFAMinutesDuration = 10;
   static String currentTwoFAtoken = null;
   static DateTime currentTwoFAtokenValid = DateTime.now();
 
@@ -57,8 +57,4 @@ class Config {
   static String siteShutdownReason;
 }
 
-enum ShutdownTemplate{
-  None,
-  TemplateEmpty,
-  Template451
-}
+enum ShutdownTemplate { None, TemplateEmpty, Template451 }

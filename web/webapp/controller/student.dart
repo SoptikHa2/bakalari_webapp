@@ -32,7 +32,7 @@ class Student {
       // refresh info, write it into DB and add access token into cookies
       var guid = await DB.saveStudentInfo(
           ComplexStudent.create(bakaweb.student, bakaweb.school));
-      DB.logLogin(postParameters, guid);
+      DB.logLogin(bakaweb.student, bakaweb.school, guid);
       DB.addSchool(post.bakawebUrl);
 
       bakaweb.getTimetable().then((t) => DB.updateStudentInfo(
@@ -128,8 +128,7 @@ class Student {
         timetable: timetable,
         permTimetable: permTimetable,
         lastRefresh: sinceLastRefresh,
-        averages: averages,
-        test: Config.totp.now());
+        averages: averages);
   }
 
   // POST
@@ -152,7 +151,7 @@ class Student {
       // refresh info, write it into DB and add access token into cookies
       var guid = await DB.saveStudentInfo(
           ComplexStudent.create(bakaweb.student, bakaweb.school));
-      DB.logLogin(postParameters, guid);
+      DB.logLogin(bakaweb.student, bakaweb.school, guid);
       DB.addSchool(post.bakawebUrl);
 
       bakaweb.getTimetable().then((t) => DB.updateStudentInfo(

@@ -103,11 +103,6 @@ class Admin {
             .singleWhere((c) => c.name == "twoFAtoken")
             .value;
       }
-      if (connect.response.cookies.any((c) => c.name == "twoFAtoken")) {
-        twoFAtoken = connect.response.cookies
-            .singleWhere((c) => c.name == "twoFAtoken")
-            .value;
-      }
     } catch (e) {}
 
     if (twoFAtoken == null) {
