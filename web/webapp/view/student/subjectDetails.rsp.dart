@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, subjectDetailsView, for rendering the view. */
-Future subjectDetailsView(HttpConnect connect, {dynamic subject}) async {
+Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -17,13 +17,80 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject}) async {
   response.write("""
 
 <div class="content">
+  <noscript>
+    <p>
+      Zapněte JavaScript pro
+      kalkulaci průměru
+    </p>
+  </noscript>
   <h1>""");
 
   response.write(Rsp.nnx(subject.subjectLong));
 
 
   response.write("""</h1>
+  <a href="javascript:window.history.go(-1);">Zpět</a>
+  <p>""");
+
+  response.write(Rsp.nnx(subject.teacherName));
+
+
+  response.write(""" (""");
+
+  response.write(Rsp.nnx(subject.teacherEmail));
+
+
+  response.write(""")</p>
+  <h2 id="average">Průměr: NaN</h2>
+  <table class="grades-table">
+    <tr>
+      <th>Datum</th>
+      <th>Titulek</th>
+      <th>Známka</th>
+      <th>Váha</th>
+    </tr>
+""");
+
+  for (var grade in grades) {
+
+    response.write("""  <tr class="grades">
+    <td>""");
+
+    response.write(Rsp.nnx(grade.date.day));
+
+
+    response.write(""". """);
+
+    response.write(Rsp.nnx(grade.date.month));
+
+
+    response.write("""</td>
+    <td>""");
+
+    response.write(Rsp.nnx(grade.caption));
+
+
+    response.write("""</td>
+    <td name="value">""");
+
+    response.write(Rsp.nnx(grade.value.round() == grade.value ? grade.value.toInt() : grade.value.floor().toString() + '-'));
+
+
+    response.write("""</td>
+    <td name="weight">""");
+
+    response.write(Rsp.nnx(grade.weight));
+
+
+    response.write("""</td>
+  </tr>
+""");
+  } //for
+
+  response.write("""  </table>
 </div>
+
+<script src="/js/subjectDetails.js"></script>
 """);
 
   await connect.include("/webapp/view/templates/tail.html");

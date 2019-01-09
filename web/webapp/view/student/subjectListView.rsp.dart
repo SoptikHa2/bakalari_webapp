@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, subjectListView, for rendering the view. */
-Future subjectListView(HttpConnect connect, {List<dynamic> subjects, List<dynamic> grades, List<dynamic> absences}) async {
+Future subjectListView(HttpConnect connect, {List<dynamic> subjects, Map<String, double> grades, List<dynamic> absences}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -17,16 +17,11 @@ Future subjectListView(HttpConnect connect, {List<dynamic> subjects, List<dynami
   response.write("""<div class="content">
     <h1 class="content-subhead">Předměty</h1>
 """);
-var i = 0;
-    var grade = null;
-
-  response.write("""
-
-""");
 
   for (var subject in subjects) {
-if(grades != null)
-        grade = grades[i];
+var grade = null;
+    if(grades != null)
+        grade = grades[subject.subjectLong];
 
     response.write("""
 
@@ -48,17 +43,23 @@ if(grades != null)
     response.write(Rsp.nnx(subject.teacherName));
 
 
-    response.write("""
+    response.write(""" (""");
 
+    response.write(Rsp.nnx(subject.teacherEmail));
+
+
+    response.write(""")
         </p>
+        <br />
         <p>
+            <strong>
 """);
 
     if (grade != null) {
 
       response.write("""            """);
 
-      response.write(Rsp.nnx(grade));
+      response.write(Rsp.nnx(grade.toStringAsFixed(2)));
 
 
       response.write("""
@@ -66,15 +67,11 @@ if(grades != null)
 """);
     } //if
 
-    response.write("""        </p>
+    response.write("""            </strong>
+        </p>
         <p>
         </p>
     </div>
-""");
-i++;
-
-    response.write("""
-
 """);
   } //for
 

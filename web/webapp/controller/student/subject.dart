@@ -31,12 +31,14 @@ class Subject {
     if (student.grades != null) {
       averages = Tools.gradesToSubjectAverages(student.grades);
     }
-    var sortedKeys = averages.keys.toList(growable: false)
-      ..sort((k1, k2) => student.subjects.indexWhere((s) => s.subjectShort == k1).compareTo(student.subjects.indexWhere((s) => s.subjectShort == k2)));
-    var sortedAverages = new LinkedHashMap<String, double>.fromIterable(sortedKeys,
-        key: (k) => k, value: (k) => averages[k]);
+    Map<String, double> longTextAverages = Map<String, double>();
+    for (var key in averages.keys) {
+      var newKey = student.subjects.singleWhere((s) => s.subjectShort == key);
+      var value = averages[key];
+      longTextAverages[newKey.subjectLong] = value;
+    }
 
-    return subjectListView(connect, subjects: student.subjects, grades: sortedAverages.values.toList());
+    return subjectListView(connect, subjects: student.subjects, grades: longTextAverages);
   }
 
   static Future getSubject(HttpConnect connect) async{
@@ -55,6 +57,7 @@ class Subject {
     if(!student.subjects.any((s) => s.subjectShort == identifier)){
       throw new Http404(connect.request.uri.toString());
     }
-    return subjectDetailsView(connect, subject: student.subjects.singleWhere((s) => s.subjectShort == identifier));
+    var sub = student.subjects.singleWhere((s) => s.subjectShort == identifier);
+    return subjectDetailsView(connect, subject: sub, grades: student.grades.where((g) => g.subject == sub.subjectShort));
   }
 }

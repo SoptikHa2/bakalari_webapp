@@ -44,7 +44,7 @@
 }
 
 .lesson-change{
-    background-color: rgb(208, 164, 226) !important;
+    background-color: rgb(255, 214, 241) !important;
 }
 
 tr{
@@ -53,10 +53,17 @@ tr{
 
 
 
-/* LUBOS TABLE */
-.lubos-table td{
+/* Table with padding and borders */
+.lubos-table td,
+.grades-table td{
     border: 1px solid rgb(233, 233, 233);
     padding: 0.5em;
+    min-width: 5em;
+}
+.lubos-table th,
+.grades-table th{
+    background-color: #eee;
+    color: #000; 
 }
 
 

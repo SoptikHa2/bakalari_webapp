@@ -1,7 +1,34 @@
-[:page name="subjectDetailsView" args="dynamic subject"]
+[:page name="subjectDetailsView" args="dynamic subject, dynamic grades"]
 [:include "/webapp/view/templates/head.html" /]
 
 <div class="content">
+  <noscript>
+    <p>
+      Zapněte JavaScript pro
+      kalkulaci průměru
+    </p>
+  </noscript>
   <h1>[= subject.subjectLong ]</h1>
+  <a href="javascript:window.history.go(-1);">Zpět</a>
+  <p>[= subject.teacherName] ([= subject.teacherEmail])</p>
+  <h2 id="average">Průměr: NaN</h2>
+  <table class="grades-table">
+    <tr>
+      <th>Datum</th>
+      <th>Titulek</th>
+      <th>Známka</th>
+      <th>Váha</th>
+    </tr>
+  [:for grade in grades]
+  <tr class="grades">
+    <td>[=grade.date.day]. [=grade.date.month]</td>
+    <td>[=grade.caption]</td>
+    <td name="value">[=grade.value.round() == grade.value ? grade.value.toInt() : grade.value.floor().toString() + '-']</td>
+    <td name="weight">[=grade.weight]</td>
+  </tr>
+  [/for]
+  </table>
 </div>
+
+<script src="/js/subjectDetails.js"></script>
 [:include "/webapp/view/templates/tail.html" /]
