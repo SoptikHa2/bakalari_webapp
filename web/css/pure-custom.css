@@ -53,6 +53,13 @@ tr{
 
 
 
+/* LUBOS TABLE */
+.lubos-table td{
+    border: 1px solid rgb(233, 233, 233);
+    padding: 0.5em;
+}
+
+
 /* GENERAL */
 
 .content-subhead{

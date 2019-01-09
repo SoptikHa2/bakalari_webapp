@@ -1,0 +1,19 @@
+[:page name="lubosView" args="dynamic cites"]
+[:include "/webapp/view/templates/head.html" /]
+
+<div class="content">
+  <h1>Lubošovy citáty</h1>
+  <table class="lubos-table">
+      <tr>
+          <th>Datum</th>
+          <th>Moudro</th>
+      </tr>
+      [:for cite in cites]
+      <tr>
+          <td>[=cite[0]]</td>
+          <td>[=cite[1]]</td>
+      </tr>
+      [/for]
+  </table>
+</div>
+[:include "/webapp/view/templates/tail.html" /]

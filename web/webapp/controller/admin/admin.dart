@@ -4,10 +4,10 @@ import 'package:rikulo_commons/io.dart';
 import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
 
-import '../config.dart';
-import '../tools/tools.dart';
-import '../view/admin/adminLoginView.rsp.dart';
-import '../view/admin/adminRootView.rsp.dart';
+import '../../config.dart';
+import '../../tools/tools.dart';
+import '../../view/admin/adminLoginView.rsp.dart';
+import '../../view/admin/adminRootView.rsp.dart';
 
 class Admin {
   static Future loginForm(HttpConnect connect) async {

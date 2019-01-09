@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:rikulo_commons/io.dart';
 import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
-import '../config.dart';
-import '../model/complexStudent.dart';
-import '../tools/tools.dart';
-import '../view/student/studentView.rsp.dart';
+import '../../config.dart';
+import '../../model/complexStudent.dart';
+import '../../tools/tools.dart';
+import '../../view/student/studentView.rsp.dart';
 import 'package:bakalari/bakalari.dart';
-import '../tools/db.dart';
+import '../../tools/db.dart';
 
 class Student {
   // POST

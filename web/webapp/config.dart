@@ -1,12 +1,13 @@
 import 'controller/general.dart';
-import 'controller/refreshStudentInfo.dart';
+import 'controller/lubos.dart';
+import 'controller/student/refreshStudentInfo.dart';
 import 'controller/shutdown.dart';
 import 'tools/filter.dart';
 import 'controller/root.dart';
-import 'controller/student.dart';
+import 'controller/student/student.dart';
 import 'controller/logout.dart';
-import 'controller/subject.dart';
-import 'controller/admin.dart';
+import 'controller/student/subject.dart';
+import 'controller/admin/admin.dart';
 import 'view/general/privacyPolicyView.rsp.dart';
 import 'view/general/restApi.rsp.dart';
 
@@ -19,17 +20,21 @@ class Config {
     "get:/api": restApiView,
     "get:/logout": Logout.logoutUser,
     "get:/refresh": RefreshStudentInfo.refresh,
+    "get:/lubos": Lubos.showLubosCites,
+
     "post:/student": Student.login,
     "get:/student": Student.getInfo,
     "get:/student/subject": Subject.getList,
     "get:/student/subject/(identifier:[^/]*)": Subject.getSubject,
     "post:/student/json": Student.loginJson,
     "get:/student/json": Student.getInfoJson,
+
     "get:/admin": Admin.adminRootPage,
     "get:/admin/login": Admin.loginForm,
     "get:/admin/logout": Logout.logoutAdmin,
     "post:/admin": Admin.verify2FA,
     "post:/admin/shutdown": Admin.shutdownWebsite,
+
     "get:/shutdown": Shutdown.showShutdown,
     "/.+/": General.redirectToNoLeadingSlash,
     "/admin/purgeInactiveStudents/security/in/obscurity/5432058437104547123501":

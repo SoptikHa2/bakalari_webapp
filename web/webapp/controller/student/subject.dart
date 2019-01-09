@@ -2,10 +2,10 @@ import 'dart:collection';
 
 import 'package:stream/stream.dart';
 
-import '../model/complexStudent.dart';
-import '../tools/tools.dart';
-import '../view/student/subjectDetails.rsp.dart';
-import '../view/student/subjectListView.rsp.dart';
+import '../../model/complexStudent.dart';
+import '../../tools/tools.dart';
+import '../../view/student/subjectDetails.rsp.dart';
+import '../../view/student/subjectListView.rsp.dart';
 
 /// This controllers handles both
 /// one subject details lookup
