@@ -115,8 +115,10 @@ String nbsp = "\u{00A0}";
 
     if (timetable != null && permTimetable != null) {
 
-      response.write("""            <button id="butSwitchTimetableToToday" class="pure-button pure-button-primary button-switch" toggleon="tabletoday" toggleoff="tableperm" oppButton="butSwitchTimetableToPerm">Dnešní</button>
-            <button id="butSwitchTimetableToPerm" class="pure-button button-switch" toggleon="tableperm" toggleoff="tabletoday" oppButton="butSwitchTimetableToToday">Stálý</button>
+      response.write("""            <button id="butSwitchTimetableToToday" class="pure-button pure-button-primary button-switch" toggleon="tabletoday"
+                toggleoff="tableperm" oppButton="butSwitchTimetableToPerm">Dnešní</button>
+            <button id="butSwitchTimetableToPerm" class="pure-button button-switch" toggleon="tableperm" toggleoff="tabletoday"
+                oppButton="butSwitchTimetableToToday">Stálý</button>
 """);
     } //if
 
@@ -382,6 +384,13 @@ String nbsp = "\u{00A0}";
 
   response.write("""
 
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/offlineServiceWorker.js')
+            .then(function () { console.log("Service Worker Registered"); });
+    }
+</script>
 <script src="../../js/buttonSwitch.js"></script>
 <script src="../../js/studentRefresh.js"></script>
 """);

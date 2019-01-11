@@ -216,6 +216,14 @@ String nbsp = "\u{00A0}";
 
   response.write("""  </div>
 
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/offlineServiceWorker.js')
+        .then(function () { console.log("Service Worker Registered"); });
+    }
+  </script>
+
 """);
 
   await connect.include("/webapp/view/templates/tail.html");
