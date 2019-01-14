@@ -11,6 +11,7 @@
   <h1>[= subject.subjectLong ]</h1>
   <a href="javascript:window.history.go(-1);">Zpět</a>
   <p>[= subject.teacherName] ([= subject.teacherEmail])</p>
+  [:if grades != null]
   <h2>Průměr: [= prumer]</h2>
   <table class="grades-table">
     <tr>
@@ -37,6 +38,7 @@
     </fieldset>
   </form>
   <p id="average"></p>
+  [/if]
 </div>
 
 <script src="/js/subjectDetails.js"></script>

@@ -41,12 +41,16 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
 
 
   response.write(""")</p>
-  <h2>Průměr: """);
+""");
 
-  response.write(Rsp.nnx(prumer));
+  if (grades != null) {
+
+    response.write("""  <h2>Průměr: """);
+
+    response.write(Rsp.nnx(prumer));
 
 
-  response.write("""</h2>
+    response.write("""</h2>
   <table class="grades-table">
     <tr>
       <th>Datum</th>
@@ -56,43 +60,43 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
     </tr>
 """);
 
-  for (var grade in grades) {
+    for (var grade in grades) {
 
-    response.write("""  <tr class="grades">
+      response.write("""  <tr class="grades">
     <td>""");
 
-    response.write(Rsp.nnx(grade.date.day));
+      response.write(Rsp.nnx(grade.date.day));
 
 
-    response.write(""". """);
+      response.write(""". """);
 
-    response.write(Rsp.nnx(grade.date.month));
+      response.write(Rsp.nnx(grade.date.month));
 
 
-    response.write("""</td>
+      response.write("""</td>
     <td>""");
 
-    response.write(Rsp.nnx(grade.caption));
+      response.write(Rsp.nnx(grade.caption));
 
 
-    response.write("""</td>
+      response.write("""</td>
     <td name="value">""");
 
-    response.write(Rsp.nnx(grade.value.round() == grade.value ? grade.value.toInt() : grade.value.floor().toString() + '-'));
+      response.write(Rsp.nnx(grade.value.round() == grade.value ? grade.value.toInt() : grade.value.floor().toString() + '-'));
 
 
-    response.write("""</td>
+      response.write("""</td>
     <td name="weight">""");
 
-    response.write(Rsp.nnx(grade.weight));
+      response.write(Rsp.nnx(grade.weight));
 
 
-    response.write("""</td>
+      response.write("""</td>
   </tr>
 """);
-  } //for
+    } //for
 
-  response.write("""  </table>
+    response.write("""  </table>
   <form class="pure-form">
     <fieldset>
       <label for="new-grade">Známka</label>
@@ -102,7 +106,10 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
     </fieldset>
   </form>
   <p id="average"></p>
-</div>
+""");
+  } //if
+
+  response.write("""</div>
 
 <script src="/js/subjectDetails.js"></script>
 """);
