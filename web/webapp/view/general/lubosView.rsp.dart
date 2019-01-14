@@ -17,7 +17,7 @@ Future lubosView(HttpConnect connect, {dynamic cites}) async {
   response.write("""
 
 <div class="content">
-  <h1>Lubošovy citáty</h1>
+  <h1>Lubošova moudra</h1>
   <table class="lubos-table">
       <tr>
           <th>Datum</th>
