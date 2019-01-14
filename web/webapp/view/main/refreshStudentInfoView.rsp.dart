@@ -39,7 +39,7 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
             <fieldset>
                 <legend>Obnovení údajů o studentovi (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-                <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
+                <input name="bakawebUrl" type="text" list="schoolUrls" autocomplete="off" placeholder="bakalari.ceskolipska.cz" />
                 <datalist id="schoolUrls">
 """);
 

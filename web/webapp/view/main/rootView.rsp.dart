@@ -47,7 +47,7 @@ String nbsp = "\u{00A0}";
       <fieldset>
         <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-        <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
+        <input name="bakawebUrl" autocomplete="off" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
         <datalist id="schoolUrls">
 """);
 

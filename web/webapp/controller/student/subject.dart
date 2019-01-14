@@ -51,7 +51,13 @@ class Subject {
     if(!student.subjects.any((s) => s.subjectLong == identifier)){
       throw new Http404(connect.request.uri.toString());
     }
+    
+    Map<String, double> averages = null;
+    if (student.grades != null && student.subjects != null) {
+      averages = Tools.gradesToSubjectAverages(student.grades, student.subjects);
+    }
+    
     var sub = student.subjects.firstWhere((s) => s.subjectLong == identifier);
-    return subjectDetailsView(connect, subject: sub, grades: student.grades.where((g) => g.subject == sub.subjectShort));
+    return subjectDetailsView(connect, subject: sub, grades: student.grades.where((g) => g.subject == sub.subjectShort), prumer: averages[sub.subjectLong].toStringAsFixed(2));
   }
 }

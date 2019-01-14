@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, subjectDetailsView, for rendering the view. */
-Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades}) async {
+Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades, String prumer}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -41,7 +41,12 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades}
 
 
   response.write(""")</p>
-  <h2 id="average">Průměr: NaN</h2>
+  <h2>Průměr: """);
+
+  response.write(Rsp.nnx(prumer));
+
+
+  response.write("""</h2>
   <table class="grades-table">
     <tr>
       <th>Datum</th>
@@ -88,6 +93,15 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades}
   } //for
 
   response.write("""  </table>
+  <form class="pure-form">
+    <fieldset>
+      <label for="new-grade">Známka</label>
+      <input name="new-grade" id="new-grade" type="text" placeholder="2-" autocomplete="off" onkeyup="updateSubjectAverage();">
+      <label for="new-weight">Váha</label>
+      <input name="new-weight" id="new-weight" type="number" value="4" autocomplete="off" min="1" max="12" onchange="updateSubjectAverage();">
+    </fieldset>
+  </form>
+  <p id="average"></p>
 </div>
 
 <script src="/js/subjectDetails.js"></script>
