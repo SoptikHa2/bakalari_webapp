@@ -17,6 +17,7 @@ class Filter {
     if(Config.siteShutdownType != ShutdownTemplate.None){
       return connect.redirect('/shutdown');
     }
+    
     _log(connect);
     return chain(connect);
   }

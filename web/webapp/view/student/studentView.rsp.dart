@@ -48,59 +48,7 @@ String nbsp = "\u{00A0}";
         </aside>
     </noscript>
     <div class="pure-g" id="main">
-        <div class="pure-u-1 pure-u-md-1-4" id="znamky">
-            <h1 class="content-subhead">Průměry</h1>
-""");
-
-  if (averages == null) {
-
-    response.write("""            <p>
-                Načítám známky, za chvíli to bude...
-            </p>
-""");
-
-  } else {
-
-    response.write("""            <table class="pure-table">
-                <tbody>
-""");
-
-    for (var subject in averages.keys) {
-
-      response.write("""                    <tr>
-                        <td>
-                            <a href="/student/subject/""");
-
-      response.write(Rsp.nnx(subject));
-
-
-      response.write("""">""");
-
-      response.write(Rsp.nnx(subject));
-
-
-      response.write("""</a>
-                        </td>
-                        <td>
-                            """);
-
-      response.write(Rsp.nnx(averages[subject].toStringAsPrecision(3)));
-
-
-      response.write("""
-
-                        </td>
-                    </tr>
-""");
-    } //for
-
-    response.write("""                </tbody>
-            </table>
-""");
-  } //if
-
-  response.write("""        </div>
-        <div class="pure-u-1 pure-u-md-2-3" id="rozvrh">
+        <div class="pure-u-1 pure-u-md-1" id="rozvrh">
             <h1 class="content-subhead">Rozvrh</h1>
 """);
 
@@ -322,47 +270,99 @@ String nbsp = "\u{00A0}";
     } //if
   } //if
 
-  response.write("""            <div class="pure-u-1 pure-u-md-1-2" id="otherModules">
-                <h1 class="content-subhead">Ostatní moduly</h1>
-                <ul>
-                    <li>
-                        <a href="/student/grade">Přehled všech známek</a>
-                    </li>
-                    <li>
-                        <a href="/student/message">Přehled zpráv</a>
-                        """);
+  response.write("""        </div>
+        <div class="pure-u-1 pure-u-md-1-2" id="znamky">
+            <h1 class="content-subhead">Průměry</h1>
+""");
+
+  if (averages == null) {
+
+    response.write("""            <p>
+                Načítám známky, za chvíli to bude...
+            </p>
+""");
+
+  } else {
+
+    response.write("""            <table class="pure-table">
+                <tbody>
+""");
+
+    for (var subject in averages.keys) {
+
+      response.write("""                    <tr>
+                        <td>
+                            <a href="/student/subject/""");
+
+      response.write(Rsp.nnx(subject));
+
+
+      response.write("""">""");
+
+      response.write(Rsp.nnx(subject));
+
+
+      response.write("""</a>
+                        </td>
+                        <td>
+                            """);
+
+      response.write(Rsp.nnx(averages[subject].toStringAsPrecision(3)));
+
+
+      response.write("""
+
+                        </td>
+                    </tr>
+""");
+    } //for
+
+    response.write("""                </tbody>
+            </table>
+""");
+  } //if
+
+  response.write("""        </div>
+        <div class="pure-u-1 pure-u-md-1-2" id="otherModules">
+            <h1 class="content-subhead">Ostatní moduly</h1>
+            <ul>
+                <li>
+                    <a href="/student/grade">Přehled všech známek</a>
+                </li>
+                <li>
+                    <a href="/student/message">Přehled zpráv</a>
+                    """);
 
   response.write(Rsp.nnx(lastMailInfo == null ? '' : '(poslední zpráva $lastMailInfo)'));
 
 
   response.write("""
 
-                    </li>
-                    <li>
-                        <a href="/student/absention">Přehled absencí</a>
-                        """);
+                </li>
+                <li>
+                    <a href="/student/absention">Přehled absencí</a>
+                    """);
 
   response.write(Rsp.nnx(urgentAbsence == null ? '' : urgentAbsence));
 
 
   response.write("""
 
-                    </li>
-                    <li>
-                        <a href="/student/homework">Přehled domácích úkolů</a>
-                        """);
+                </li>
+                <li>
+                    <a href="/student/homework">Přehled domácích úkolů</a>
+                    """);
 
   response.write(Rsp.nnx(urgentHomeworks == null ? '' : urgentHomeworks));
 
 
   response.write("""
 
-                    </li>
-                    <li>
-                        <a href="/student/subject">Přehled předmětů</a>
-                    </li>
-                </ul>
-            </div>
+                </li>
+                <li>
+                    <a href="/student/subject">Přehled předmětů</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
