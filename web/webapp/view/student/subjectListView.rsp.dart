@@ -28,7 +28,7 @@ var grade = null;
     <div class="listDiv">
         <h2><a href="/student/subject/""");
 
-    response.write(Rsp.nnx(subject.subjectShort));
+    response.write(Rsp.nnx(subject.subjectLong));
 
 
     response.write("""">""");
