@@ -75,7 +75,7 @@ class Student {
   // GET
   static Future getInfo(HttpConnect connect) async {
     var result = await Tools.loginAsStudent(connect.request.cookies);
-    var student = null;
+    ComplexStudent student = null;
     if (result.success) {
       student = result.result;
     } else {
@@ -104,8 +104,8 @@ class Student {
 
     // Averages
     Map<String, double> averages = null;
-    if (student.grades != null) {
-      averages = Tools.gradesToSubjectAverages(student.grades);
+    if (student.grades != null && student.subjects != null) {
+      averages = Tools.gradesToSubjectAverages(student.grades, student.subjects);
     }
 
     // Change status code to 201 (Created) if we already have all the information we need,

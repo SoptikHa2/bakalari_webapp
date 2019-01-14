@@ -28,17 +28,11 @@ class Subject {
     }
 
     Map<String, double> averages = null;
-    if (student.grades != null) {
-      averages = Tools.gradesToSubjectAverages(student.grades);
-    }
-    Map<String, double> longTextAverages = Map<String, double>();
-    for (var key in averages.keys) {
-      var newKey = student.subjects.singleWhere((s) => s.subjectShort == key);
-      var value = averages[key];
-      longTextAverages[newKey.subjectLong] = value;
+    if (student.grades != null && student.subjects != null) {
+      averages = Tools.gradesToSubjectAverages(student.grades, student.subjects);
     }
 
-    return subjectListView(connect, subjects: student.subjects, grades: longTextAverages);
+    return subjectListView(connect, subjects: student.subjects, grades: averages);
   }
 
   static Future getSubject(HttpConnect connect) async{
@@ -54,10 +48,10 @@ class Subject {
         return connect.redirect('/?error=not_logged_in');
       }
     }
-    if(!student.subjects.any((s) => s.subjectShort == identifier)){
+    if(!student.subjects.any((s) => s.subjectLong == identifier)){
       throw new Http404(connect.request.uri.toString());
     }
-    var sub = student.subjects.singleWhere((s) => s.subjectShort == identifier);
+    var sub = student.subjects.firstWhere((s) => s.subjectLong == identifier);
     return subjectDetailsView(connect, subject: sub, grades: student.grades.where((g) => g.subject == sub.subjectShort));
   }
 }

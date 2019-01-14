@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:bakalari/src/modules/gradeModule.dart';
+import 'package:bakalari/src/modules/subjectListModule.dart';
 import 'package:uuid/uuid.dart';
 import 'package:pointycastle/pointycastle.dart';
 
@@ -11,15 +12,16 @@ import 'db.dart';
 
 class Tools {
   static LinkedHashMap<String, double> gradesToSubjectAverages(
-      List<Grade> grades) {
+      List<Grade> grades, List<Subject> listOfSubjects) {
     // Custom groupby
     Map<String, List<double>> subjects = {};
     for (var grade in grades) {
-      if (!subjects.containsKey(grade.subject)) {
-        subjects[grade.subject] = new List<double>();
+      String subjectFullName = listOfSubjects.firstWhere((s) => s.subjectShort == grade.subject).subjectLong;
+      if (!subjects.containsKey(subjectFullName)) {
+        subjects[subjectFullName] = new List<double>();
       }
       for (var i = 0; i < grade.weight; i++) {
-        subjects[grade.subject].add(grade.value);
+        subjects[subjectFullName].add(grade.value);
       }
     }
     var averages = Map<String, double>();

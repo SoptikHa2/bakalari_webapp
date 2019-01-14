@@ -36,6 +36,7 @@ String nbsp = "\u{00A0}";
             <button id="butSwitchTimetableToPerm" class="pure-button button-switch" toggleon="tableperm" toggleoff="tabletoday"
                 oppButton="butSwitchTimetableToToday">Stálý</button>
             [/if]
+            <div class="timetable-div-scrollable">
             <table class="pure-table" id="tabletoday">
                 <thead>
                     <tr></tr>
@@ -70,7 +71,9 @@ String nbsp = "\u{00A0}";
                     [/for]
                 </tbody>
             </table>
+            </div>
             [:if permTimetable != null]
+            <div class="timetable-div-scrollable">
             <table class="pure-table" id="tableperm" style="display: none;">
                 <thead>
                     <tr></tr>
@@ -105,6 +108,7 @@ String nbsp = "\u{00A0}";
                     [/for]
                 </tbody>
             </table>
+            </div>
             [/if]
             [/if]
         </div>

@@ -70,7 +70,8 @@ String nbsp = "\u{00A0}";
 """);
     } //if
 
-    response.write("""            <table class="pure-table" id="tabletoday">
+    response.write("""            <div class="timetable-div-scrollable">
+            <table class="pure-table" id="tabletoday">
                 <thead>
                     <tr></tr>
                     <tr>
@@ -166,11 +167,13 @@ String nbsp = "\u{00A0}";
 
     response.write("""                </tbody>
             </table>
+            </div>
 """);
 
     if (permTimetable != null) {
 
-      response.write("""            <table class="pure-table" id="tableperm" style="display: none;">
+      response.write("""            <div class="timetable-div-scrollable">
+            <table class="pure-table" id="tableperm" style="display: none;">
                 <thead>
                     <tr></tr>
                     <tr>
@@ -266,6 +269,7 @@ String nbsp = "\u{00A0}";
 
       response.write("""                </tbody>
             </table>
+            </div>
 """);
     } //if
   } //if
