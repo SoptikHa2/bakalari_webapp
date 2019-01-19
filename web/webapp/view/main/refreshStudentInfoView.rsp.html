@@ -1,4 +1,4 @@
-[:page name="refreshStudentInfoView" args="List<String> urls, String errorDescription"]
+[:page name="refreshStudentInfoView" args="List<String> urls, String errorDescription, String presetUrl, String presetUsername"]
     [:include "/webapp/view/templates/head.html" /]
     <div class="content">
         [:if errorDescription != null]
@@ -13,7 +13,7 @@
             <fieldset>
                 <legend>Obnovení údajů o studentovi (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-                <input name="bakawebUrl" type="text" list="schoolUrls" autocomplete="off" placeholder="bakalari.ceskolipska.cz" />
+                <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" [= presetUrl != null ? 'value="$presetUrl"' : ''] />
                 <datalist id="schoolUrls">
                     [:if urls != null]
                     [:for url in urls]
@@ -21,7 +21,7 @@
                     [/for]
                     [/if]
                 </datalist>
-                <input name="login" type="text" placeholder="Uživatelské jméno">
+                <input name="login" type="text" placeholder="Uživatelské jméno" [= presentUsername != null ? 'value="$presetUsername"' : '']>
                 <input name="password" type="password" placeholder="Heslo">
 
                 <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>

@@ -14,8 +14,3 @@ main(List<String> args) async {
   print('Database will be loaded from ' + join(dirname(Platform.script.toFilePath()), "main.db"));
   DB.initializeDb().whenComplete(() => server.start());
 }
-
-void currentTime(HttpConnect connect){
-  connect.response
-    .write("<html><body>It's ${new DateTime.now()}</body></html>");
-}

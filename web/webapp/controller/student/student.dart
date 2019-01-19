@@ -63,9 +63,9 @@ class Student {
       print(e);
       if (connect.request.uri.queryParameters.keys.contains('refresh') &&
           connect.request.uri.queryParameters['refresh'] == '1') {
-        return connect.redirect('/refresh?error=cannot_connect');
+        return connect.redirect('/refresh?error=cannot_connect&filledURI=${Uri.encodeComponent(post.bakawebUrl)}&filledUsername=${Uri.encodeComponent(post.login)}');
       }
-      return connect.redirect('/?error=cannot_connect');
+      return connect.redirect('/?error=cannot_connect&filledURI=${Uri.encodeComponent(post.bakawebUrl)}&filledUsername=${Uri.encodeComponent(post.login)}');
     }
 
     // Forward to itself, just GET

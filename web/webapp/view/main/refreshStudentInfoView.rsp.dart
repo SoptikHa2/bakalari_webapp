@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, refreshStudentInfoView, for rendering the view. */
-Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String errorDescription}) async {
+Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String errorDescription, String presetUrl, String presetUsername}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -39,7 +39,12 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
             <fieldset>
                 <legend>Obnovení údajů o studentovi (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-                <input name="bakawebUrl" type="text" list="schoolUrls" autocomplete="off" placeholder="bakalari.ceskolipska.cz" />
+                <input name="bakawebUrl" type="text" list="schoolUrls" autocomplete="off" placeholder="bakalari.ceskolipska.cz" value=\"""");
+
+  response.write(Rsp.nnx(presetUrl ?? ''));
+
+
+  response.write("""" />
                 <datalist id="schoolUrls">
 """);
 
@@ -58,7 +63,12 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
   } //if
 
   response.write("""                </datalist>
-                <input name="login" type="text" placeholder="Uživatelské jméno">
+                <input name="login" type="text" placeholder="Uživatelské jméno" value=\"""");
+
+  response.write(Rsp.nnx(presetUsername ?? ''));
+
+
+  response.write("""">
                 <input name="password" type="password" placeholder="Heslo">
 
                 <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>

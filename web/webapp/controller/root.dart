@@ -1,7 +1,6 @@
 import 'package:stream/stream.dart';
 import '../view/main/rootView.rsp.dart';
 import '../tools/db.dart';
-import '../tools/tools.dart';
 
 class Root {
   static Map<String, String> _errors = {
@@ -22,7 +21,17 @@ class Root {
         errorMessage = _errors[connect.request.uri.queryParameters['error']];
     }
 
+    // Add username and uri if error and filled in last time
+    String uri = null;
+    if (connect.request.uri.queryParameters.containsKey('filledURI')) {
+        uri = Uri.decodeComponent(connect.request.uri.queryParameters['filledURI']);
+    }
+    String username = null;
+    if (connect.request.uri.queryParameters.containsKey('filledUsername')) {
+        username = Uri.decodeComponent(connect.request.uri.queryParameters['filledUsername']);
+    }
+
     return rootView(connect,
-        urls: await DB.getSchools(), errorDescription: errorMessage);
+        urls: await DB.getSchools(), errorDescription: errorMessage, presetUrl: uri, presetUsername: username);
   }
 }

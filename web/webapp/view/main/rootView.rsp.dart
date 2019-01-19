@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, rootView, for rendering the view. */
-Future rootView(HttpConnect connect, {List<String> urls, String errorDescription}) async {
+Future rootView(HttpConnect connect, {List<String> urls, String errorDescription, String presetUrl, String presetUsername}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -47,7 +47,12 @@ String nbsp = "\u{00A0}";
       <fieldset>
         <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-        <input name="bakawebUrl" autocomplete="off" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" />
+        <input name="bakawebUrl" autocomplete="off" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" value=\"""");
+
+  response.write(Rsp.nnx(presetUrl ?? ''));
+
+
+  response.write("""" />
         <datalist id="schoolUrls">
 """);
 
@@ -66,7 +71,12 @@ String nbsp = "\u{00A0}";
   } //if
 
   response.write("""        </datalist>
-        <input name="login" type="text" placeholder="Uživatelské jméno">
+        <input name="login" type="text" placeholder="Uživatelské jméno" value=\"""");
+
+  response.write(Rsp.nnx(presetUsername ?? ''));
+
+
+  response.write("""">
         <input name="password" type="password" placeholder="Heslo">
 
         <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
