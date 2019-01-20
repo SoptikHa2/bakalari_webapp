@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:path/path.dart';
 import 'package:rikulo_commons/browser.dart';
@@ -19,12 +20,32 @@ class DB {
   static Store _logStudent;
 
   static Future<void> initializeDb() async {
-    _db = await databaseFactoryIo.openDatabase(
-        join("..", "..", dirname(Platform.script.toFilePath()), "main.db"));
-    _students = _db.getStore('students');
-    _schools = _db.getStore('schools');
-    _logRaw = _db.getStore('logRaw');
-    _logStudent = _db.getStore('logStudent');
+    _db = await databaseFactoryIo.openDatabase(Config.dbFileLocation);
+    _students = _db.getStore('students'); // Students data
+    _schools = _db.getStore('schools'); // List of schools [obsolete]
+    _logRaw = _db.getStore('logRaw'); // Raw access logs
+    _logStudent = _db.getStore('logStudent'); // Student login logs
+  }
+
+  static Future<String> getLogRawInJson() async {
+    var file = File(Config.dbFileLocation);
+    var lines = await file.readAsLines().then((List<String> lines) =>
+        lines.where((l) => l.contains(',"store":"logRaw","value":{')));
+    return jsonEncode(lines.toList(growable: false));
+  }
+
+  static Future<String> getStudentsInJson() async {
+    var file = File(Config.dbFileLocation);
+    var lines = await file.readAsLines().then((List<String> lines) =>
+        lines.where((l) => l.contains(',"store":"students","value":{')));
+    return jsonEncode(lines.toList(growable: false));
+  }
+
+  static Future<String> getStudentLoginLogsInJson() async {
+    var file = File(Config.dbFileLocation);
+    var lines = await file.readAsLines().then((List<String> lines) =>
+        lines.where((l) => l.contains(',"store":"logStudent","value":{')));
+    return jsonEncode(lines.toList(growable: false));
   }
 
   static Future<List<String>> getSchools() async {
@@ -101,7 +122,9 @@ class DB {
       var studentsStore = txn.getStore('students');
       var recordsToDelete = (await _students.findRecords(Finder()))
           .map((r) => ComplexStudent.fromJson(r.value['student']))
-          .where((s) => s.refresh.add(Duration(days: timeInDaysToKeep)).isBefore(DateTime.now()));
+          .where((s) => s.refresh
+              .add(Duration(days: timeInDaysToKeep))
+              .isBefore(DateTime.now()));
       studentsStore.deleteAll(recordsToDelete.map((s) => s.guid));
       print('Purged ${recordsToDelete.length} students from cache');
     });

@@ -11,6 +11,6 @@ main(List<String> args) async {
     filterMapping: Config.filterRouting,
     errorMapping: Config.errorRouting
   );
-  print('Database will be loaded from ' + join(dirname(Platform.script.toFilePath()), "main.db"));
+  print('Database will be loaded from ' + Config.dbFileLocation);
   DB.initializeDb().whenComplete(() => server.start());
 }

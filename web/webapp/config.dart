@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:path/path.dart';
+
 import 'controller/general.dart';
 import 'controller/lubos.dart';
 import 'controller/student/refreshStudentInfo.dart';
@@ -54,8 +58,9 @@ class Config {
   static const int daysHowLongIsClassIdentifierCookieStored = 365;
   static const int twoFAMinutesDuration = 10;
   static const int unsuccessfulLoginThreshold = 5;
-
+  static final String dbFileLocation = join(dirname(Platform.script.toFilePath()), "main.db");
   static final TOTP totp = TOTP("NEOFBAKALARIADMIN");
+
   static String currentTwoFAtoken = null;
   static DateTime currentTwoFAtokenValid = DateTime.now();
   // When unsuccessful 2fa occurs, lock down admin account until next 2FA
