@@ -1,6 +1,7 @@
 // NOTE: This has to be placed in / (root directory), 
-// as service workers can only work in current directory (or subdirectories).
+// Service workers can only work in current directory (or subdirectories).
 // By placing this file here, we can ensure it'll work for every page.
+// TODO: This doesn't work
 
 self.addEventListener('install', function (e) {
     e.waitUntil(
