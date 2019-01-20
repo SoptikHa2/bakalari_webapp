@@ -19,7 +19,7 @@ ComplexStudent _$ComplexStudentFromJson(Map<String, dynamic> json) {
           ?.map((e) =>
               e == null ? null : Grade.fromJson(e as Map<String, dynamic>))
           ?.toList(),
-      homeworks: (json['homeworks'] as List)
+      homework: (json['homework'] as List)
           ?.map((e) =>
               e == null ? null : Homework.fromJson(e as Map<String, dynamic>))
           ?.toList(),
@@ -52,7 +52,7 @@ Map<String, dynamic> _$ComplexStudentToJson(ComplexStudent instance) =>
       'permTimetable': instance.permTimetable?.toJson(),
       'grades': instance.grades?.map((m) => m.toJson())?.toList(),
       'subjects': instance.subjects?.map((s) => s.toJson())?.toList(),
-      'homeworks': instance.homeworks?.map((h) => h.toJson())?.toList(),
+      'homework': instance.homework?.map((h) => h.toJson())?.toList(),
       'messages': instance.messages?.map((m) => m.toJson())?.toList(),
       'refresh': instance.refresh?.toIso8601String()
     };

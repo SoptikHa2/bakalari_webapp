@@ -27,7 +27,7 @@ class Student {
 
     Bakalari bakaweb = null;
     try {
-      bakaweb = new Bakalari(Uri().resolve(post.bakawebUrl));
+      bakaweb = new Bakalari(post.bakawebUrl);
       await bakaweb.logIn(post.login, post.password);
       // refresh info, write it into DB and add access token into cookies
       var guid = await DB.saveStudentInfo(
@@ -43,8 +43,8 @@ class Student {
           DB.updateStudentInfo(guid, ((student) => student.update(grades: g))));
       bakaweb.getSubjects().then((s) => DB.updateStudentInfo(
           guid, ((student) => student.update(subjects: s))));
-      bakaweb.getHomeworks().then((h) => DB.updateStudentInfo(
-          guid, ((student) => student.update(homeworks: h))));
+      bakaweb.getHomework().then((h) => DB.updateStudentInfo(
+          guid, ((student) => student.update(homework: h))));
       bakaweb.getMessages().then((m) => DB.updateStudentInfo(
           guid, ((student) => student.update(messages: m))));
 
@@ -111,7 +111,7 @@ class Student {
     // Change status code to 201 (Created) if we already have all the information we need,
     // so there is no need to ask for more
     if ((student.grades != null &&
-            student.homeworks != null &&
+            student.homework != null &&
             student.messages != null &&
             student.subjects != null &&
             student.timetable != null) ||
@@ -146,7 +146,7 @@ class Student {
     }
 
     try {
-      var bakaweb = new Bakalari(Uri().resolve(post.bakawebUrl));
+      var bakaweb = new Bakalari(post.bakawebUrl);
       await bakaweb.logIn(post.login, post.password);
       // refresh info, write it into DB and add access token into cookies
       var guid = await DB.saveStudentInfo(
@@ -160,8 +160,8 @@ class Student {
           DB.updateStudentInfo(guid, ((student) => student.update(grades: g))));
       bakaweb.getSubjects().then((s) => DB.updateStudentInfo(
           guid, ((student) => student.update(subjects: s))));
-      bakaweb.getHomeworks().then((h) => DB.updateStudentInfo(
-          guid, ((student) => student.update(homeworks: h))));
+      bakaweb.getHomework().then((h) => DB.updateStudentInfo(
+          guid, ((student) => student.update(homework: h))));
       bakaweb.getMessages().then((m) => DB.updateStudentInfo(
           guid, ((student) => student.update(messages: m))));
       connect.response

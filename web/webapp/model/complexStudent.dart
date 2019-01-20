@@ -20,7 +20,7 @@ class ComplexStudent {
   Timetable permTimetable;
   List<Grade> grades;
   List<Subject> subjects;
-  List<Homework> homeworks;
+  List<Homework> homework;
   List<PrivateMessage> messages;
   DateTime refresh;
 
@@ -29,7 +29,7 @@ class ComplexStudent {
       this.timetable,
       this.permTimetable,
       this.grades,
-      this.homeworks,
+      this.homework,
       this.messages,
       this.schoolInfo,
       this.studentInfo,
@@ -53,7 +53,7 @@ class ComplexStudent {
       Timetable permTimetable,
       List<Grade> grades,
       List<Subject> subjects,
-      List<Homework> homeworks,
+      List<Homework> homework,
       List<PrivateMessage> messages,
       DateTime refresh}) {
     this.studentInfo = studentInfo ?? this.studentInfo;
@@ -62,7 +62,7 @@ class ComplexStudent {
     this.permTimetable = permTimetable ?? this.permTimetable;
     this.grades = grades ?? this.grades;
     this.subjects = subjects ?? this.subjects;
-    this.homeworks = homeworks ?? this.homeworks;
+    this.homework = homework ?? this.homework;
     this.messages = messages ?? this.messages;
     this.refresh = refresh ?? this.refresh;
 
