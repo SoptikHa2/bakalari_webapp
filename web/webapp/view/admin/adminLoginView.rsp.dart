@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, adminLoginView, for rendering the view. */
-Future adminLoginView(HttpConnect connect) async {
+Future adminLoginView(HttpConnect connect, {String error}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -15,7 +15,25 @@ Future adminLoginView(HttpConnect connect) async {
   await connect.include("/webapp/view/templates/head.html");
 
   response.write("""<div class="content">
-    <h1>Administrační sekce</h1>
+""");
+
+  if (error != null) {
+
+    response.write("""    <aside class="errorBar">
+      <p>
+        """);
+
+    response.write(Rsp.nnx(error));
+
+
+    response.write("""
+
+      </p>
+    </aside>
+""");
+  } //if
+
+  response.write("""    <h1>Administrační sekce</h1>
     <form class="pure-form" action="/admin" method="POST">
         <fieldset>
             <legend>Zadejte dvoufaktorový kód. Heslo bude vyžadováno v příštím kroku přihlášení.</legend>

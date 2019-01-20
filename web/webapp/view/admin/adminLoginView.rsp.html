@@ -1,6 +1,13 @@
-[:page name="adminLoginView"]
+[:page name="adminLoginView" args="String error"]
 [:include "/webapp/view/templates/head.html" /]
 <div class="content">
+    [:if error != null]
+    <aside class="errorBar">
+      <p>
+        [= error]
+      </p>
+    </aside>
+    [/if]
     <h1>Administrační sekce</h1>
     <form class="pure-form" action="/admin" method="POST">
         <fieldset>

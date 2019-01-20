@@ -32,7 +32,7 @@
           [/for]
           [/if]
         </datalist>
-        <input name="login" type="text" placeholder="Uživatelské jméno" [= presentUsername != null ? 'value="$presetUsername"' : '']">
+        <input name="login" type="text" placeholder="Uživatelské jméno" [= presetUsername != null ? 'value="$presetUsername"' : '']">
         <input name="password" type="password" placeholder="Heslo">
 
         <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>

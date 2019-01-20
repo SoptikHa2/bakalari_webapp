@@ -52,11 +52,20 @@ class Config {
   static const int hoursUntilRefreshButtonIsShown = 12;
   static const int daysHowLongIsSessionCookieStored = 7;
   static const int daysHowLongIsClassIdentifierCookieStored = 365;
+  static const int twoFAMinutesDuration = 10;
+  static const int unsuccessfulLoginThreshold = 5;
 
   static final TOTP totp = TOTP("NEOFBAKALARIADMIN");
-  static const int twoFAMinutesDuration = 10;
   static String currentTwoFAtoken = null;
   static DateTime currentTwoFAtokenValid = DateTime.now();
+  // When unsuccessful 2fa occurs, lock down admin account until next 2FA
+  // code is generated (which is every 30 seconds)
+  static DateTime last2FAattempt = null;
+  // When $unsuccessfulLoginThreshold admin logins in a row failed,
+  // request new 2FA auth. This is more than enough to stop
+  // bruteforcing, as 2FA login can be attempted just once
+  // every 30 seconds.
+  static int unsuccessfulAdminLoginsInARow = 0;
 
   static ShutdownTemplate siteShutdownType = ShutdownTemplate.None;
   static String siteShutdownReason;

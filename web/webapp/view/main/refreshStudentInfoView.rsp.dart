@@ -39,12 +39,12 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
             <fieldset>
                 <legend>Obnovení údajů o studentovi (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-                <input name="bakawebUrl" type="text" list="schoolUrls" autocomplete="off" placeholder="bakalari.ceskolipska.cz" value=\"""");
+                <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" """);
 
-  response.write(Rsp.nnx(presetUrl ?? ''));
+  response.write(Rsp.nnx(presetUrl != null ? 'value="$presetUrl"' : ''));
 
 
-  response.write("""" />
+  response.write(""" />
                 <datalist id="schoolUrls">
 """);
 
@@ -63,12 +63,12 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
   } //if
 
   response.write("""                </datalist>
-                <input name="login" type="text" placeholder="Uživatelské jméno" value=\"""");
+                <input name="login" type="text" placeholder="Uživatelské jméno" """);
 
-  response.write(Rsp.nnx(presetUsername ?? ''));
+  response.write(Rsp.nnx(presetUsername != null ? 'value="$presetUsername"' : ''));
 
 
-  response.write("""">
+  response.write(""">
                 <input name="password" type="password" placeholder="Heslo">
 
                 <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>

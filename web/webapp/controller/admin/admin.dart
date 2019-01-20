@@ -10,24 +10,51 @@ import '../../view/admin/adminLoginView.rsp.dart';
 import '../../view/admin/adminRootView.rsp.dart';
 
 class Admin {
+  static Map<String, String> _errors = {
+    "invalid_structure":
+        "Ještě jednou zkontrolujte zadané údaje v formuláři, něco jste vyplnili špatně.",
+    "2fa_error":
+        "Dvoufaktorový kód je nesprávný. Počkejte než bude vygenerován další a zkuste to znovu.",
+    "ratelimit_error":
+        "Zkoušíte to moc rychle. Dvoufaktorový kód lze zadat pouze jednou za 30 vteřin."
+  };
+
   static Future loginForm(HttpConnect connect) async {
-    return adminLoginView(connect);
+    String errorMessage = null;
+    if (connect.request.uri.queryParameters.containsKey('error')) {
+      if (_errors.containsKey(connect.request.uri.queryParameters['error']))
+        errorMessage = _errors[connect.request.uri.queryParameters['error']];
+    }
+
+    return adminLoginView(connect, error: errorMessage);
   }
 
   // Post
   static Future verify2FA(HttpConnect connect) async {
+    // Check ratelimit
+    var now = DateTime.now();
+    if (Config.last2FAattempt != null) {
+      if (now.second >= 30 && Config.last2FAattempt.second < 30 ||
+          now.minute > Config.last2FAattempt.minute) {} // It's ok
+      else{
+        // Rate limit
+        return connect.redirect("/admin/login?error=ratelimit_error");
+      }
+    }
+
     // Decode
     var postParameters = await HttpUtil.decodePostedParameters(connect.request);
     var post = AdminLoginPostParams();
     ObjectUtil.inject(post, postParameters);
     if (!post.validate()) {
-      return connect.redirect("/admin/login");
+      return connect.redirect("/admin/login?error=invalid_structure");
     }
 
     String twoFAToken = Tools.loginAsAdmin2FA(post.twofa);
 
     if (twoFAToken == null) {
-      return connect.redirect('/admin/login');
+      Config.last2FAattempt = now;
+      return connect.redirect('/admin/login?error=2fa_error');
     }
 
     connect.response.cookies.add(Cookie("twoFAtoken", twoFAToken)
@@ -155,7 +182,7 @@ class AdminLoginPostParams {
   String twofa;
 
   bool validate() {
-    return twofa != null;
+    return twofa != null && twofa.replaceAll(' ', '').length == 6;
   }
 }
 
