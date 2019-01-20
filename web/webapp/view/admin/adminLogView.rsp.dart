@@ -5,6 +5,7 @@ library adminLogView_rsp;
 import 'dart:async';
 import 'dart:io';
 import 'package:stream/stream.dart';
+import '../../config.dart';
 
 /** Template, adminLogView, for rendering the view. */
 Future adminLogView(HttpConnect connect) async {
@@ -18,19 +19,22 @@ Future adminLogView(HttpConnect connect) async {
     <h1>Vizualizace</h1>
     <p>TODO</p>
     <h1>Ke stažení</h1>
-    <h2>Logování přímého přístupu</h2>
-    <form class="pure-form" action="/admin/log/raw/download" method="POST">
+    <p>Vše bude ve formátu JSON.</p>
+    <h2>Log přímého přístupu</h2>
+    <form class="pure-form" action="/admin/log/raw/download/logRaw" method="GET">
         <fieldset>
-            <legend>Vyberte z kolika posledních dnů má být vytvořen soubor ke stažení. -1 znamená kompletní záznam.</legend>
-            <input name="days" type="number" value="7" min="-1" max="365" autocomplete="off">
             <button type="submit" class="pure-button pure-button-primary">Stáhnout</button>
         </fieldset>
     </form>
-    <h2>Logování přihlášení</h2>
-    <form class="pure-form" action="/admin/log/login/download" method="POST">
+    <h2>Log přihlášení studentů</h2>
+    <form class="pure-form" action="/admin/log/raw/download/logStudentLogin" method="GET">
         <fieldset>
-            <legend>Vyberte si z kolika posledních dnů má být vytvořen soubor ke stažení. -1 znamená kompletní záznam.</legend>
-            <input name="days" type="number" value="7" min="-1" max="365" autocomplete="off">
+            <button type="submit" class="pure-button pure-button-primary">Stáhnout</button>
+        </fieldset>
+    </form>
+    <h2>Informace o studentech</h2>
+    <form class="pure-form" action="/admin/log/raw/download/logStudentInfo" method="GET">
+        <fieldset>
             <button type="submit" class="pure-button pure-button-primary">Stáhnout</button>
         </fieldset>
     </form>

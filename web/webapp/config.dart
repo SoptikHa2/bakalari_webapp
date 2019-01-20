@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
+import 'controller/admin/log.dart';
 import 'controller/general.dart';
 import 'controller/lubos.dart';
 import 'controller/student/refreshStudentInfo.dart';
@@ -36,8 +37,10 @@ class Config {
     "get:/admin": Admin.adminRootPage,
     "get:/admin/login": Admin.loginForm,
     "get:/admin/logout": Logout.logoutAdmin,
+    "get:/admin/log": Log.showLogPage,
     "post:/admin": Admin.verify2FA,
     "post:/admin/shutdown": Admin.shutdownWebsite,
+    "get:/admin/log/raw/download/(file:[^/]*)": Log.downloadRawLog,
 
     "get:/shutdown": Shutdown.showShutdown,
     "/.+/": General.redirectToNoLeadingSlash,
@@ -53,8 +56,9 @@ class Config {
     "500": "/html/500.html"
   };
 
-  static const int hoursUntilRefreshButtonIsShown = 12;
+  static const int hoursUntilRefreshButtonIsShown = 8;
   static const int daysHowLongIsSessionCookieStored = 7;
+  static const int daysHowLongIsRawLoginLogStored = 3;
   static const int daysHowLongIsClassIdentifierCookieStored = 365;
   static const int twoFAMinutesDuration = 10;
   static const int unsuccessfulLoginThreshold = 5;
