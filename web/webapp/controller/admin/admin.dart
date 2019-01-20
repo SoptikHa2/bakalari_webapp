@@ -14,9 +14,11 @@ class Admin {
     "invalid_structure":
         "Ještě jednou zkontrolujte zadané údaje v formuláři, něco jste vyplnili špatně.",
     "2fa_error":
-        "Dvoufaktorový kód je nesprávný. Počkejte než bude vygenerován další a zkuste to znovu.",
+        "Dvoufaktorový kód je nesprávný nebo vypršela jeho platnost ještě před úspěšným přihlášením. Počkejte než bude vygenerován další a zkuste to znovu.",
     "ratelimit_error":
-        "Zkoušíte to moc rychle. Dvoufaktorový kód lze zadat pouze jednou za 30 vteřin."
+        "Zkoušíte to moc rychle. Dvoufaktorový kód lze zadat pouze jednou za 30 vteřin.",
+    "too_many_login_attempts":
+        "Zkusili jste se několikrát neúspěšně přihlásit. Počkejte než bude vygenerován nový kód a zkuste to znovu."
   };
 
   static Future loginForm(HttpConnect connect) async {
@@ -35,8 +37,9 @@ class Admin {
     var now = DateTime.now();
     if (Config.last2FAattempt != null) {
       if (now.second >= 30 && Config.last2FAattempt.second < 30 ||
-          now.minute > Config.last2FAattempt.minute) {} // It's ok
-      else{
+          now.minute > Config.last2FAattempt.minute) {
+      } // It's ok
+      else {
         // Rate limit
         return connect.redirect("/admin/login?error=ratelimit_error");
       }
@@ -66,6 +69,17 @@ class Admin {
 
   static Future adminRootPage(HttpConnect connect) async {
     /* LOGIN */
+
+    // Check if there weren't five invalid logins in a row
+    if (Config.unsuccessfulAdminLoginsInARow >=
+        Config.unsuccessfulLoginThreshold) {
+      connect.response.cookies.add(Cookie('twoFAtoken', 'deleted')..maxAge = 0);
+      Config.currentTwoFAtoken = null;
+      Config.last2FAattempt = DateTime.now();
+      Config.unsuccessfulAdminLoginsInARow = 0;
+      return connect.redirect('/admin/login?error=too_many_login_attempts');
+    }
+
     String twoFAtoken = null;
     try {
       if (connect.request.cookies.any((c) => c.name == "twoFAtoken")) {
@@ -97,6 +111,7 @@ class Admin {
         connect.request.headers.value('Authorization'), twoFAtoken);
 
     if (authResult == AdminLoginStatus.PasswordIncorrect) {
+      Config.unsuccessfulAdminLoginsInARow++;
       connect.response
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
@@ -108,6 +123,7 @@ class Admin {
       return connect.redirect('/admin/login');
     }
 
+    Config.unsuccessfulAdminLoginsInARow = 0;
     /* LOGGED IN */
     // ignore: mixed_return_types
     return adminRootView(connect);
