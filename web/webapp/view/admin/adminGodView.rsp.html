@@ -1,0 +1,32 @@
+[:page name="adminGodView" args="dynamic students, dynamic classes"]
+[:include "/webapp/view/templates/adminHead.html" /]
+<div class="content">
+    <h1>Debug - student</h1>
+    <form class="pure-form" action="/admin/god/student" method="GET">
+        <fieldset>
+            <legend>Vyberte studenta</legend>
+            <input name="student" type="text" list="students" autocomplete="off">
+            <datalist id="students">
+                [:for student in students]
+                <option>[=student.studentInfo.name.replaceAll(' ',
+                    '-')]-[=student.studentInfo.schoolClass]-[=student.schoolInfo.name.replaceAll(' ', '-')]</option>
+                [/for]
+            </datalist>
+            <button type="submit" class="pure-button pure-button-primary">Zobrazit</button>
+        </fieldset>
+    </form>
+    <h1>Debug - class</h1>
+    <form class="pure-form" action="/admin/god/class" method="GET">
+        <fieldset>
+            <legend>Vyberte třídu</legend>
+            <input name="class" type="text" list="classes" autocomplete="off">
+            <datalist id="classes">
+                [:for cl in classes]
+                <option>[=cl]</option>
+                [/for]
+            </datalist>
+            <button type="submit" class="pure-button pure-button-primary">Zobrazit</button>
+        </fieldset>
+    </form>
+</div>
+[:include "/webapp/view/templates/tail.html" /]

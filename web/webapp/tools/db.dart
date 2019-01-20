@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:convert';
 
-import 'package:path/path.dart';
 import 'package:rikulo_commons/browser.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -9,7 +7,6 @@ import 'package:bakalari/src/school.dart';
 import 'package:bakalari/src/student.dart';
 import '../config.dart';
 import '../model/complexStudent.dart';
-import 'tools.dart';
 
 /// Class that takes care of Database
 class DB {
@@ -105,15 +102,6 @@ class DB {
     return ComplexStudent.fromJson(value);
   }
 
-  static Future<ComplexStudent> getLatestStudent(
-      String school, String studentClass) async {
-    var records = (await _students.findRecords(Finder()))
-        .map((r) => ComplexStudent.fromJson(r.value['student']));
-    //(await _students.findRecords(Finder(filter: Filter.matchesRegExp('student', RegExp(r'^.*' + RegExp.escape(school) + r'.*' + RegExp.escape(studentClass) + r'.*$'))))).map((r) => ComplexStudent.fromJson(r.value['student']));
-    return Tools.maxWhere<ComplexStudent>(
-        records, (r) => r.refresh.millisecondsSinceEpoch.toDouble());
-  }
-
   static Future<void> logRawAccess(HttpRequest request, Browser browser) async {
     await _logRaw.put({
       'request': request.uri.toString(),
@@ -134,17 +122,77 @@ class DB {
     });
   }
 
-  static Future<void> purgeSavedStudents(
-      [int timeInDaysToKeep = Config.daysHowLongIsSessionCookieStored]) async {
+  static Future<void> purgeSavedData() async {
+    // Purge student data
     await _db.transaction((txn) async {
       var studentsStore = txn.getStore('students');
       var recordsToDelete = (await _students.findRecords(Finder()))
           .map((r) => ComplexStudent.fromJson(r.value['student']))
           .where((s) => s.refresh
-              .add(Duration(days: timeInDaysToKeep))
+              .add(Duration(days: Config.daysHowLongIsSessionCookieStored))
               .isBefore(DateTime.now()));
       studentsStore.deleteAll(recordsToDelete.map((s) => s.guid));
-      print('Purged ${recordsToDelete.length} students from cache');
+      print(
+          '${DateTime.now().toIso8601String()}:Purged ${recordsToDelete.length} students from cache');
     });
+
+    // Purge raw log
+    await _db.transaction((txn) async {
+      var rawLogStore = txn.getStore('logRaw');
+      var recordsToDelete = (await _logRaw.findRecords(Finder()))
+          .where((r) => DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(r.value['timestamp']))
+              .isBefore(DateTime.now()
+                  .add(Duration(days: Config.daysHowLongIsRawLoginLogStored))))
+          .map((r) => r.key);
+      rawLogStore.deleteAll(recordsToDelete);
+      print(
+          '${DateTime.now().toIso8601String()}:Purged ${await rawLogStore.count()} logs from cache');
+    });
+  }
+
+  static Future<List<ComplexStudent>> getAllUniqueStudents() async {
+    var allStudents = (await _students.findRecords(Finder()))
+        .map((r) => ComplexStudent.fromJson(r.value['student']));
+    var students = Map<String, ComplexStudent>();
+    for (var student in allStudents) {
+      String identifier = student.studentInfo.name +
+          ':' +
+          student.studentInfo.schoolClass +
+          ':' +
+          student.schoolInfo.name;
+      
+      if(students.containsKey(identifier)){
+        var savedRecord = students[identifier];
+        if(savedRecord.refresh.isBefore(student.refresh)){
+          students[identifier] = student;
+        }
+      }else{
+        students[identifier] = student;
+      }
+    }
+
+    var studentsList = List<ComplexStudent>();
+    for (var key in students.keys) {
+      studentsList.add(students[key]);
+    }
+
+    return studentsList;
+  }
+
+  static Future<ComplexStudent> getLatestStudentBy(bool condition(ComplexStudent student)) async {
+    var allStudents = (await _students.findRecords(Finder()))
+        .map((r) => ComplexStudent.fromJson(r.value['student']))
+        .where((s) => condition(s));
+    DateTime last = null;
+    ComplexStudent selectedStudent = null;
+    for (var student in allStudents) {
+      if(last == null || student.refresh.isAfter(last)){
+        last = student.refresh;
+        selectedStudent = student;
+      }
+    }
+
+    return selectedStudent;
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:stream/stream.dart';
 
 import '../config.dart';

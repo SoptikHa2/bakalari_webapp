@@ -17,7 +17,7 @@ Future adminLogView(HttpConnect connect) async {
 
   response.write("""<div class="content">
     <h1>Vizualizace</h1>
-    <p>TODO</p>
+    
     <h1>Ke stažení</h1>
     <p>Vše bude ve formátu JSON.</p>
     <h2>Log přímého přístupu</h2>

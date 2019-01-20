@@ -18,9 +18,8 @@ Future adminRootView(HttpConnect connect) async {
     <h1>Administrační sekce</h1>
     <ul>
         <li><a href="/admin/log">Log</a></li>
-        <li><a href="/admin/rpi">Raspberry info</a></li>
-        <li><a href="/admin/upload">Upload</a></li>
-        <li><a href="/admin/logout">Logout</a></li>
+        <li><a href="/admin/god">Debug</a></li>
+        <li><a href="/admin/logout">Logout (!)</a></li>
     </ul>
     <h2>Pozastavení stránky</h2>
     <p>

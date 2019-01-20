@@ -13,11 +13,12 @@ class General {
         .substring(0, connect.request.uri.toString().length - 1), status: HttpStatus.movedPermanently);
   }
 
-  /// Purge old users. This should be called with cron about once a day.
+  /// Purge old data about students and old raw logs.
+  /// This should be called with cron about once a day.
   /// Since this is not secured, we will assign it to hard-to-guess url
   /// and return 404. Hope nobody sees this. #securitybyobscurity
-  static void purgeStudents(HttpConnect connect) {
-    DB.purgeSavedStudents();
+  static void purgeOldData(HttpConnect connect) {
+    DB.purgeSavedData();
     throw Http404.fromConnect(connect);
   }
 }

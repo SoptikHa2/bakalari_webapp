@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
+import 'controller/admin/godStudent.dart';
 import 'controller/admin/log.dart';
 import 'controller/general.dart';
 import 'controller/lubos.dart';
@@ -38,14 +39,16 @@ class Config {
     "get:/admin/login": Admin.loginForm,
     "get:/admin/logout": Logout.logoutAdmin,
     "get:/admin/log": Log.showLogPage,
+    "get:/admin/god": GodStudent.displayForm,
+    "get:/admin/god/student": GodStudent.displayStudent,
     "post:/admin": Admin.verify2FA,
     "post:/admin/shutdown": Admin.shutdownWebsite,
     "get:/admin/log/raw/download/(file:[^/]*)": Log.downloadRawLog,
 
     "get:/shutdown": Shutdown.showShutdown,
     "/.+/": General.redirectToNoLeadingSlash,
-    "/admin/purgeInactiveStudents/security/in/obscurity/5432058437104547123501":
-        General.purgeStudents,
+    "/admin/purgeOldData/security/in/obscurity/5432058437104547123501":
+        General.purgeOldData,
   };
   static final filterRouting = {
     "/.*": Filter.process,

@@ -1,0 +1,43 @@
+[:page name="adminGodStudentView" args="var student, dynamic averages, dynamic subjectsDetail"]
+[:include "/webapp/view/templates/adminHead.html" /]
+<div class="content">
+    <p>[= student.studentInfo.name] ([= student.studentInfo.schoolClass])</p>
+    <p>[= student.schoolInfo.name]</p>
+    <p>Aktualizováno [= student.refresh.day]. [= student.refresh.month]. [= student.refresh.year] (Δ[= student.refresh.difference(DateTime.now()).inDays]d)</p>
+    <h1>Průměry</h1>
+    <table class="pure-table">
+        <tbody>
+            [:for subject in averages.keys]
+            <tr>
+                <td>
+                    <a href="#[= subject]">[= subject]</a>
+                </td>
+                <td>
+                    [= averages[subject].toStringAsPrecision(3)]
+                </td>
+            </tr>
+            [/for]
+        </tbody>
+    </table>
+    [:for subject in subjectsDetail]
+    <h2 id="[= subject.name]">[= subject.name]</h2>
+    <table class="grades-table">
+        <tr>
+            <th>Datum</th>
+            <th>Titulek</th>
+            <th>Známka</th>
+            <th>Váha</th>
+        </tr>
+        [:for grade in subject.grades]
+        <tr class="grades">
+            <td>[=grade.date.day]. [=grade.date.month]</td>
+            <td>[=grade.caption]</td>
+            <td name="value">[=grade.value.round() == grade.value ? grade.value.toInt() :
+                grade.value.floor().toString() + '-']</td>
+            <td name="weight">[=grade.weight]</td>
+        </tr>
+        [/for]
+    </table>
+    [/for]
+</div>
+[:include "/webapp/view/templates/tail.html" /]
