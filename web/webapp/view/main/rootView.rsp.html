@@ -24,7 +24,8 @@
       <fieldset>
         <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-        <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" [= presetUrl != null ? 'value="$presetUrl"' : '']" />
+        <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" [=presetUrl !=null
+          ? 'value="$presetUrl"' : '' ]" />
         <datalist id="schoolUrls">
           [:if urls != null]
           [:for url in urls]
@@ -32,12 +33,36 @@
           [/for]
           [/if]
         </datalist>
-        <input name="login" type="text" placeholder="Uživatelské jméno" [= presetUsername != null ? 'value="$presetUsername"' : '']">
+        <input name="login" type="text" placeholder="Uživatelské jméno" [=presetUsername !=null ?
+          'value="$presetUsername"' : '' ]">
         <input name="password" type="password" placeholder="Heslo">
 
         <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
       </fieldset>
     </form>
+
+    <section>
+      <h3>O projektu</h3>
+      <p>
+        Projekt Bakaláři: A tentokrát lépe, navazuje na web <a href="bakaweb.tk">Bakaweb.tk</a>, a klade si za cíl
+        nahradit klasické školní bakaláře. Umožňuje věci, jako například přehled průměrů a možnost se podívat,
+        jak by daná známka ovlivnila průměr - a to u všech škol. Zároveň se vše cachuje na serveru, takže tato stránka se vždy načte bleskově
+        rychle, nehledě na to, jak moc fungují - nebo nefungují - školní bakaláři.
+      </p>
+      <p>
+        Zároveň nabízíme přehledný souhrn na hlavní straně, a to dokoknce i 
+        s přehledem obědů na dnešní den (pro školy v programu Strava). Po vyřešení
+        technických problémů tohle všechno navíc bude dostupné i offline - jakmile si
+        alespoň jednou tuto stránku načtete, bez problémů ji budete moci procházet kdykoliv
+        a kdekoliv, a to i bez připojení k internetu.
+      </p>
+      <img src="/other/server.jpg" alt='Kvalitní servery' style="max-width: 40%; float: right;" />
+      <p>
+        Vše hostujeme na kvalitním a spolehlivém serveru: Raspberry Pi. Server je
+        napsán v <a href="https://dartlang.org">Dartu</a> a běží na frameworku <a href="https://github.com/rikulo/stream">Stream</a>.
+        Pro vývojáře je zde i možnost si něco malého naskriptovat pomocí veřejně přístupného <a href="/api">API</a>.
+      </p>
+    </section>
   </div>
 
   <script>
