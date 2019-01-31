@@ -5,7 +5,7 @@ import '../../tools/db.dart';
 import '../../tools/tools.dart';
 import '../../view/admin/adminGodStudentView.rsp.dart';
 import '../../view/admin/adminGodView.rsp.dart';
-import 'package:bakalari/src/modules/gradeModule.dart';
+import 'package:bakalari/definitions.dart';
 
 class GodStudent {
   static Future displayForm(HttpConnect connect) async {

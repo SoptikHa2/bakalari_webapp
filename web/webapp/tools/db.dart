@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:rikulo_commons/browser.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:bakalari/src/school.dart';
-import 'package:bakalari/src/student.dart';
+import 'package:bakalari/definitions.dart';
+
 import '../config.dart';
 import '../model/complexStudent.dart';
 

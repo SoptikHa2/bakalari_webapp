@@ -1,10 +1,4 @@
-import 'package:bakalari/src/modules/gradeModule.dart';
-import 'package:bakalari/src/modules/homeworkModule.dart';
-import 'package:bakalari/src/modules/privateMessagesModule.dart';
-import 'package:bakalari/src/modules/subjectListModule.dart';
-import 'package:bakalari/src/modules/timetableModule.dart';
-import 'package:bakalari/src/school.dart';
-import 'package:bakalari/src/student.dart';
+import 'package:bakalari/definitions.dart';
 
 import 'package:uuid/uuid.dart';
 

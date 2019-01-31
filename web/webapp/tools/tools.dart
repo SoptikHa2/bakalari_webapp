@@ -1,8 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
-import 'package:bakalari/src/modules/gradeModule.dart';
-import 'package:bakalari/src/modules/subjectListModule.dart';
+import 'package:bakalari/definitions.dart';
 import 'package:uuid/uuid.dart';
 import 'package:pointycastle/pointycastle.dart';
 
@@ -16,12 +15,15 @@ class Tools {
     // Custom groupby
     Map<String, List<double>> subjects = {};
     for (var grade in grades) {
-      String subjectFullName = listOfSubjects.firstWhere((s) => s.subjectShort == grade.subject).subjectLong;
+      String subjectFullName = listOfSubjects
+          .firstWhere((s) => s.subjectShort == grade.subject)
+          .subjectLong;
       if (!subjects.containsKey(subjectFullName)) {
         subjects[subjectFullName] = new List<double>();
       }
       for (var i = 0; i < grade.weight; i++) {
-        subjects[subjectFullName].add(grade.value);
+        if (grade.numericValue != null)
+          subjects[subjectFullName].add(grade.numericValue);
       }
     }
     var averages = Map<String, double>();
@@ -207,6 +209,8 @@ class Tools {
       return LoginStatus(false, true, 'unknown', null);
     }
   }
+
+  static Timetable editTimetableToOneRowView(Timetable timetable) {}
 
   /// Verify 2FA. If correct, return guid that can be used as proof that 2fa was successful.
   static String loginAsAdmin2FA(String twoFA) {
