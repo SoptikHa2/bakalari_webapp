@@ -26,7 +26,7 @@ class Contact {
 
     try {
       DB.saveMessage(Message.create(post.subject, post.messageBody,
-          post.messageType, post.email, post.isMessageImportant));
+          post.messageType, post.email, post.isMessageImportant, DateTime.now()));
     } catch (e) {
       return contactView(connect,
           showSuccMessage: false,

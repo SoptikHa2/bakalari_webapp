@@ -225,6 +225,6 @@ class DB {
   }
 
   static Future saveMessage(Message message) async {
-    _messages.put({'message': message.toJson()}, message.guid);
+    await _messages.put({'message': message.toJson()}, message.guid);
   }
 }

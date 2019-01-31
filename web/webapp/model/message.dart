@@ -11,6 +11,7 @@ class Message {
   String email;
   String text;
   String tag;
+  DateTime sent;
   bool isImportant;
   bool isClosed;
 
@@ -21,9 +22,10 @@ class Message {
       this.text,
       this.tag,
       this.isImportant,
-      this.isClosed});
+      this.isClosed,
+      this.sent});
 
-  Message.create(this.subject, this.text, this.tag, this.email, this.isImportant){
+  Message.create(this.subject, this.text, this.tag, this.email, this.isImportant, this.sent){
     this.isClosed = false;
     this.guid = Uuid().v4();
   }

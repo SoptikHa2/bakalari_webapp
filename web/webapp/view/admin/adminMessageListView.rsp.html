@@ -1,0 +1,33 @@
+[:page name="adminMessageListView", args="int countOfNew, int countOfImportant, List<dynamic> messages"]
+    [:include "/webapp/view/templates/adminHead.html" /]
+    <div class="content">
+        <h1>Zprávy</h1>
+        [:if countOfImportant != 0]
+        <p style="color: red">Důležité zprávy: [= countOfImportant]</p>
+        [/if]
+        [:if countOfNew != 0]
+        <p>Otevřené zprávy: [= countOfNew]</p>
+        [/if]
+
+        [:for message in messages]
+        <div>
+            <h2><a href="/admin/message/[= message.guid]">[= message.subject]</a></h2>
+            [:if message.isImportant]
+            <p style="color: red;">
+                DŮLEŽITÉ!
+            </p>
+            [/if]
+            <p>[= DateTime.now().difference(message.sent).inHours] ago</p>
+            <p>
+                [= message.tag]
+            </p>
+            <p>
+                [= message.text.substring(0, 100)] ...
+            </p>
+            <p>
+                <a href="/admin/message/[= message.guid]">View</a>
+            </p>
+        </div>
+        [/for]
+    </div>
+    [:include "/webapp/view/templates/tail.html" /]

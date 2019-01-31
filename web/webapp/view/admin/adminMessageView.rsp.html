@@ -1,0 +1,29 @@
+[:page name="adminMessageView", args="int countOfNew, int countOfImportant, List<dynamic> messages"]
+    [:include "/webapp/view/templates/adminHead.html" /]
+    <div class="content">
+        <h1>[= message.subject]</h1>
+        [:if message.isImportant]
+        <p style="color: red;">
+            DŮLEŽITÉ!
+        </p>
+        [/if]
+        <p>[= DateTime.now().difference(message.sent).inHours] ago</p>
+        <p>
+            [= message.tag]
+        </p>
+        <hr />
+        <p>
+            [= message.text] ...
+        </p>
+        <hr />
+        <p>
+            [:if message.email != '']
+            <a href="mailto: [= message.email]">[= message.email]</a>
+        </p>
+        <form class="pure-form" action="/admin/message/markAsRead/[= message.guid]" method="POST">
+            <button type="submit" class="pure-button pure-button-primary">Mark as solved</button>
+        </form>
+    </div>
+    [/for]
+    </div>
+    [:include "/webapp/view/templates/tail.html" /]
