@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, contactView, for rendering the view. */
-Future contactView(HttpConnect connect, {bool showSuccMessage, String errorMessage}) async {
+Future contactView(HttpConnect connect, {bool showSuccMessage, String errorMessage, String prefilledBody, String prefilledSubject}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -48,11 +48,16 @@ Future contactView(HttpConnect connect, {bool showSuccMessage, String errorMessa
             <legend><a href="/privacy_policy">Zpracování osobních údajů</a></legend>
 
             <label for="subject">Nadpis *</label>
-            <input type="text" id="subject" name="subject">
+            <input type="text" id="subject" name="subject" value=\"""");
+
+  response.write(Rsp.nnx(prefilledSubject?.toString()));
+
+
+  response.write("""" required>
             <br />
 
             <label for="type">Typ zprávy *</label>
-            <select type="text" id="type" name="messageType">
+            <select type="text" id="type" name="messageType" required>
                 <option value="bug">Nahlášení chyby</option>
                 <option value="featureRequest">Návrh na novou funkci</option>
                 <option value="featureRequest">Ostatní</option>
@@ -63,8 +68,13 @@ Future contactView(HttpConnect connect, {bool showSuccMessage, String errorMessa
             <input type="checkbox" id="important" name="isMessageImportant">
             <br />
 
-            <label for="body">Zpráva *</label>
-            <textarea id="body" name="messageBody"></textarea>
+            <label for="body" required>Zpráva *</label>
+            <textarea id="body" name="messageBody">""");
+
+  response.write(Rsp.nnx(prefilledBody?.toString()));
+
+
+  response.write("""</textarea>
             <br />
 
             <label for="email">Email</label>

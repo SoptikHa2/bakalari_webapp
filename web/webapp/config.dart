@@ -37,6 +37,7 @@ class Config {
     "get:/student/json": Student.getInfoJson,
 
     "get:/contact": Contact.getContactPage,
+    "post:/contact" : Contact.postContactPage,
 
     "get:/admin": Admin.adminRootPage,
     "get:/admin/login": Admin.loginForm,

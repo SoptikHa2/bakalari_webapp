@@ -1,18 +1,20 @@
-[:page name="contactView" args="bool showSuccMessage, String errorMessage"]
+[:page name="contactView" args="bool showSuccMessage, String errorMessage, String prefilledBody, String
+prefilledSubject"]
 [:include "/webapp/view/templates/head.html" /]
 
-[:if showSuccMessage]
-<div class="successBar">
-    <p>Zpráva byla odeslána!</p>
-</div>
-[/if]
-[:if errorMessage != null]
-<div class="errorBar">
-    <p>[= errorMessage]</p>
-</div>
-[/if]
-
 <div class="content">
+    [:if showSuccMessage]
+    <div class="successBar">
+        <p>Zpráva byla odeslána!</p>
+    </div>
+    [/if]
+    [:if errorMessage != null]
+    <div class="errorBar">
+        <p>[= errorMessage]</p>
+    </div>
+    [/if]
+
+
     <h1>Kontakt</h1>
     <p>
         Je možné mě kontaktovat pomocí následujícího formuláře.
@@ -23,7 +25,7 @@
             <legend><a href="/privacy_policy">Zpracování osobních údajů</a></legend>
 
             <label for="subject">Nadpis *</label>
-            <input type="text" id="subject" name="subject" required>
+            <input type="text" id="subject" name="subject" value="[= prefilledSubject?.toString()]" required>
             <br />
 
             <label for="type">Typ zprávy *</label>
@@ -39,7 +41,7 @@
             <br />
 
             <label for="body" required>Zpráva *</label>
-            <textarea id="body" name="messageBody"></textarea>
+            <textarea id="body" name="messageBody">[= prefilledBody?.toString()]</textarea>
             <br />
 
             <label for="email">Email</label>
