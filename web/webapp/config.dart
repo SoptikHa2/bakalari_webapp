@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 
+import 'controller/admin/adminMessages.dart';
 import 'controller/admin/godStudent.dart';
 import 'controller/admin/log.dart';
 import 'controller/contact.dart';
@@ -48,6 +49,10 @@ class Config {
     "post:/admin": Admin.verify2FA,
     "post:/admin/shutdown": Admin.shutdownWebsite,
     "get:/admin/log/raw/download/(file:[^/]*)": Log.downloadRawLog,
+    "get:/admin/message" : AdminMessages.getMessageList,
+    "get:/admin/message/all": AdminMessages.getFullMessageList,
+    "get:/admin/message/(guid:[^/]*)": AdminMessages.getOneMessage,
+    "post:/admin/message/markAsRead/(guid:[^/]*)": AdminMessages.setAsCompleted,
 
     "get:/shutdown": Shutdown.showShutdown,
     "/.+/": General.redirectToNoLeadingSlash,

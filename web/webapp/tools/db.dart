@@ -221,10 +221,16 @@ class DB {
 
   static Future<Message> getOneMessage(String guid) async {
     return Message.fromJson(
-        (await _messages.findRecord(Finder(filter: Filter.byKey(guid)))).value);
+        (await _messages.findRecord(Finder(filter: Filter.byKey(guid)))).value['message']);
   }
 
   static Future saveMessage(Message message) async {
     await _messages.put({'message': message.toJson()}, message.guid);
+  }
+
+  static Future markMessageAsDone(String guid) async {
+    var message = await getOneMessage(guid);
+    message.isClosed = true;
+    await _messages.update({'message': message.toJson()}, guid);
   }
 }

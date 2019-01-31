@@ -5,6 +5,7 @@ import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
 
 import '../../config.dart';
+import '../../tools/db.dart';
 import '../../tools/tools.dart';
 import '../../view/admin/adminLoginView.rsp.dart';
 import '../../view/admin/adminRootView.rsp.dart';
@@ -125,8 +126,14 @@ class Admin {
 
     Config.unsuccessfulAdminLoginsInARow = 0;
     /* LOGGED IN */
+
+    var messages = (await DB.getAllMessages()).where((m) => !m.isClosed);
+    int countOfNormalMessages = messages.where((m) => !m.isImportant).length;
+    int countOfImprotantMessages = messages.length - countOfNormalMessages;
     // ignore: mixed_return_types
-    return adminRootView(connect);
+    return adminRootView(connect,
+        numberOfNormalMessages: countOfNormalMessages,
+        numberOfImprotantMessages: countOfImprotantMessages);
   }
 
   // Post

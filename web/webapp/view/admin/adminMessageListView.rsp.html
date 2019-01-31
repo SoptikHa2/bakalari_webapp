@@ -1,33 +1,41 @@
-[:page name="adminMessageListView", args="int countOfNew, int countOfImportant, List<dynamic> messages"]
+[:page name="adminMessageListView" args="int countOfNew, int countOfImportant, Iterable<dynamic> messages"]
     [:include "/webapp/view/templates/adminHead.html" /]
     <div class="content">
-        <h1>Zprávy</h1>
+        <h1>Messages</h1>
         [:if countOfImportant != 0]
-        <p style="color: red">Důležité zprávy: [= countOfImportant]</p>
+        <p style="color: red">Important messages: [= countOfImportant]</p>
         [/if]
         [:if countOfNew != 0]
-        <p>Otevřené zprávy: [= countOfNew]</p>
+        <p>New messages: [= countOfNew]</p>
         [/if]
+        <p>
+            <a href="/admin/message">Show only new messages</a> <br />
+            <a href="/admin/message/all">Show all messages</a>
+        </p>
 
         [:for message in messages]
         <div>
-            <h2><a href="/admin/message/[= message.guid]">[= message.subject]</a></h2>
-            [:if message.isImportant]
-            <p style="color: red;">
-                DŮLEŽITÉ!
-            </p>
-            [/if]
-            <p>[= DateTime.now().difference(message.sent).inHours] ago</p>
+            <h2>[= message.subject]</h2>
+            <table>
+                <tr>
+                    [:if message.isImportant]
+                    <td style="color: red;">
+                        IMPORTANT!
+                    </td>
+                    [/if]
+                    <td>[= DateTime.now().difference(message.sent).inHours]h ago</td>
+                    <td>
+                        [= message.tag]
+                    </td>
+                </tr>
+            </table>
             <p>
-                [= message.tag]
-            </p>
-            <p>
-                [= message.text.substring(0, 100)] ...
-            </p>
-            <p>
-                <a href="/admin/message/[= message.guid]">View</a>
+                [:if message.text.length <= 120] [=message.text] [:else] [=message.text.substring(0, 120)] ... [/if] </p>
+                    <p>
+                    <a href="/admin/message/[= message.guid]">View</a>
             </p>
         </div>
+        <hr />
         [/for]
     </div>
     [:include "/webapp/view/templates/tail.html" /]

@@ -27,6 +27,7 @@ class Message {
 
   Message.create(this.subject, this.text, this.tag, this.email, this.isImportant, this.sent){
     this.isClosed = false;
+    this.isImportant = isImportant ?? false;
     this.guid = Uuid().v4();
   }
 

@@ -141,6 +141,11 @@ input{
     margin: 0.5em;
 }
 
+table td{
+    border: 1px solid #666;
+    padding: 0.5em;
+}
+
 
 /* Buttons */
 

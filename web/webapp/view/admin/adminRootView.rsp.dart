@@ -7,18 +7,32 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, adminRootView, for rendering the view. */
-Future adminRootView(HttpConnect connect) async {
+Future adminRootView(HttpConnect connect, {int numberOfNormalMessages, int numberOfImprotantMessages}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
   await connect.include("/webapp/view/templates/adminHead.html");
+// Prepare message count string
+String newMessagesString = '';
+if(numberOfNormalMessages != 0 || numberOfImprotantMessages != 0){
+newMessagesString = '<span style="color: black">($numberOfNormalMessages | <span style="color: red;">$numberOfImprotantMessages</span>)</span>';
+}
 
-  response.write("""<div class="content">
+  response.write("""
+
+
+<div class="content">
     <h1>Administrační sekce</h1>
     <ul>
         <li><a href="/admin/log">Log</a></li>
         <li><a href="/admin/god">Debug</a></li>
+        <li><a href="/admin/message">Messages """);
+
+  response.write(Rsp.nnx(newMessagesString, encode: 'none'));
+
+
+  response.write("""</a></li>
         <li><a href="/admin/logout">Logout (!)</a></li>
     </ul>
     <h2>Pozastavení stránky</h2>

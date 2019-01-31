@@ -1,10 +1,19 @@
-[:page name="adminRootView"]
+[:page name="adminRootView" args="int numberOfNormalMessages, int numberOfImprotantMessages"]
 [:include "/webapp/view/templates/adminHead.html" /]
+[:dart]
+// Prepare message count string
+String newMessagesString = '';
+if(numberOfNormalMessages != 0 || numberOfImprotantMessages != 0){
+newMessagesString = '<span style="color: black">($numberOfNormalMessages | <span style="color: red;">$numberOfImprotantMessages</span>)</span>';
+}
+[/dart]
+
 <div class="content">
     <h1>Administrační sekce</h1>
     <ul>
         <li><a href="/admin/log">Log</a></li>
         <li><a href="/admin/god">Debug</a></li>
+        <li><a href="/admin/message">Messages [= newMessagesString, encode: 'none']</a></li>
         <li><a href="/admin/logout">Logout (!)</a></li>
     </ul>
     <h2>Pozastavení stránky</h2>

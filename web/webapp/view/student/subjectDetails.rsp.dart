@@ -29,7 +29,7 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
 
 
   response.write("""</h1>
-  <a href="javascript:window.history.go(-1);">Zpět</a>
+  <a href="/student">Zpět</a>
   <p>""");
 
   response.write(Rsp.nnx(subject.teacherName));
