@@ -23,11 +23,11 @@
             <legend><a href="/privacy_policy">Zpracování osobních údajů</a></legend>
 
             <label for="subject">Nadpis *</label>
-            <input type="text" id="subject" name="subject">
+            <input type="text" id="subject" name="subject" required>
             <br />
 
             <label for="type">Typ zprávy *</label>
-            <select type="text" id="type" name="messageType">
+            <select type="text" id="type" name="messageType" required>
                 <option value="bug">Nahlášení chyby</option>
                 <option value="featureRequest">Návrh na novou funkci</option>
                 <option value="featureRequest">Ostatní</option>
@@ -38,7 +38,7 @@
             <input type="checkbox" id="important" name="isMessageImportant">
             <br />
 
-            <label for="body">Zpráva *</label>
+            <label for="body" required>Zpráva *</label>
             <textarea id="body" name="messageBody"></textarea>
             <br />
 
