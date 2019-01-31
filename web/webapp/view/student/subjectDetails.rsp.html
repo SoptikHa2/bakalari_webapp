@@ -24,7 +24,7 @@
   <tr class="grades">
     <td>[=grade.date.day]. [=grade.date.month]</td>
     <td>[=grade.caption]</td>
-    <td name="value">[=grade.value.round() == grade.value ? grade.value.toInt() : grade.value.floor().toString() + '-']</td>
+    <td name="value">[= grade.numericValue == null ? grade.value : (grade.numericValue.round() == grade.value ? grade.value.toInt() : grade.value.floor().toString() + '-')]</td>
     <td name="weight">[=grade.weight]</td>
   </tr>
   [/for]
