@@ -13,7 +13,7 @@ Future adminLogView(HttpConnect connect) async {
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("/webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/adminHead.html");
 
   response.write("""<div class="content">
     <h1>Vizualizace</h1>

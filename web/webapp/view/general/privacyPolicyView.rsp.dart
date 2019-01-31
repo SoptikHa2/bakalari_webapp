@@ -28,21 +28,19 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
     dobu zpracování Vašeho požadavku.
   </p>
   <p>
-    Dočasně ukládáme na serveru informace přijaté ze serveru školy, abychom je mohli průběžně zobrazovat a nemuseli
-    jste při každém dalším načtení stránky znovu zadávat heslo. Přístupový kód k těmto údajům ukládáme po dobu jednoho
-    týdne ve vašem prohlížeči v souborech cookies. Tento přístupový kód bude ve vašem prohlížeči uložen """);
+    Dočasně ukládáme na serveru informace přijaté ze serveru školy, abychom je mohli průběžně zobrazovat. Přístupový
+    kód k těmto údajům ukládáme ve vašem prohlížeči v souboru cookie. Tento přístupový kód
+    bude ve vašem prohlížeči uložen """);
 
   response.write(Rsp.nnx(sessionCookieLength));
 
 
-  response.write("""
-
-    nebo dokud se neodhlásíte. Údaje přijaté ze stránek školy po stejné době mažeme.
+  response.write(""" nebo dokud se neodhlásíte. Údaje přijaté ze stránek školy
+    po stejné době mažeme.
   </p>
   <p>
-    Po přihlášení uložíme do vašeho prohlížeče identifikátor školy a třídy. Díky tomu můžeme na hlavní stránce
-    zobrazovat rozvrh pro vaši třídu, i když zrovna nejste přihlášeni. Tyto informace budou po každém novém
-    přihlášení uloženy """);
+    Po přihlášení uložíme do vašeho prohlížeče URI bakalářů vaší školy, takže nemusíte při každém přihlášení
+    znovu vybírat vaši školu. tato informace bude po každém novém přihlášení uložena na """);
 
   response.write(Rsp.nnx(classCookieLength));
 
@@ -50,8 +48,13 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
   response.write(""".
   </p>
   <p>
-    Zároveň zaznamenáváme informace o přístupu a využívání těchto webových stránek kvůli analýze návštěvnosti těchto
-    webových stránek a způsobu jejich využívání.
+    Pokud kontaktujete administrátora této stránky (<a href="/contact">zde</a>), na dobu neurčitou budeme na serveru
+    ukládat text vaší zprávy, nadpis vaší zprávy, druh zprávy, označení priority a váš email, pokud ho formulářem
+    odešlete (ve zkratce tedy vše, co dáte do formuláře).
+  </p>
+  <p>
+    Zároveň zaznamenáváme informace o přístupu k těmto webovým stránkám kvůli analýze návštěvnosti a tvorbě
+    hezkých barevných grafů.
   </p>
 </div>
 """);

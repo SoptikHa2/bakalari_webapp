@@ -82,7 +82,7 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
       response.write("""</td>
     <td name="value">""");
 
-      response.write(Rsp.nnx(grade.value.round() == grade.value ? grade.value.toInt() : grade.value.floor().toString() + '-'));
+      response.write(Rsp.nnx(grade.numericValue == null ? grade.value : (grade.numericValue.round() == grade.numericValue ? grade.numericValue.toInt() : grade.numericValue.floor().toString() + '-')));
 
 
       response.write("""</td>

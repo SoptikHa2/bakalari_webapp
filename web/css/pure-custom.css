@@ -137,6 +137,10 @@ a:hover{
     100% { opacity: 1; }
 }
 
+input{
+    margin: 0.5em;
+}
+
 
 /* Buttons */
 

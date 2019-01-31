@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 
 import 'controller/admin/godStudent.dart';
 import 'controller/admin/log.dart';
+import 'controller/contact.dart';
 import 'controller/general.dart';
 import 'controller/lubos.dart';
 import 'controller/student/refreshStudentInfo.dart';
@@ -34,6 +35,8 @@ class Config {
     "get:/student/subject/(identifier:[^/]*)": Subject.getSubject,
     "post:/student/json": Student.loginJson,
     "get:/student/json": Student.getInfoJson,
+
+    "get:/contact": Contact.getContactPage,
 
     "get:/admin": Admin.adminRootPage,
     "get:/admin/login": Admin.loginForm,
