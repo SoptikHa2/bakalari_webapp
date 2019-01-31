@@ -53,10 +53,11 @@ Future adminMessageView(HttpConnect connect, {dynamic message}) async {
     <p>
         """);
 
-  response.write(Rsp.nnx(message.text));
+  response.write(Rsp.nnx(message.getMarkdownInHtml(), encode: 'none'));
 
 
-  response.write(""" ...
+  response.write("""
+
     </p>
     <hr />
     <p>

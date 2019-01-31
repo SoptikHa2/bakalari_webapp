@@ -66,7 +66,7 @@ prefilledSubject}) async {
             <select type="text" id="type" name="messageType" required>
                 <option value="bug">Nahlášení chyby</option>
                 <option value="featureRequest">Návrh na novou funkci</option>
-                <option value="featureRequest">Ostatní</option>
+                <option value="other">Ostatní</option>
             </select>
             <br />
 
@@ -82,6 +82,9 @@ prefilledSubject}) async {
 
   response.write("""</textarea>
             <br />
+            <p>
+                Ve zprávě můžete použít <a href="https://commonmark.org/help/">Markdown</a>.
+            </p>
 
             <label for="email">Email</label>
             <input type="email" id="email" name="email">

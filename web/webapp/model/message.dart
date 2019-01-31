@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:markdown/markdown.dart';
 
 part 'message.g.dart';
 
@@ -14,6 +15,8 @@ class Message {
   DateTime sent;
   bool isImportant;
   bool isClosed;
+
+  String getMarkdownInHtml() => markdownToHtml(text);
 
   Message(
       {this.guid,

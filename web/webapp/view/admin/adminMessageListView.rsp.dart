@@ -92,14 +92,14 @@ Future adminMessageListView(HttpConnect connect, {int countOfNew, int countOfImp
 
       response.write(""" """);
 
-      response.write(Rsp.nnx(message.text));
+      response.write(Rsp.nnx(message.getMarkdownInHtml(), encode: 'none'));
 
 
     } else {
 
       response.write(""" """);
 
-      response.write(Rsp.nnx(message.text.substring(0, 120)));
+      response.write(Rsp.nnx(message.text.substring(0, 120).getMarkdownInHtml(), encode: 'none'));
 
 
       response.write(""" ... """);
