@@ -7,37 +7,43 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, contactView, for rendering the view. */
-Future contactView(HttpConnect connect, {bool showSuccMessage, String errorMessage, String prefilledBody, String prefilledSubject}) async {
+Future contactView(HttpConnect connect, {bool showSuccMessage, String errorMessage, String prefilledBody, String
+prefilledSubject}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
   await connect.include("/webapp/view/templates/head.html");
 
+  response.write("""
+
+<div class="content">
+""");
+
   if (showSuccMessage) {
 
-    response.write("""<div class="successBar">
-    <p>Zpráva byla odeslána!</p>
-</div>
+    response.write("""    <div class="successBar">
+        <p>Zpráva byla odeslána!</p>
+    </div>
 """);
   } //if
 
   if (errorMessage != null) {
 
-    response.write("""<div class="errorBar">
-    <p>""");
+    response.write("""    <div class="errorBar">
+        <p>""");
 
     response.write(Rsp.nnx(errorMessage));
 
 
     response.write("""</p>
-</div>
+    </div>
 """);
   } //if
 
   response.write("""
 
-<div class="content">
+
     <h1>Kontakt</h1>
     <p>
         Je možné mě kontaktovat pomocí následujícího formuláře.

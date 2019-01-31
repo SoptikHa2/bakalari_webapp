@@ -25,8 +25,13 @@ class Contact {
     }
 
     try {
-      DB.saveMessage(Message.create(post.subject, post.messageBody,
-          post.messageType, post.email, post.isMessageImportant, DateTime.now()));
+      DB.saveMessage(Message.create(
+          post.subject,
+          post.messageBody,
+          post.messageType,
+          post.email,
+          post.isMessageImportant,
+          DateTime.now()));
     } catch (e) {
       return contactView(connect,
           showSuccMessage: false,
@@ -45,6 +50,10 @@ class ContactInputMessage {
   bool isMessageImportant;
   String messageBody;
   String email;
+
+  ContactInputMessage() {
+    if (isMessageImportant == null) isMessageImportant = false;
+  }
 
   bool validate() {
     if (subject == null ||

@@ -9,9 +9,9 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
     subject: json['subject'] as String,
     tag: json['tag'] as String,
     text: json['text'] as String,
-    sent: json['refresh'] == null
+    sent: json['sent'] == null
         ? null
-        : DateTime.parse(json['refresh'] as String),
+        : DateTime.parse(json['sent'] as String),
   );
 }
 
