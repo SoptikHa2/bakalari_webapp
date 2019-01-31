@@ -87,7 +87,6 @@ class Student {
     }
 
     var timetable = student.timetable;
-    var permTimetable = student.permTimetable;
 
     // Refresh time
     var timeSinceLastRefresh =
@@ -125,8 +124,7 @@ class Student {
     }
 
     return studentView(connect,
-        timetable: timetable,
-        permTimetable: permTimetable,
+        timetableRow: timetable,
         lastRefresh: sinceLastRefresh,
         averages: averages);
   }

@@ -1,4 +1,4 @@
-[:page name="studentView" args="String errorDescription, dynamic timetable, dynamic permTimetable, dynamic averages,
+[:page name="studentView" args="String errorDescription, dynamic timetableRow, dynamic averages,
 String lastRefresh,
 String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
 [:include "/webapp/view/templates/head.html" /]
@@ -25,91 +25,11 @@ String nbsp = "\u{00A0}";
     <div class="pure-g" id="main">
         <div class="pure-u-1 pure-u-md-1" id="rozvrh">
             <h1 class="content-subhead">Rozvrh</h1>
-            [:if timetable == null]
+            [:if timetableRow == null]
             <p class="loader">
                 Načítám rozvrh, za chvíli tady bude...
             </p>
             [:else]
-            [:if timetable != null && permTimetable != null ]
-            <button id="butSwitchTimetableToToday" class="pure-button pure-button-primary button-switch" toggleon="tabletoday"
-                toggleoff="tableperm" oppButton="butSwitchTimetableToPerm">Dnešní</button>
-            <button id="butSwitchTimetableToPerm" class="pure-button button-switch" toggleon="tableperm" toggleoff="tabletoday"
-                oppButton="butSwitchTimetableToToday">Stálý</button>
-            [/if]
-            <div class="timetable-div-scrollable">
-            <table class="pure-table" id="tabletoday">
-                <thead>
-                    <tr></tr>
-                    <tr>
-                        <th></th>
-                        [:for hour in timetable.times ]
-                        <th title="[= hour.beginTime ] - [= hour.endTime ]">
-                            [= hour.caption ]
-                        </th>
-                        [/for]
-                    </tr>
-                </thead>
-                <tbody>
-                    [:for day in timetable.days ]
-                    <tr>
-                        <th>[= day.shortName ]</th>
-                        [:for lessons in day.lessons]
-                        <td class="table-cell-small">
-                            [:for lesson in lessons]
-                            <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
-                                <div class="table-cell-main">[= lesson.subjectShort ]</div>
-                                <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
-                                    null
-                                    || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
-                                    ?
-                                    '' : '$nbsp|$nbsp'][= lesson.classroom ]</span>
-                            </div>
-                            [/for]
-                        </td>
-                        [/for]
-                    </tr>
-                    [/for]
-                </tbody>
-            </table>
-            </div>
-            [:if permTimetable != null]
-            <div class="timetable-div-scrollable">
-            <table class="pure-table" id="tableperm" style="display: none;">
-                <thead>
-                    <tr></tr>
-                    <tr>
-                        <th></th>
-                        [:for hour in permTimetable.times ]
-                        <th title="[= hour.beginTime ] - [= hour.endTime ]">
-                            [= hour.caption ]
-                        </th>
-                        [/for]
-                    </tr>
-                </thead>
-                <tbody>
-                    [:for day in permTimetable.days ]
-                    <tr>
-                        <th>[= day.shortName ]</th>
-                        [:for lessons in day.lessons]
-                        <td class="table-cell-small">
-                            [:for lesson in lessons]
-                            <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
-                                <div class="table-cell-main">[= lesson.subjectShort ]</div>
-                                <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
-                                    null
-                                    || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
-                                    ?
-                                    '' : '$nbsp|$nbsp'][= lesson.classroom ]</span>
-                            </div>
-                            [/for]
-                        </td>
-                        [/for]
-                    </tr>
-                    [/for]
-                </tbody>
-            </table>
-            </div>
-            [/if]
             [/if]
         </div>
         <div class="pure-u-1 pure-u-md-1-2" id="znamky">
