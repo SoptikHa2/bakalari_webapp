@@ -106,7 +106,7 @@ class DB {
     await _logRaw.put({
       'request': request.uri.toString(),
       'browser': browser.userAgent,
-      'ip': request.connectionInfo.remoteAddress.toString(),
+      'ip': request.headers.value('X-Real-IP'),
       'timestamp': DateTime.now().millisecondsSinceEpoch
     });
   }
