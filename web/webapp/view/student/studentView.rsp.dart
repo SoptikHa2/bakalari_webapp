@@ -54,7 +54,7 @@ String nbsp = "\u{00A0}";
 
   if (timetable == null) {
 
-    response.write("""            <p>
+    response.write("""            <p class="loader">
                 Načítám rozvrh, za chvíli tady bude...
             </p>
 """);
@@ -281,7 +281,7 @@ String nbsp = "\u{00A0}";
 
   if (averages == null) {
 
-    response.write("""            <p>
+    response.write("""            <p class="loader">
                 Načítám známky, za chvíli to bude...
             </p>
 """);

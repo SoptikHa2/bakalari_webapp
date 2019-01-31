@@ -26,7 +26,7 @@ String nbsp = "\u{00A0}";
         <div class="pure-u-1 pure-u-md-1" id="rozvrh">
             <h1 class="content-subhead">Rozvrh</h1>
             [:if timetable == null]
-            <p>
+            <p class="loader">
                 Načítám rozvrh, za chvíli tady bude...
             </p>
             [:else]
@@ -115,7 +115,7 @@ String nbsp = "\u{00A0}";
         <div class="pure-u-1 pure-u-md-1-2" id="znamky">
             <h1 class="content-subhead">Průměry</h1>
             [:if averages == null]
-            <p>
+            <p class="loader">
                 Načítám známky, za chvíli to bude...
             </p>
             [:else]

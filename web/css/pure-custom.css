@@ -125,6 +125,21 @@ a:hover{
     color: #fff;
 }
 
+.loader {
+    animation-name: toggleOpacity;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes toggleOpacity {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+
+/* Buttons */
+
 .button-success,
 .button-error,
 .button-warning,
