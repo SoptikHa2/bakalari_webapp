@@ -7,6 +7,7 @@ import 'package:bakalari/definitions.dart';
 
 import '../config.dart';
 import '../model/complexStudent.dart';
+import '../model/message.dart';
 
 /// Class that takes care of Database
 class DB {
@@ -15,6 +16,7 @@ class DB {
   static Store _schools;
   static Store _logRaw;
   static Store _logStudent;
+  static Store _messages;
 
   static Future<void> initializeDb() async {
     _db = await databaseFactoryIo.openDatabase(Config.dbFileLocation);
@@ -22,12 +24,26 @@ class DB {
     _schools = _db.getStore('schools'); // List of schools [obsolete]
     _logRaw = _db.getStore('logRaw'); // Raw access logs
     _logStudent = _db.getStore('logStudent'); // Student login logs
+    _messages = _db.getStore('messages'); // Messages sent to admin
   }
 
   static Future<String> getLogRawInJson() async {
     var file = File(Config.dbFileLocation);
     var lines = await file.readAsLines().then((List<String> lines) =>
         lines.where((l) => l.contains(',"store":"logRaw","value":{')));
+    lines = lines.toList(growable: false);
+    var result = '[';
+    for (var line in lines) {
+      result += line;
+      if (line != lines.last) result += ',';
+    }
+    return result + ']';
+  }
+
+  static Future<String> getMessagesInJson() async {
+    var file = File(Config.dbFileLocation);
+    var lines = await file.readAsLines().then((List<String> lines) =>
+        lines.where((l) => l.contains(',"store":"messages","value":{')));
     lines = lines.toList(growable: false);
     var result = '[';
     for (var line in lines) {
@@ -161,13 +177,13 @@ class DB {
           student.studentInfo.schoolClass +
           ':' +
           student.schoolInfo.name;
-      
-      if(students.containsKey(identifier)){
+
+      if (students.containsKey(identifier)) {
         var savedRecord = students[identifier];
-        if(savedRecord.refresh.isBefore(student.refresh)){
+        if (savedRecord.refresh.isBefore(student.refresh)) {
           students[identifier] = student;
         }
-      }else{
+      } else {
         students[identifier] = student;
       }
     }
@@ -180,19 +196,35 @@ class DB {
     return studentsList;
   }
 
-  static Future<ComplexStudent> getLatestStudentBy(bool condition(ComplexStudent student)) async {
+  static Future<ComplexStudent> getLatestStudentBy(
+      bool condition(ComplexStudent student)) async {
     var allStudents = (await _students.findRecords(Finder()))
         .map((r) => ComplexStudent.fromJson(r.value['student']))
         .where((s) => condition(s));
     DateTime last = null;
     ComplexStudent selectedStudent = null;
     for (var student in allStudents) {
-      if(last == null || student.refresh.isAfter(last)){
+      if (last == null || student.refresh.isAfter(last)) {
         last = student.refresh;
         selectedStudent = student;
       }
     }
 
     return selectedStudent;
+  }
+
+  static Future<Iterable<Message>> getAllMessages() async {
+    var messages = (await _messages.findRecords(Finder()))
+        .map((r) => Message.fromJson(r.value['message']));
+    return messages;
+  }
+
+  static Future<Message> getOneMessage(String guid) async {
+    return Message.fromJson(
+        (await _messages.findRecord(Finder(filter: Filter.byKey(guid)))).value);
+  }
+
+  static Future saveMessage(Message message) async {
+    _messages.put({'message': message.toJson()}, message.guid);
   }
 }
