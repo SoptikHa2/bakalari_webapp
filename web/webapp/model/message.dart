@@ -28,10 +28,11 @@ class Message {
       this.isClosed,
       this.sent});
 
-  Message.create(this.subject, this.text, this.tag, this.email, this.isImportant, this.sent){
+  Message.create(this.subject, this.text, this.tag, this.email, this.isImportant){
     this.isClosed = false;
     this.isImportant = isImportant ?? false;
     this.guid = Uuid().v4();
+    this.sent = DateTime.now();
   }
 
   factory Message.fromJson(Map<String, dynamic> json) =>
