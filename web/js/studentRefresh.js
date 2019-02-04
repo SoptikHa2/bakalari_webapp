@@ -10,22 +10,22 @@ function update() {
     request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
             var resp = this.response;
-            console.log('Pulling content update...');
+            console.log('[LOGIN-AUTO-REFRESH] Pulled content update...');
             registerSwitches();
             numberOfRequests++;
 
             if (this.status == 201) { // Everything is done
-                console.log('Received 201 status code from server, updating content and quiting update process.');
+                console.log('[LOGIN-AUTO-REFRESH] Received 201 status code from server, updating content and quiting update process.');
                 document.body.innerHTML = resp;
                 clearInterval(intervalId);
             } else if (numberOfRequests > requestThreshold) {
-                console.log('Failed to receive 201 status code from server in last ' + requestThreshold + ' requests. Aborting.');
+                console.log('[LOGIN-AUTO-REFRESH] Failed to receive 201 status code from server in last ' + requestThreshold + ' requests. Aborting.');
                 // Display error box
                 document.getElementById('failed-to-fetch-update').setAttribute('style', '');
             }
         } else {
             // We reached our target server, but it returned an error
-            console.log('Unknown error when updating content.');
+            console.log('[LOGIN-AUTO-REFRESH] Unknown error when updating content.');
             // Display error box
             document.getElementById('failed-to-fetch-update').setAttribute('style', '');
         }
@@ -33,7 +33,7 @@ function update() {
 
     request.onerror = function () {
         // There was a connection error of some sort
-        console.log('Connection error when updating content.');
+        console.log('[LOGIN-AUTO-REFRESH] Connection error when updating content.');
         // Display error box
         document.getElementById('failed-to-fetch-update').setAttribute('style', '');
     };
