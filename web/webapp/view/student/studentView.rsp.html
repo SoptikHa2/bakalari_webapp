@@ -33,16 +33,39 @@ String nbsp = "\u{00A0}";
         </aside>
     </div>
     <div class="pure-g" id="main">
-        <div class="pure-u-1 pure-u-md-1" id="rozvrh">
-            <h1 class="content-subhead">Rozvrh</h1>
+        <div class="pure-u-1 pure-u-md-1-2" id="timetable">
             [:if timetableRow == null]
+            <h1 class="content-subhead">Rozvrh</h1>
             <p class="loader">
                 Načítám rozvrh, za chvíli tady bude...
             </p>
             [:else]
+            <h1 class="content-subhead">[= timetableRow.date.difference(DateTime.now()).inDays == 0 ? 'Dnes' :
+                (timetableRow.date.difference(DateTime.now()).inDays == 1 ? 'Zítra' : timetableRow.shortName) ]</h1>
+            <table class="pure-table">
+                <tbody>
+                    [:for multipleLessons in timetableRow.lessons]
+                    [:for lesson in multipleLessons]
+                    <tr class="[= lesson.change != null && lesson.change != '' ? 'lesson-change' : '']">
+                        <td>
+                            [= lesson.lessonTime.caption]
+                        </td>
+                        [:if lesson.isSet != null && lesson.isSet]
+                        <td>
+                            [= lesson.subjectLong] ([= lesson.teacherShort])
+                        </td>
+                        <td>
+                            [= lesson.classroom]
+                        </td>
+                        [/if]
+                    </tr>
+                    [/for]
+                    [/for]
+                </tbody>
+            </table>
             [/if]
         </div>
-        <div class="pure-u-1 pure-u-md-1-2" id="znamky">
+        <div class="pure-u-1 pure-u-md-1-2" id="grades">
             <h1 class="content-subhead">Průměry</h1>
             [:if averages == null]
             <p class="loader">
@@ -65,7 +88,7 @@ String nbsp = "\u{00A0}";
             </table>
             [/if]
         </div>
-        <div class="pure-u-1 pure-u-md-1-2" id="otherModules">
+        <div class="pure-u-1 pure-u-md-1" id="otherModules">
             <h1 class="content-subhead">Ostatní moduly</h1>
             <ul>
                 <li>

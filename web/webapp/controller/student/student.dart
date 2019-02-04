@@ -39,6 +39,8 @@ class Student {
           guid, ((student) => student.update(timetable: t))));
       bakaweb.getTimetablePermanent().then((t) => DB.updateStudentInfo(
           guid, ((student) => student.update(permTimetable: t))));
+      bakaweb.getNextWeekTimetable().then((t) => DB.updateStudentInfo(
+          guid, ((student) => student.update(nextWeekTimetable: t))));
       bakaweb.getGrades().then((g) =>
           DB.updateStudentInfo(guid, ((student) => student.update(grades: g))));
       bakaweb.getSubjects().then((s) => DB.updateStudentInfo(
@@ -63,9 +65,11 @@ class Student {
       print(e);
       if (connect.request.uri.queryParameters.keys.contains('refresh') &&
           connect.request.uri.queryParameters['refresh'] == '1') {
-        return connect.redirect('/refresh?error=cannot_connect&filledURI=${Uri.encodeComponent(post.bakawebUrl)}&filledUsername=${Uri.encodeComponent(post.login)}');
+        return connect.redirect(
+            '/refresh?error=cannot_connect&filledURI=${Uri.encodeComponent(post.bakawebUrl)}&filledUsername=${Uri.encodeComponent(post.login)}');
       }
-      return connect.redirect('/?error=cannot_connect&filledURI=${Uri.encodeComponent(post.bakawebUrl)}&filledUsername=${Uri.encodeComponent(post.login)}');
+      return connect.redirect(
+          '/?error=cannot_connect&filledURI=${Uri.encodeComponent(post.bakawebUrl)}&filledUsername=${Uri.encodeComponent(post.login)}');
     }
 
     // Forward to itself, just GET
@@ -87,6 +91,7 @@ class Student {
     }
 
     var timetable = student.timetable;
+    var nextWeekTimetable = student.nextWeekTimetable;
 
     // Refresh time
     var timeSinceLastRefresh =
@@ -104,7 +109,8 @@ class Student {
     // Averages
     Map<String, double> averages = null;
     if (student.grades != null && student.subjects != null) {
-      averages = Tools.gradesToSubjectAverages(student.grades, student.subjects);
+      averages =
+          Tools.gradesToSubjectAverages(student.grades, student.subjects);
     }
 
     // Change status code to 201 (Created) if we already have all the information we need,
@@ -123,8 +129,14 @@ class Student {
       connect.response.statusCode = 201;
     }
 
+    var timetableRow = null;
+    if (timetable != null && nextWeekTimetable != null) {
+      timetableRow = Tools.whichDayShouldIShowInOneDayTimetable(
+          timetable, nextWeekTimetable);
+    }
+
     return studentView(connect,
-        timetableRow: timetable,
+        timetableRow: timetableRow,
         lastRefresh: sinceLastRefresh,
         averages: averages);
   }
@@ -256,7 +268,7 @@ class StudentLoginPostParams {
         bakawebUrl = "https://" + bakawebUrl;
       }
       // Add /login.aspx if it ends with domain
-      if(r"\.[a-z]{2,3}$".allMatches(bakawebUrl).length > 0){
+      if (r"\.[a-z]{2,3}$".allMatches(bakawebUrl).length > 0) {
         bakawebUrl = bakawebUrl + '/login.aspx';
       }
     }

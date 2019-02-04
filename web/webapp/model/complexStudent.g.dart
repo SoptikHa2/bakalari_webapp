@@ -15,6 +15,10 @@ ComplexStudent _$ComplexStudentFromJson(Map<String, dynamic> json) {
       permTimetable: json['permTimetable'] == null
           ? null
           : Timetable.fromJson(json['permTimetable'] as Map<String, dynamic>),
+      nextWeekTimetable: json['nextWeekTimetable'] == null
+          ? null
+          : Timetable.fromJson(
+              json['nextWeekTimetable'] as Map<String, dynamic>),
       grades: (json['grades'] as List)
           ?.map((e) =>
               e == null ? null : Grade.fromJson(e as Map<String, dynamic>))
@@ -50,6 +54,7 @@ Map<String, dynamic> _$ComplexStudentToJson(ComplexStudent instance) =>
       'schoolInfo': instance.schoolInfo?.toJson(),
       'timetable': instance.timetable?.toJson(),
       'permTimetable': instance.permTimetable?.toJson(),
+      'nextWeekTimetable': instance.nextWeekTimetable?.toJson(),
       'grades': instance.grades?.map((m) => m.toJson())?.toList(),
       'subjects': instance.subjects?.map((s) => s.toJson())?.toList(),
       'homework': instance.homework?.map((h) => h.toJson())?.toList(),

@@ -47,23 +47,101 @@ String nbsp = "\u{00A0}";
             </p>
         </aside>
     </noscript>
+    <div id="failed-to-fetch-update" style="display: none">
+        <aside class="errorBar">
+            <p>
+                Připojení k serveru školy proběhlo úspěšně, ale něco
+                se nepodařilo načíst. Na této stránce se zobrazí vše,
+                co se nám podařilo načíst. Pokud tento stav přetrvává,
+                <a href="/contact">kontaktujte vývojáře</a>.
+            </p>
+        </aside>
+    </div>
     <div class="pure-g" id="main">
-        <div class="pure-u-1 pure-u-md-1" id="rozvrh">
-            <h1 class="content-subhead">Rozvrh</h1>
+        <div class="pure-u-1 pure-u-md-1-2" id="timetable">
 """);
 
   if (timetableRow == null) {
 
-    response.write("""            <p class="loader">
+    response.write("""            <h1 class="content-subhead">Rozvrh</h1>
+            <p class="loader">
                 Načítám rozvrh, za chvíli tady bude...
             </p>
 """);
 
   } else {
+
+    response.write("""            <h1 class="content-subhead">""");
+
+    response.write(Rsp.nnx(timetableRow.date.difference(DateTime.now()).inDays == 0 ? 'Dnes' :
+                (timetableRow.date.difference(DateTime.now()).inDays == 1 ? 'Zítra' : timetableRow.shortName)));
+
+
+    response.write("""</h1>
+            <table class="pure-table">
+                <tbody>
+""");
+
+    for (var multipleLessons in timetableRow.lessons) {
+
+      for (var lesson in multipleLessons) {
+
+        response.write("""                    <tr class=\"""");
+
+        response.write(Rsp.nnx(lesson.change != null && lesson.change != '' ? 'lesson-change' : ''));
+
+
+        response.write("""">
+                        <td>
+                            """);
+
+        response.write(Rsp.nnx(lesson.lessonTime.caption));
+
+
+        response.write("""
+
+                        </td>
+""");
+
+        if (lesson.isSet != null && lesson.isSet) {
+
+          response.write("""                        <td>
+                            """);
+
+          response.write(Rsp.nnx(lesson.subjectLong));
+
+
+          response.write(""" (""");
+
+          response.write(Rsp.nnx(lesson.teacherShort));
+
+
+          response.write(""")
+                        </td>
+                        <td>
+                            """);
+
+          response.write(Rsp.nnx(lesson.classroom));
+
+
+          response.write("""
+
+                        </td>
+""");
+        } //if
+
+        response.write("""                    </tr>
+""");
+      } //for
+    } //for
+
+    response.write("""                </tbody>
+            </table>
+""");
   } //if
 
   response.write("""        </div>
-        <div class="pure-u-1 pure-u-md-1-2" id="znamky">
+        <div class="pure-u-1 pure-u-md-1-2" id="grades">
             <h1 class="content-subhead">Průměry</h1>
 """);
 
@@ -115,7 +193,7 @@ String nbsp = "\u{00A0}";
   } //if
 
   response.write("""        </div>
-        <div class="pure-u-1 pure-u-md-1-2" id="otherModules">
+        <div class="pure-u-1 pure-u-md-1" id="otherModules">
             <h1 class="content-subhead">Ostatní moduly</h1>
             <ul>
                 <li>

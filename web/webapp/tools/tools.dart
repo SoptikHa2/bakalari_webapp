@@ -210,7 +210,39 @@ class Tools {
     }
   }
 
-  static Timetable editTimetableToOneRowView(Timetable timetable) {}
+  static Day whichDayShouldIShowInOneDayTimetable(
+      Timetable timetable, Timetable nextWeekTimetable) {
+    Day selectedDay = null;
+    var now = DateTime.now();
+    // Determine which day should one show in timetable
+    if (now.weekday > timetable.days.length) {
+      // Next week
+      selectedDay = nextWeekTimetable.days[0];
+    } else {
+      // Something like 10:45
+      var todayLatestHourEnd = timetable
+          .days[now.weekday - 1].lessons.last.first.lessonTime.endTime
+          .trim()
+          .split(':');
+      int todayLatestHourEnd_Hour = int.parse(todayLatestHourEnd[0]);
+      int todayLatestHourEnd_Minute = int.parse(todayLatestHourEnd[0]);
+      if (now.hour > todayLatestHourEnd_Hour ||
+          (now.hour == todayLatestHourEnd_Hour &&
+              now.minute >= todayLatestHourEnd_Minute)) {
+        // Tomorrow
+        if(now.weekday + 1 > timetable.days.length){
+          // Next week
+          selectedDay = nextWeekTimetable.days[0];
+        }else{
+          selectedDay = timetable.days[now.weekday];
+        }
+      } else {
+        // Today
+        selectedDay = timetable.days[now.weekday - 1];
+      }
+    }
+    return selectedDay;
+  }
 
   /// Verify 2FA. If correct, return guid that can be used as proof that 2fa was successful.
   static String loginAsAdmin2FA(String twoFA) {
