@@ -89,10 +89,10 @@ String nbsp = "\u{00A0}";
             [/if]
         </div>
         <div class="pure-u-1 pure-u-md-1" id="otherModules">
-            <h1 class="content-subhead">Ostatní moduly</h1>
+            <h1 class="content-subhead">Ostatní</h1>
             <ul>
                 <li>
-                    <a href="/student/grade">Přehled všech známek</a>
+                    <a href="/student/timetable">Rozvrh</a>
                 </li>
                 <li>
                     <a href="/student/message">Přehled zpráv</a>
@@ -106,9 +106,13 @@ String nbsp = "\u{00A0}";
                     <a href="/student/homework">Přehled domácích úkolů</a>
                     [= urgentHomeworks == null ? '' : urgentHomeworks ]
                 </li>
+                <hr />
                 <li>
-                    <a href="/student/subject">Přehled předmětů</a>
+                    <a href="/student/refresh">Načíst nejnovější data</a>
                 </li>
+                <li>
+                        <a href="/student/logout">Odhlásit se</a>
+                    </li>
             </ul>
         </div>
     </div>
