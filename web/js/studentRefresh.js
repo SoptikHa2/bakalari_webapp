@@ -1,3 +1,6 @@
+numberOfRequests = 0
+requestThreshold = 20;
+
 function update() {
     // http://youmightnotneedjquery.com/
     var request = new XMLHttpRequest();
@@ -7,23 +10,32 @@ function update() {
     request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
             var resp = this.response;
-            console.log('Updating content...');
-            document.body.innerHTML = resp;
+            console.log('Pulling content update...');
             registerSwitches();
+            numberOfRequests++;
 
-            if(this.status == 201){ // Everything is done
-                console.log('Received 201 status code from server, quiting update process.');
+            if (this.status == 201) { // Everything is done
+                console.log('Received 201 status code from server, updating content and quiting update process.');
+                document.body.innerHTML = resp;
                 clearInterval(intervalId);
+            } else if (numberOfRequests > requestThreshold) {
+                console.log('Failed to receive 201 status code from server in last ' + requestThreshold + ' requests. Aborting.');
+                // Display error box
+                document.getElementById('failed-to-fetch-update').setAttribute('style', '');
             }
         } else {
             // We reached our target server, but it returned an error
             console.log('Unknown error when updating content.');
+            // Display error box
+            document.getElementById('failed-to-fetch-update').setAttribute('style', '');
         }
     };
 
     request.onerror = function () {
         // There was a connection error of some sort
         console.log('Connection error when updating content.');
+        // Display error box
+        document.getElementById('failed-to-fetch-update').setAttribute('style', '');
     };
 
     request.send();
