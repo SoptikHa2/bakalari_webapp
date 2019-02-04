@@ -12,7 +12,7 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("/webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/studentHead.html");
 
   response.write("""    <div class="content">
 """);
@@ -74,6 +74,9 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
                 <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
             </fieldset>
         </form>
+        <p>
+            Po zadání přihlašovacích údajů do formuláře ze serverů školy stáhneme a zobrazíme nejnovější data.
+        </p>
     </div>
 """);
 

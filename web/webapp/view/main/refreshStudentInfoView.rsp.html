@@ -1,5 +1,5 @@
 [:page name="refreshStudentInfoView" args="List<String> urls, String errorDescription, String presetUrl, String presetUsername"]
-    [:include "/webapp/view/templates/head.html" /]
+    [:include "/webapp/view/templates/studentHead.html" /]
     <div class="content">
         [:if errorDescription != null]
         <aside class="errorBar">
@@ -27,5 +27,8 @@
                 <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
             </fieldset>
         </form>
+        <p>
+            Po zadání přihlašovacích údajů do formuláře ze serverů školy stáhneme a zobrazíme nejnovější data.
+        </p>
     </div>
     [:include "/webapp/view/templates/tail.html" /]

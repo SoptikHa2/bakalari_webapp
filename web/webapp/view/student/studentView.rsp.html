@@ -1,7 +1,7 @@
 [:page name="studentView" args="String errorDescription, dynamic timetableRow, dynamic averages,
 String lastRefresh,
 String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
-[:include "/webapp/view/templates/head.html" /]
+[:include "/webapp/view/templates/studentHead.html" /]
 [:dart]
 String nbsp = "\u{00A0}";
 [/dart]
@@ -108,11 +108,11 @@ String nbsp = "\u{00A0}";
                 </li>
                 <hr />
                 <li>
-                    <a href="/student/refresh">Načíst nejnovější data</a>
+                    <a href="/refresh">Načíst nejnovější data</a>
                 </li>
                 <li>
-                        <a href="/student/logout">Odhlásit se</a>
-                    </li>
+                    <a href="/logout">Odhlásit se</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -131,6 +131,5 @@ String nbsp = "\u{00A0}";
             .then(function () { console.log("Service Worker Registered"); });
     }
 </script>
-<script src="../../js/buttonSwitch.js"></script>
 <script src="../../js/studentRefresh.js"></script>
 [:include "/webapp/view/templates/tail.html" /]

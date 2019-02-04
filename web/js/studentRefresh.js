@@ -11,7 +11,6 @@ function update() {
         if (this.status >= 200 && this.status < 400) {
             var resp = this.response;
             console.log('[LOGIN-AUTO-REFRESH] Pulled content update...');
-            registerSwitches();
             numberOfRequests++;
 
             if (this.status == 201) { // Everything is done

@@ -102,14 +102,14 @@ String nbsp = "\u{00A0}";
         aplikací.
       </p>
       <p>
-        Projekt vychází z původního projektu Václava Šraiera <a href="https://bakaweb.tk">Bakaweb.tk</a>, který už
-        dlouho před tímto projektem uměl zobrazovat průměry u všech předmětů. Díky jeho knihovně <a href="https://github.com/vakabus/pybakalib/">pybakalib</a>
+        Projekt vychází z původního projektu Václava Šraiera <a href="https://bakaweb.tk" target="_blank">Bakaweb.tk</a>, který už
+        dlouho před tímto projektem uměl zobrazovat průměry u všech předmětů. Díky jeho knihovně <a href="https://github.com/vakabus/pybakalib/" target="_blank">pybakalib</a>
         bylo možné tohoto dosáhnout. Pokud máte zájem o podrobnější informace o tom, jak protokol Bakalářů funguje, v
         repozitáři <a href="">bakalari-api</a>
         je komunikace s webovou službou podrobně popsána.
       </p>
       <p>
-        V případě jakýchkoli žádostí, otázek, nebo návrhů, mě neváhejte <a href="/contact">kontaktovat</a> (<a href="https://github.com/soptikha2/">GitHub</a>).
+        V případě jakýchkoli žádostí, otázek, nebo návrhů, mě neváhejte <a href="/contact">kontaktovat</a> (<a href="https://github.com/soptikha2/" target="_blank">GitHub</a>).
       </p>
       <p>
         Petr Šťastný

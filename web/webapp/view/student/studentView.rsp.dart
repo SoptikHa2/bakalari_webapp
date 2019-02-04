@@ -14,7 +14,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("/webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/studentHead.html");
 String nbsp = "\u{00A0}";
 
   response.write("""
@@ -194,10 +194,10 @@ String nbsp = "\u{00A0}";
 
   response.write("""        </div>
         <div class="pure-u-1 pure-u-md-1" id="otherModules">
-            <h1 class="content-subhead">Ostatní moduly</h1>
+            <h1 class="content-subhead">Ostatní</h1>
             <ul>
                 <li>
-                    <a href="/student/grade">Přehled všech známek</a>
+                    <a href="/student/timetable">Rozvrh</a>
                 </li>
                 <li>
                     <a href="/student/message">Přehled zpráv</a>
@@ -229,8 +229,12 @@ String nbsp = "\u{00A0}";
   response.write("""
 
                 </li>
+                <hr />
                 <li>
-                    <a href="/student/subject">Přehled předmětů</a>
+                    <a href="/refresh">Načíst nejnovější data</a>
+                </li>
+                <li>
+                    <a href="/logout">Odhlásit se</a>
                 </li>
             </ul>
         </div>
@@ -261,7 +265,6 @@ String nbsp = "\u{00A0}";
             .then(function () { console.log("Service Worker Registered"); });
     }
 </script>
-<script src="../../js/buttonSwitch.js"></script>
 <script src="../../js/studentRefresh.js"></script>
 """);
 

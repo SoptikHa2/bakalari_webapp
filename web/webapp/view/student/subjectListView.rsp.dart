@@ -12,7 +12,7 @@ Future subjectListView(HttpConnect connect, {List<dynamic> subjects, Map<String,
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("/webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/studentHead.html");
 
   response.write("""<div class="content">
     <h1 class="content-subhead">Předměty</h1>

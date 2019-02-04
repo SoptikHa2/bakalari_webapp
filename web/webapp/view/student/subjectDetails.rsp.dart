@@ -12,7 +12,7 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
 
-  await connect.include("/webapp/view/templates/head.html");
+  await connect.include("/webapp/view/templates/studentHead.html");
 
   response.write("""
 
