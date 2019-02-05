@@ -15,11 +15,8 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
     return null;
 
   await connect.include("/webapp/view/templates/studentHead.html");
-String nbsp = "\u{00A0}";
 
-  response.write("""
-
-<div class="content">
+  response.write("""<div class="content">
 """);
 
   if (errorDescription != null) {
@@ -78,35 +75,35 @@ String nbsp = "\u{00A0}";
 
 
     response.write("""</h1>
-            <table class="pure-table">
-                <tbody>
+                    <table class="pure-table">
+                    <tbody>
 """);
 
     for (var multipleLessons in timetableRow.lessons) {
 
       for (var lesson in multipleLessons) {
 
-        response.write("""                    <tr class=\"""");
+        response.write("""                        <tr class=\"""");
 
         response.write(Rsp.nnx(lesson.change != null && lesson.change != '' ? 'lesson-change' : ''));
 
 
         response.write("""">
-                        <td>
-                            """);
+                            <td>
+                                """);
 
         response.write(Rsp.nnx(lesson.lessonTime.caption));
 
 
         response.write("""
 
-                        </td>
+                            </td>
 """);
 
         if (lesson.isSet != null && lesson.isSet) {
 
-          response.write("""                        <td>
-                            """);
+          response.write("""                            <td>
+                                """);
 
           response.write(Rsp.nnx(lesson.subjectLong));
 
@@ -117,26 +114,26 @@ String nbsp = "\u{00A0}";
 
 
           response.write(""")
-                        </td>
-                        <td>
-                            """);
+                            </td>
+                            <td>
+                                """);
 
           response.write(Rsp.nnx(lesson.classroom));
 
 
           response.write("""
 
-                        </td>
+                            </td>
 """);
         } //if
 
-        response.write("""                    </tr>
+        response.write("""                        </tr>
 """);
       } //for
     } //for
 
-    response.write("""                </tbody>
-            </table>
+    response.write("""                    </tbody>
+                    </table>
 """);
   } //if
 

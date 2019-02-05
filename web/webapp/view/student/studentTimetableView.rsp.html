@@ -1,0 +1,139 @@
+[:page name="studentTimetableView" args="dynamic timetable, dynamic nextWeekTimetable, dynamic permanentTimetable"]
+[:include "/webapp/view/templates/studentHead.html" /]
+[:dart]
+String nbsp = "\u{00A0}";
+[/dart]
+
+<div class="content">
+    <noscript>
+        <p>
+            Zapněte JavaScript pro možnost změny náhledu rozvrhu.
+        </p>
+    </noscript>
+    <h1>Rozvrh</h1>
+    <a href="/student">Zpět</a> <br />
+    <button class="pure-button pure-button-secondary" onclick="switchtimetableDisplay('tabletoday')">Tento týden</button>
+    <button class="pure-button pure-button-secondary" onclick="switchtimetableDisplay('tabletomorrow')">Příští týden</button>
+    <button class="pure-button pure-button-secondary" onclick="switchtimetableDisplay('tablepermanent')">Trvalý rozvrh</button>
+    [:if timetable != null]
+    <div class="timetable-div-scrollable">
+        <table class="pure-table" id="tabletoday">
+            <thead>
+                <tr></tr>
+                <tr>
+                    <th></th>
+                    [:for hour in timetable.times ]
+                    <th title="[= hour.beginTime ] - [= hour.endTime ]">
+                        [= hour.caption ]
+                    </th>
+                    [/for]
+                </tr>
+            </thead>
+            <tbody>
+                [:for day in timetable.days ]
+                <tr>
+                    <th>[= day.shortName ]</th>
+                    [:for lessons in day.lessons]
+                    <td class="table-cell-small">
+                        [:for lesson in lessons]
+                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                            <div class="table-cell-main">[= lesson.subjectShort ]</div>
+                            <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
+                                null
+                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
+                                ?
+                                '' : '$nbsp|$nbsp'][= lesson.classroom ]</span>
+                        </div>
+                        [/for]
+                    </td>
+                    [/for]
+                </tr>
+                [/for]
+            </tbody>
+        </table>
+    </div>
+    [/if]
+    [:if nextWeekTimetable != null]
+    <div class="timetable-div-scrollable">
+        <table class="pure-table" id="tabletomorrow">
+            <thead>
+                <tr></tr>
+                <tr>
+                    <th></th>
+                    [:for hour in nextWeekTimetable.times ]
+                    <th title="[= hour.beginTime ] - [= hour.endTime ]">
+                        [= hour.caption ]
+                    </th>
+                    [/for]
+                </tr>
+            </thead>
+            <tbody>
+                [:for day in nextWeekTimetable.days ]
+                <tr>
+                    <th>[= day.shortName ]</th>
+                    [:for lessons in day.lessons]
+                    <td class="table-cell-small">
+                        [:for lesson in lessons]
+                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                            <div class="table-cell-main">[= lesson.subjectShort ]</div>
+                            <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
+                                null
+                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
+                                ?
+                                '' : '$nbsp|$nbsp'][= lesson.classroom ]</span>
+                        </div>
+                        [/for]
+                    </td>
+                    [/for]
+                </tr>
+                [/for]
+            </tbody>
+        </table>
+    </div>
+    [/if]
+    [:if permanentTimetable != null]
+    <div class="timetable-div-scrollable">
+        <table class="pure-table" id="tablepermanent">
+            <thead>
+                <tr></tr>
+                <tr>
+                    <th></th>
+                    [:for hour in permanentTimetable.times ]
+                    <th title="[= hour.beginTime ] - [= hour.endTime ]">
+                        [= hour.caption ]
+                    </th>
+                    [/for]
+                </tr>
+            </thead>
+            <tbody>
+                [:for day in permanentTimetable.days ]
+                <tr>
+                    <th>[= day.shortName ]</th>
+                    [:for lessons in day.lessons]
+                    <td class="table-cell-small">
+                        [:for lesson in lessons]
+                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                            <div class="table-cell-main">[= lesson.subjectShort ]</div>
+                            <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
+                                null
+                                || lesson.teacherShort == "" || lesson.classroom == null || lesson.classroom == "")
+                                ?
+                                '' : '$nbsp|$nbsp'][= lesson.classroom ]</span>
+                        </div>
+                        [/for]
+                    </td>
+                    [/for]
+                </tr>
+                [/for]
+            </tbody>
+        </table>
+    </div>
+    [/if]
+</div>
+
+<script src="/js/switchTimetableDisplay.js"></script>
+<script>
+// By default show this week timetable
+switchtimetableDisplay('tabletoday');
+</script>
+[:include "/webapp/view/templates/tail.html" /]

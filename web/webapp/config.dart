@@ -10,6 +10,7 @@ import 'controller/general.dart';
 import 'controller/lubos.dart';
 import 'controller/student/refreshStudentInfo.dart';
 import 'controller/shutdown.dart';
+import 'controller/student/timetable.dart';
 import 'tools/filter.dart';
 import 'controller/root.dart';
 import 'controller/student/student.dart';
@@ -36,6 +37,7 @@ class Config {
     "get:/student/subject/(identifier:[^/]*)": Subject.getSubject,
     "post:/student/json": Student.loginJson,
     "get:/student/json": Student.getInfoJson,
+    "get:/student/timetable": StudentTimetableController.displayTimetables,
 
     "get:/contact": Contact.getContactPage,
     "post:/contact" : Contact.postContactPage,

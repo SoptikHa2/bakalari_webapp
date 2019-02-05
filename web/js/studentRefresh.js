@@ -19,22 +19,28 @@ function update() {
                 clearInterval(intervalId);
             } else if (numberOfRequests > requestThreshold) {
                 console.log('[LOGIN-AUTO-REFRESH] Failed to receive 201 status code from server in last ' + requestThreshold + ' requests. Aborting.');
-                // Display error box
-                document.getElementById('failed-to-fetch-update').setAttribute('style', '');
+                if (document.getElementsByClassName('pure-table').length == 0) {
+                    // Display error box
+                    document.getElementById('failed-to-fetch-update').setAttribute('style', '');
+                }
             }
         } else {
             // We reached our target server, but it returned an error
             console.log('[LOGIN-AUTO-REFRESH] Unknown error when updating content.');
-            // Display error box
-            document.getElementById('failed-to-fetch-update').setAttribute('style', '');
+            if (document.getElementsByClassName('pure-table').length == 0) {
+                // Display error box
+                document.getElementById('failed-to-fetch-update').setAttribute('style', '');
+            }
         }
     };
 
     request.onerror = function () {
         // There was a connection error of some sort
         console.log('[LOGIN-AUTO-REFRESH] Connection error when updating content.');
-        // Display error box
-        document.getElementById('failed-to-fetch-update').setAttribute('style', '');
+        if (document.getElementsByClassName('pure-table').length == 0) {
+            // Display error box
+            document.getElementById('failed-to-fetch-update').setAttribute('style', '');
+        }
     };
 
     request.send();
