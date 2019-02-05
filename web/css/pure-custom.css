@@ -183,3 +183,15 @@ blockquote{
         display: none;
     }
 }
+
+
+
+/* Icons */
+
+.material-icons {
+    color: black;
+}
+
+.material-icon-image {
+    width: 1.5em;
+}

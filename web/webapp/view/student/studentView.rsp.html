@@ -40,30 +40,30 @@ String nbsp = "\u{00A0}";
                 Načítám rozvrh, za chvíli tady bude...
             </p>
             [:else]
-            <h1 class="content-subhead">[= timetableRow.date.difference(DateTime.now()).inDays == 0 ? 'Dnes' :
-                (timetableRow.date.difference(DateTime.now()).inDays == 1 ? 'Zítra' : timetableRow.shortName) ]</h1>
-            <table class="pure-table">
-                <tbody>
-                    [:for multipleLessons in timetableRow.lessons]
-                    [:for lesson in multipleLessons]
-                    <tr class="[= lesson.change != null && lesson.change != '' ? 'lesson-change' : '']">
-                        <td>
-                            [= lesson.lessonTime.caption]
-                        </td>
-                        [:if lesson.isSet != null && lesson.isSet]
-                        <td>
-                            [= lesson.subjectLong] ([= lesson.teacherShort])
-                        </td>
-                        <td>
-                            [= lesson.classroom]
-                        </td>
-                        [/if]
-                    </tr>
-                    [/for]
-                    [/for]
-                </tbody>
-            </table>
-            [/if]
+            <h1 class="content-subhead">[= (timetableRow.date as DateTime).weekday == DateTime.now().weekday ? 'Dnes' :
+                ((timetableRow.date.weekday + 1) - DateTime.now().weekday <= 1 ? 'Zítra' : timetableRow.shortName)) ]</h1>
+                    <table class="pure-table">
+                    <tbody>
+                        [:for multipleLessons in timetableRow.lessons]
+                        [:for lesson in multipleLessons]
+                        <tr class="[= lesson.change != null && lesson.change != '' ? 'lesson-change' : '']">
+                            <td>
+                                [= lesson.lessonTime.caption]
+                            </td>
+                            [:if lesson.isSet != null && lesson.isSet]
+                            <td>
+                                [= lesson.subjectLong] ([= lesson.teacherShort])
+                            </td>
+                            <td>
+                                [= lesson.classroom]
+                            </td>
+                            [/if]
+                        </tr>
+                        [/for]
+                        [/for]
+                    </tbody>
+                    </table>
+                    [/if]
         </div>
         <div class="pure-u-1 pure-u-md-1-2" id="grades">
             <h1 class="content-subhead">Průměry</h1>

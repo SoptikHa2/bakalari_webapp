@@ -73,8 +73,8 @@ String nbsp = "\u{00A0}";
 
     response.write("""            <h1 class="content-subhead">""");
 
-    response.write(Rsp.nnx(timetableRow.date.difference(DateTime.now()).inDays == 0 ? 'Dnes' :
-                (timetableRow.date.difference(DateTime.now()).inDays == 1 ? 'Zítra' : timetableRow.shortName)));
+    response.write(Rsp.nnx((timetableRow.date as DateTime).weekday == DateTime.now().weekday ? 'Dnes' :
+                ((timetableRow.date.weekday + 1) - DateTime.now().weekday <= 1 ? 'Zítra' : timetableRow.shortName)));
 
 
     response.write("""</h1>
