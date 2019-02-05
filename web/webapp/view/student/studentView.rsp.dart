@@ -125,6 +125,12 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
                             </td>
 """);
+
+        } else {
+
+          response.write("""                            <td></td>
+                            <td></td>
+""");
         } //if
 
         response.write("""                        </tr>

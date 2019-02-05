@@ -23,24 +23,27 @@ function update() {
                     // Display error box
                     document.getElementById('failed-to-fetch-update').setAttribute('style', '');
                 }
+                clearInterval(intervalId);
             }
         } else {
             // We reached our target server, but it returned an error
-            console.log('[LOGIN-AUTO-REFRESH] Unknown error when updating content.');
+            console.log('[LOGIN-AUTO-REFRESH] Unknown error when updating content. Aborting.');
             if (document.getElementsByClassName('pure-table').length == 0) {
                 // Display error box
                 document.getElementById('failed-to-fetch-update').setAttribute('style', '');
             }
+            clearInterval(intervalId);
         }
     };
 
     request.onerror = function () {
         // There was a connection error of some sort
-        console.log('[LOGIN-AUTO-REFRESH] Connection error when updating content.');
+        console.log('[LOGIN-AUTO-REFRESH] Connection error when updating content. Aborting.');
         if (document.getElementsByClassName('pure-table').length == 0) {
             // Display error box
             document.getElementById('failed-to-fetch-update').setAttribute('style', '');
         }
+        clearInterval(intervalId);
     };
 
     request.send();
