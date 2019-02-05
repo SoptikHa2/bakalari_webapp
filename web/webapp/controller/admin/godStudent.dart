@@ -7,7 +7,7 @@ import '../../view/admin/adminGodStudentView.rsp.dart';
 import '../../view/admin/adminGodView.rsp.dart';
 import 'package:bakalari/definitions.dart';
 
-class GodStudent {
+class AdminGodController {
   static Future displayForm(HttpConnect connect) async {
     /* LOGIN */
     // Check 2fa token

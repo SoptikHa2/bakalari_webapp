@@ -10,7 +10,7 @@ import '../../view/student/studentView.rsp.dart';
 import 'package:bakalari/bakalari.dart';
 import '../../tools/db.dart';
 
-class Student {
+class StudentBaseController {
   // POST
   static Future login(HttpConnect connect) async {
     // Decode

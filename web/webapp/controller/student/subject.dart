@@ -11,7 +11,7 @@ import '../../view/student/subjectListView.rsp.dart';
 ///
 /// /student/subject -> display subject list
 /// /student/subject/XX -> display subject XX
-class Subject {
+class StudentSubjectController {
   static Future getList(HttpConnect connect) async {
     var result = await Tools.loginAsStudent(connect.request.cookies);
     ComplexStudent student = null;

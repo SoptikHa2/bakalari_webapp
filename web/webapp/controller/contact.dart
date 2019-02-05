@@ -6,7 +6,7 @@ import '../model/message.dart';
 import '../tools/db.dart';
 import '../view/general/contact.rsp.dart';
 
-class Contact {
+class GeneralContactController {
   static Future getContactPage(HttpConnect connect) {
     return contactView(connect, showSuccMessage: false);
   }

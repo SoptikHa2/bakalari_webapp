@@ -4,7 +4,7 @@ import 'package:stream/stream.dart';
 
 import '../tools/db.dart';
 
-class General {
+class GeneralBaseController {
   /// This accepts any URL and redirects user
   /// to URL without the last char
   static void redirectToNoLeadingSlash(HttpConnect connect) {

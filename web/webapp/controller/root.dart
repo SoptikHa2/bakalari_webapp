@@ -2,7 +2,7 @@ import 'package:stream/stream.dart';
 import '../view/main/rootView.rsp.dart';
 import '../tools/db.dart';
 
-class Root {
+class GeneralRootController {
   static Map<String, String> _errors = {
     "invalid_structure":
         "Ještě jednou zkontrolujte zadané údaje v formuláři, něco jste vyplnili špatně.",

@@ -10,7 +10,7 @@ import '../../tools/tools.dart';
 import '../../view/admin/adminLoginView.rsp.dart';
 import '../../view/admin/adminRootView.rsp.dart';
 
-class Admin {
+class AdminBaseController {
   static Map<String, String> _errors = {
     "invalid_structure":
         "Ještě jednou zkontrolujte zadané údaje v formuláři, něco jste vyplnili špatně.",

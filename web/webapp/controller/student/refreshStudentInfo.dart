@@ -2,7 +2,7 @@ import 'package:stream/stream.dart';
 import '../../view/main/refreshStudentInfoView.rsp.dart';
 import '../../tools/db.dart';
 
-class RefreshStudentInfo {
+class StudentRefreshInfoController {
   static Map<String, String> _errors = {
     "invalid_structure":
         "Ještě jednou zkontrolujte zadané údaje v formuláři, něco jste vyplnili špatně.",

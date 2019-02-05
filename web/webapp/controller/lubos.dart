@@ -5,7 +5,7 @@ import 'package:stream/stream.dart';
 
 import '../view/general/lubosView.rsp.dart';
 
-class Lubos {
+class GeneralLubosController {
   static Future showLubosCites(HttpConnect connect) {
     var file = File(join(dirname(Platform.script.toFilePath()), "lubos.csv"));
     var cites = List<dynamic>();

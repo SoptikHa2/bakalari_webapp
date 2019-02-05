@@ -7,7 +7,7 @@ import '../../tools/db.dart';
 import '../../tools/tools.dart';
 import '../../view/admin/adminLogView.rsp.dart';
 
-class Log {
+class AdminLogController {
   static showLogPage(HttpConnect connect) {
     /* LOGIN */
     // Check 2fa token

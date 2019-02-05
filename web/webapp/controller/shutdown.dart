@@ -4,7 +4,7 @@ import '../config.dart';
 import '../view/shutdown/shutdown451.rsp.dart';
 import '../view/shutdown/shutdownPlain.rsp.dart';
 
-class Shutdown {
+class GeneralShutdownController {
   static Future showShutdown(HttpConnect connect) async {
     switch (Config.siteShutdownType) {
       case ShutdownTemplate.None:

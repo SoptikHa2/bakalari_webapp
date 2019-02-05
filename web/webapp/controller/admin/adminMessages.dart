@@ -6,7 +6,7 @@ import '../../tools/tools.dart';
 import '../../view/admin/adminMessageListView.rsp.dart';
 import '../../view/admin/adminMessageView.rsp.dart';
 
-class AdminMessages {
+class AdminMessagesController {
   static Future getFullMessageList(HttpConnect connect) async {
     /* LOGIN */
     // Check 2fa token
