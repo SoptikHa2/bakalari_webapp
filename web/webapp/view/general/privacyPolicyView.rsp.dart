@@ -35,8 +35,7 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
   response.write(Rsp.nnx(sessionCookieLength));
 
 
-  response.write(""" nebo dokud se neodhlásíte. Údaje přijaté ze stránek školy
-    po stejné době mažeme.
+  response.write(""" nebo dokud se neodhlásíte.
   </p>
   <p>
     Po přihlášení uložíme do vašeho prohlížeče URI bakalářů vaší školy, takže nemusíte při každém přihlášení
@@ -53,8 +52,12 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
     odešlete (ve zkratce tedy vše, co dáte do formuláře).
   </p>
   <p>
-    Zároveň zaznamenáváme informace o přístupu k těmto webovým stránkám kvůli analýze návštěvnosti a tvorbě
-    hezkých barevných grafů.
+    Nezaznamenáváme informace o přístupu k těmto stránkám, a to ani IP adresu. Žádné vaše informace nikdy nebudou přístupny
+    třetím stranám. V plánu je šifrování všech informací uložených touto webovou aplikací, aby k vašim informacím nikdo kromě
+    vás přístup mít ani nemohl.
+  </p>
+  <p>
+    Tento text byl naposledy změněn 2019-02-07.
   </p>
 </div>
 """);

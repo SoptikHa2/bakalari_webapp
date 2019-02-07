@@ -14,7 +14,6 @@ class DB {
   static Database _db;
   static Store _students;
   static Store _schools;
-  static Store _logRaw;
   static Store _logStudent;
   static Store _messages;
 
@@ -22,7 +21,6 @@ class DB {
     _db = await databaseFactoryIo.openDatabase(Config.dbFileLocation);
     _students = _db.getStore('students'); // Students data
     _schools = _db.getStore('schools'); // List of schools [obsolete]
-    _logRaw = _db.getStore('logRaw'); // Raw access logs
     _logStudent = _db.getStore('logStudent'); // Student login logs
     _messages = _db.getStore('messages'); // Messages sent to admin
   }
@@ -118,15 +116,6 @@ class DB {
     return ComplexStudent.fromJson(value);
   }
 
-  static Future<void> logRawAccess(HttpRequest request, Browser browser) async {
-    await _logRaw.put({
-      'request': request.uri.toString(),
-      'browser': browser.userAgent,
-      'ip': request.headers.value('X-Real-IP'),
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
-  }
-
   static Future<void> logLogin(
       Student student, School school, String studentGuid) async {
     await _logStudent.put({
@@ -150,20 +139,6 @@ class DB {
       studentsStore.deleteAll(recordsToDelete.map((s) => s.guid));
       print(
           '${DateTime.now().toIso8601String()}:Purged ${recordsToDelete.length} students from cache');
-    });
-
-    // Purge raw log
-    await _db.transaction((txn) async {
-      var rawLogStore = txn.getStore('logRaw');
-      var recordsToDelete = (await _logRaw.findRecords(Finder()))
-          .where((r) => DateTime.fromMillisecondsSinceEpoch(
-                  int.parse(r.value['timestamp']))
-              .isBefore(DateTime.now()
-                  .add(Duration(days: Config.daysHowLongIsRawLoginLogStored))))
-          .map((r) => r.key);
-      rawLogStore.deleteAll(recordsToDelete);
-      print(
-          '${DateTime.now().toIso8601String()}:Purged ${await rawLogStore.count()} logs from cache');
     });
   }
 

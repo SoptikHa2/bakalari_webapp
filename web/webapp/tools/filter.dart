@@ -18,14 +18,6 @@ class Filter {
       return connect.redirect('/shutdown');
     }
     
-    _log(connect);
     return chain(connect);
-  }
-
-  static void _log(HttpConnect connect) {
-    if (!connect.request.uri.queryParameters.containsKey('log') ||
-        connect.request.uri.queryParameters['log'] != 0) {
-      DB.logRawAccess(connect.request, connect.browser);
-    }
   }
 }
