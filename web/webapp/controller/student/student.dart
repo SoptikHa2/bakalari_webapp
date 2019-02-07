@@ -33,7 +33,6 @@ class StudentBaseController {
       var guid = await DB.saveStudentInfo(
           ComplexStudent.create(bakaweb.student, bakaweb.school));
       DB.logLogin(bakaweb.student, bakaweb.school, guid);
-      DB.addSchool(post.bakawebUrl);
 
       bakaweb.getTimetable().then((t) => DB.updateStudentInfo(
           guid, ((student) => student.update(timetable: t))));
@@ -162,7 +161,6 @@ class StudentBaseController {
       var guid = await DB.saveStudentInfo(
           ComplexStudent.create(bakaweb.student, bakaweb.school));
       DB.logLogin(bakaweb.student, bakaweb.school, guid);
-      DB.addSchool(post.bakawebUrl);
 
       bakaweb.getTimetable().then((t) => DB.updateStudentInfo(
           guid, ((student) => student.update(timetable: t))));

@@ -13,14 +13,12 @@ import '../model/message.dart';
 class DB {
   static Database _db;
   static Store _students;
-  static Store _schools;
   static Store _logStudent;
   static Store _messages;
 
   static Future<void> initializeDb() async {
     _db = await databaseFactoryIo.openDatabase(Config.dbFileLocation);
     _students = _db.getStore('students'); // Students data
-    _schools = _db.getStore('schools'); // List of schools [obsolete]
     _logStudent = _db.getStore('logStudent'); // Student login logs
     _messages = _db.getStore('messages'); // Messages sent to admin
   }
@@ -75,18 +73,6 @@ class DB {
       if (line != lines.last) result += ',';
     }
     return result + ']';
-  }
-
-  static Future<List<String>> getSchools() async {
-    return await _schools.records
-        .map(
-            (Record school) => school.value[school.value.keys.first].toString())
-        .toList();
-  }
-
-  static Future<void> addSchool(String url) async {
-    if ((await getSchools()).any((u) => u == url)) return;
-    await _schools.put({'url': url});
   }
 
   /// Save student info into DB.

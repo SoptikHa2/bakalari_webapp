@@ -31,7 +31,6 @@ class GeneralRootController {
         username = Uri.decodeComponent(connect.request.uri.queryParameters['filledUsername']);
     }
 
-    return rootView(connect,
-        urls: await DB.getSchools(), errorDescription: errorMessage, presetUrl: uri, presetUsername: username);
+    return rootView(connect, errorDescription: errorMessage, presetUrl: uri, presetUsername: username);
   }
 }

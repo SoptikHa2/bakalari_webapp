@@ -27,7 +27,6 @@ class StudentRefreshInfoController {
         username = Uri.decodeComponent(connect.request.uri.queryParameters['filledUsername']);
     }
 
-    return refreshStudentInfoView(connect,
-        urls: await DB.getSchools(), errorDescription: errorMessage, presetUrl: uri, presetUsername: username);
+    return refreshStudentInfoView(connect, errorDescription: errorMessage, presetUrl: uri, presetUsername: username);
   }
 }
