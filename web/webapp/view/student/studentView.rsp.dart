@@ -71,7 +71,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
     response.write("""            <h1 class="content-subhead">""");
 
     response.write(Rsp.nnx((timetableRow.date as DateTime).weekday == DateTime.now().weekday ? 'Dnes' :
-                ((timetableRow.date.weekday + 1) - DateTime.now().weekday <= 1 ? 'Zítra' : timetableRow.shortName)));
+                ((timetableRow.date.weekday - 1) - DateTime.now().weekday < 1 ? 'Zítra' : timetableRow.shortName)));
 
 
     response.write("""</h1>

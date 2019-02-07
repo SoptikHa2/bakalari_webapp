@@ -38,7 +38,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
             </p>
             [:else]
             <h1 class="content-subhead">[= (timetableRow.date as DateTime).weekday == DateTime.now().weekday ? 'Dnes' :
-                ((timetableRow.date.weekday + 1) - DateTime.now().weekday <= 1 ? 'Zítra' : timetableRow.shortName) ]</h1>
+                ((timetableRow.date.weekday - 1) - DateTime.now().weekday < 1 ? 'Zítra' : timetableRow.shortName) ]</h1>
                     <table class="pure-table">
                     <tbody>
                         [:for multipleLessons in timetableRow.lessons]
