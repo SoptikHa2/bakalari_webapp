@@ -300,6 +300,18 @@ class Tools {
 
     return _verifyAsAdmin(username, password, twoFAguid);
   }
+
+  /// Take string, remove diacritics, set to uppercase and return
+  static String normalizeString(String str){
+    String diacritics = 'ěščřžýáíéůúóöäëü';
+    String normalChars = 'escrzyaieuuooaeu';
+    str = str.trim();
+    for (var i = 0; i < diacritics.length; i++) {
+      str = str.replaceAll(diacritics[i], normalChars[i]);
+    }
+    str = str.toUpperCase();
+    return str;
+  }
 }
 
 class LoginStatus {

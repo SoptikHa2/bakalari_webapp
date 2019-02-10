@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:rikulo_commons/browser.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:bakalari/definitions.dart';
@@ -8,6 +7,7 @@ import 'package:bakalari/definitions.dart';
 import '../config.dart';
 import '../model/complexStudent.dart';
 import '../model/message.dart';
+import './tools.dart';
 
 /// Class that takes care of Database
 class DB {
@@ -171,7 +171,8 @@ class DB {
 
   static Future<Message> getOneMessage(String guid) async {
     return Message.fromJson(
-        (await _messages.findRecord(Finder(filter: Filter.byKey(guid)))).value['message']);
+        (await _messages.findRecord(Finder(filter: Filter.byKey(guid))))
+            .value['message']);
   }
 
   static Future saveMessage(Message message) async {
@@ -182,5 +183,30 @@ class DB {
     var message = await getOneMessage(guid);
     message.isClosed = true;
     await _messages.update({'message': message.toJson()}, guid);
+  }
+
+  static Future updateSchoolInfoDB(
+      Map<String, String> schoolNamesAndUrls) async {
+    await _schools.clear();
+    for (var key in schoolNamesAndUrls.keys) {
+      var value = schoolNamesAndUrls[key];
+
+      await _schools.put(value, key);
+    }
+  }
+
+  /// Takes list of words to match, normalizes it, and searches for schools from list
+  static Future<Iterable<String>> getSchoolInfoFromQuery(
+      List<String> wordsToMatch) async {
+    var allRecords = _schools.findRecords(Finder());
+    var filteredRecords = allRecords.then((l) => l.where((r) =>
+        wordsToMatch
+            .where((w) => Tools.normalizeString(r.key.toString())
+                .contains(Tools.normalizeString(w)))
+            .length ==
+        wordsToMatch.length));
+    var mappedLines =
+        filteredRecords.then((l) => l.map((r) => r.key + ':' + r.value['url']));
+    return mappedLines;
   }
 }

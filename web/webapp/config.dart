@@ -8,6 +8,7 @@ import 'controller/admin/log.dart';
 import 'controller/contact.dart';
 import 'controller/general.dart';
 import 'controller/lubos.dart';
+import 'controller/schoolList.dart';
 import 'controller/student/refreshStudentInfo.dart';
 import 'controller/shutdown.dart';
 import 'controller/student/timetable.dart';
@@ -40,6 +41,7 @@ class Config {
     "post:/student/json": StudentBaseController.loginJson,
     "get:/student/json": StudentBaseController.getInfoJson,
     "get:/student/timetable": StudentTimetableController.displayTimetables,
+    "get:/schoolList.csv": SchoolListController.returnSchoolListInCsvByQuery,
 
     "get:/contact": GeneralContactController.getContactPage,
     "post:/contact" : GeneralContactController.postContactPage,
@@ -72,6 +74,7 @@ class Config {
     "500": "/html/500.html"
   };
 
+  static const int numberOfSchoolsInListSearch = 5;
   static const int hoursUntilRefreshButtonIsShown = 8;
   static const int daysHowLongIsSessionCookieStored = 7;
   static const int daysHowLongIsRawLoginLogStored = 3;

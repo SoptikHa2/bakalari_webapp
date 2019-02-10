@@ -5,7 +5,7 @@ function update() {
     // http://youmightnotneedjquery.com/
     var request = new XMLHttpRequest();
     // Do not log access
-    request.open('GET', '/student?log=0', true);
+    request.open('GET', '/student', true);
 
     request.onload = function () {
         if (this.status >= 200 && this.status < 400) {
