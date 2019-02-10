@@ -53,11 +53,10 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
   </p>
   <p>
     Nezaznamenáváme informace o přístupu k těmto stránkám, a to ani IP adresu. Žádné vaše informace nikdy nebudou přístupny
-    třetím stranám. V plánu je šifrování všech informací uložených touto webovou aplikací, aby k vašim informacím nikdo kromě
-    vás přístup mít ani nemohl.
+    třetím stranám.
   </p>
   <p>
-    Tento text byl naposledy změněn 2019-02-07.
+    Tento text byl naposledy změněn 2019-02-10.
   </p>
 </div>
 """);
