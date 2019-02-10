@@ -15,25 +15,14 @@ class DB {
   static Store _students;
   static Store _logStudent;
   static Store _messages;
+  static Store _schools;
 
   static Future<void> initializeDb() async {
     _db = await databaseFactoryIo.openDatabase(Config.dbFileLocation);
     _students = _db.getStore('students'); // Students data
     _logStudent = _db.getStore('logStudent'); // Student login logs
     _messages = _db.getStore('messages'); // Messages sent to admin
-  }
-
-  static Future<String> getLogRawInJson() async {
-    var file = File(Config.dbFileLocation);
-    var lines = await file.readAsLines().then((List<String> lines) =>
-        lines.where((l) => l.contains(',"store":"logRaw","value":{')));
-    lines = lines.toList(growable: false);
-    var result = '[';
-    for (var line in lines) {
-      result += line;
-      if (line != lines.last) result += ',';
-    }
-    return result + ']';
+    _schools = _db.getStore('schools');
   }
 
   static Future<String> getMessagesInJson() async {

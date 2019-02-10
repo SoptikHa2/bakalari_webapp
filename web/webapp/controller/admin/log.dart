@@ -89,9 +89,6 @@ class AdminLogController {
 
     String fileContent = null;
     switch(identifier){
-      case 'logRaw':
-        fileContent = await DB.getLogRawInJson();
-      break;
       case 'logStudentLogin':
         fileContent = await DB.getStudentLoginLogsInJson();
       break;
