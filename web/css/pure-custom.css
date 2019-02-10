@@ -195,3 +195,7 @@ blockquote{
 .material-icon-image {
     width: 1.5em;
 }
+
+.tail-icon-image{
+    filter: opacity(40%);
+}

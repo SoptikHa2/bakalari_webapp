@@ -11,6 +11,7 @@ import 'controller/lubos.dart';
 import 'controller/student/refreshStudentInfo.dart';
 import 'controller/shutdown.dart';
 import 'controller/student/timetable.dart';
+import 'controller/tor.dart';
 import 'tools/filter.dart';
 import 'controller/root.dart';
 import 'controller/student/student.dart';
@@ -30,6 +31,7 @@ class Config {
     "get:/logout": GeneralLogoutController.logoutUser,
     "get:/refresh": StudentRefreshInfoController.refresh,
     "get:/lubos": GeneralLubosController.showLubosCites,
+    "get:/tor": GeneralTorController.showTorLandingPage,
 
     "post:/student": StudentBaseController.login,
     "get:/student": StudentBaseController.getInfo,
