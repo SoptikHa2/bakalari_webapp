@@ -1,5 +1,5 @@
 import 'package:stream/stream.dart';
-import '../view/main/rootView.rsp.dart';
+import '../view/general/rootView.rsp.dart';
 import '../tools/db.dart';
 
 class GeneralRootController {

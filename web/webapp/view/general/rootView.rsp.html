@@ -1,4 +1,4 @@
-[:page name="rootView" args="List<String> urls, String errorDescription, String presetUrl, String presetUsername"]
+[:page name="rootView" args="String errorDescription, String presetUrl, String presetUsername"]
   [:dart]
   String nbsp = "\u{00A0}";
   [/dart]
@@ -11,6 +11,11 @@
         [= errorDescription]
       </p>
     </aside>
+    <noscript>
+      <aside class="errorBar">
+        <p>Nemáte zapnutý JavaScript, hledání školy dle jména nebude fungovat.</p>
+      </aside>
+    </noscript>
     [/if]
 
     <h1>
@@ -24,17 +29,14 @@
       <fieldset>
         <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-        <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" [=presetUrl !=null
-          ? 'value="$presetUrl"' : '' ]" />
-        <datalist id="schoolUrls">
-          [:if urls != null]
-          [:for url in urls]
-          <option>[=url]</option>
-          [/for]
-          [/if]
-        </datalist>
+        <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky.</label>
+        <input name="bakawebUrl" id="urlSelectField" type="text" placeholder="Českolipská" [=presetUrl !=null
+          ? 'value="$presetUrl"' : '' ] />
+        <div id="schoolList">
+
+        </div>
         <input name="login" type="text" placeholder="Uživatelské jméno" [=presetUsername !=null ?
-          'value="$presetUsername"' : '' ]">
+          'value="$presetUsername"' : '' ]>
         <input name="password" type="password" placeholder="Heslo">
 
         <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
