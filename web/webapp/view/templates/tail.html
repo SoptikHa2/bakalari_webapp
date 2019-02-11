@@ -13,8 +13,15 @@
     </div>
 </div>
 </div>
+<script src="/js/serviceWorkerRegister.js"></script>
 <script>
     console.log('/lubos');
+</script>
+<script>
+    // Add this document to cache
+    window.caches.open('bakalari').then(function (cache) {
+        cache.add(document.URL);
+    });
 </script>
 </body>
 
