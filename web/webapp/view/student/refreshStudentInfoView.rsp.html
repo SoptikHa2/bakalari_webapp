@@ -1,4 +1,5 @@
-[:page name="refreshStudentInfoView" args="List<String> urls, String errorDescription, String presetUrl, String presetUsername"]
+[:page name="refreshStudentInfoView" args="List<String> urls, String errorDescription, String presetUrl, String
+    presetUsername"]
     [:include "/webapp/view/templates/studentHead.html" /]
     <div class="content">
         [:if errorDescription != null]
@@ -13,15 +14,14 @@
             <fieldset>
                 <legend>Obnovení údajů o studentovi (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-                <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" [= presetUrl != null ? 'value="$presetUrl"' : ''] />
-                <datalist id="schoolUrls">
-                    [:if urls != null]
-                    [:for url in urls]
-                    <option>[=url]</option>
-                    [/for]
-                    [/if]
-                </datalist>
-                <input name="login" type="text" placeholder="Uživatelské jméno" [= presetUsername != null ? 'value="$presetUsername"' : '']>
+                <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky</label>
+                <input name="bakawebUrl" id="urlSelectField" type="text" placeholder="Českolipská" [=presetUrl !=null
+                    ? 'value=$presetUrl' : '' ] />
+                <div id="schoolList" class="schoolList">
+
+                </div>
+                <input name="login" type="text" placeholder="Uživatelské jméno" [=presetUsername !=null
+                    ? 'value=$presetUsername' : '' ]>
                 <input name="password" type="password" placeholder="Heslo">
 
                 <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
@@ -31,4 +31,5 @@
             Po zadání přihlašovacích údajů do formuláře ze serverů školy stáhneme a zobrazíme nejnovější data.
         </p>
     </div>
-    [:include "/webapp/view/templates/tail.html" /]
+  <script src="/js/selectSchoolFromList.js"></script>
+  [:include "/webapp/view/templates/tail.html" /]

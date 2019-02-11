@@ -52,11 +52,11 @@ String nbsp = "\u{00A0}";
       <fieldset>
         <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-        <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky.</label>
+        <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky</label>
         <input name="bakawebUrl" id="urlSelectField" type="text" placeholder="Českolipská" """);
 
   response.write(Rsp.nnx(presetUrl !=null
-          ? 'value="$presetUrl"' : ''));
+          ? 'value=$presetUrl' : ''));
 
 
   response.write(""" />
@@ -66,7 +66,7 @@ String nbsp = "\u{00A0}";
         <input name="login" type="text" placeholder="Uživatelské jméno" """);
 
   response.write(Rsp.nnx(presetUsername !=null ?
-          'value="$presetUsername"' : ''));
+          'value=$presetUsername' : ''));
 
 
   response.write(""">

@@ -7,7 +7,8 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, refreshStudentInfoView, for rendering the view. */
-Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String errorDescription, String presetUrl, String presetUsername}) async {
+Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String errorDescription, String presetUrl, String
+    presetUsername}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -39,33 +40,21 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
             <fieldset>
                 <legend>Obnovení údajů o studentovi (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-                <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" """);
+                <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky</label>
+                <input name="bakawebUrl" id="urlSelectField" type="text" placeholder="Českolipská" """);
 
-  response.write(Rsp.nnx(presetUrl != null ? 'value="$presetUrl"' : ''));
+  response.write(Rsp.nnx(presetUrl !=null
+                    ? 'value=$presetUrl' : ''));
 
 
   response.write(""" />
-                <datalist id="schoolUrls">
-""");
+                <div id="schoolList" class="schoolList">
 
-  if (urls != null) {
-
-    for (var url in urls) {
-
-      response.write("""                    <option>""");
-
-      response.write(Rsp.nnx(url));
-
-
-      response.write("""</option>
-""");
-    } //for
-  } //if
-
-  response.write("""                </datalist>
+                </div>
                 <input name="login" type="text" placeholder="Uživatelské jméno" """);
 
-  response.write(Rsp.nnx(presetUsername != null ? 'value="$presetUsername"' : ''));
+  response.write(Rsp.nnx(presetUsername !=null
+                    ? 'value=$presetUsername' : ''));
 
 
   response.write(""">
@@ -78,6 +67,7 @@ Future refreshStudentInfoView(HttpConnect connect, {List<String> urls, String er
             Po zadání přihlašovacích údajů do formuláře ze serverů školy stáhneme a zobrazíme nejnovější data.
         </p>
     </div>
+  <script src="/js/selectSchoolFromList.js"></script>
 """);
 
   await connect.include("/webapp/view/templates/tail.html");
