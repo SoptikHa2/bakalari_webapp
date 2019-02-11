@@ -53,11 +53,11 @@ class StudentBaseController {
         ..expires = DateTime.now()
             .add(Duration(days: Config.daysHowLongIsSessionCookieStored)));
       connect.response.cookies.add(Cookie(
-          "schoolName", Tools.encodeCookieValue(bakaweb.school.name))
+          "username", Tools.encodeCookieValue(post.login))
         ..expires = DateTime.now().add(
             Duration(days: Config.daysHowLongIsClassIdentifierCookieStored)));
       connect.response.cookies.add(Cookie(
-          "className", Tools.encodeCookieValue(bakaweb.student.schoolClass))
+          "schoolURI", Tools.encodeCookieValue(bakaweb.school.bakawebLink))
         ..expires = DateTime.now().add(
             Duration(days: Config.daysHowLongIsClassIdentifierCookieStored)));
     } catch (e) {

@@ -1,4 +1,5 @@
 import 'package:stream/stream.dart';
+import '../../tools/tools.dart';
 import '../../view/student/refreshStudentInfoView.rsp.dart';
 import '../../tools/db.dart';
 
@@ -17,16 +18,29 @@ class StudentRefreshInfoController {
         errorMessage = _errors[connect.request.uri.queryParameters['error']];
     }
 
-    // Add username and uri if error and filled in last time
+    // Add username and uri from cookies
     String uri = null;
-    if (connect.request.uri.queryParameters.containsKey('filledURI')) {
-        uri = Uri.decodeComponent(connect.request.uri.queryParameters['filledURI']);
-    }
     String username = null;
-    if (connect.request.uri.queryParameters.containsKey('filledUsername')) {
-        username = Uri.decodeComponent(connect.request.uri.queryParameters['filledUsername']);
+    if (connect.request.cookies.any((c) => c.name == "username")) {
+      username = Tools.decodeCookieValue(connect.request.cookies.firstWhere((c) => c.name == "username").value);
+    }
+    if (connect.request.cookies.any((c) => c.name == "schoolURI")) {
+      uri = Tools.decodeCookieValue(connect.request.cookies.firstWhere((c) => c.name == "schoolURI").value);
     }
 
-    return refreshStudentInfoView(connect, errorDescription: errorMessage, presetUrl: uri, presetUsername: username);
+    // Add username and uri if error and filled in last time
+    if (connect.request.uri.queryParameters.containsKey('filledURI')) {
+      uri =
+          Uri.decodeComponent(connect.request.uri.queryParameters['filledURI']);
+    }
+    if (connect.request.uri.queryParameters.containsKey('filledUsername')) {
+      username = Uri.decodeComponent(
+          connect.request.uri.queryParameters['filledUsername']);
+    }
+
+    return refreshStudentInfoView(connect,
+        errorDescription: errorMessage,
+        presetUrl: uri,
+        presetUsername: username);
   }
 }
