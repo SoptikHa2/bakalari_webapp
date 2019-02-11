@@ -38,8 +38,8 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
   response.write(""" nebo dokud se neodhlásíte.
   </p>
   <p>
-    Po přihlášení uložíme do vašeho prohlížeče URI bakalářů vaší školy, takže nemusíte při každém přihlášení
-    znovu vybírat vaši školu. tato informace bude po každém novém přihlášení uložena na """);
+    Po přihlášení uložíme do vašeho prohlížeče URI bakalářů vaší školy a vaše přihlašovací jméno, takže nemusíte při
+    každém přihlášení znovu tyto informace zadávat. Tyto informace budou po každém novém přihlášení uloženy na """);
 
   response.write(Rsp.nnx(classCookieLength));
 
@@ -47,16 +47,16 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
   response.write(""".
   </p>
   <p>
-    Pokud kontaktujete administrátora této stránky (<a href="/contact">zde</a>), na dobu neurčitou budeme na serveru
-    ukládat text vaší zprávy, nadpis vaší zprávy, druh zprávy, označení priority a váš email, pokud ho formulářem
-    odešlete (ve zkratce tedy vše, co dáte do formuláře).
+    Pokud kontaktujete administrátora této stránky (<a href="/contact">zde</a>), na dobu neurčitou uložíme
+    váš email, pokud ho vyplníte.
   </p>
   <p>
-    Nezaznamenáváme informace o přístupu k těmto stránkám, a to ani IP adresu. Žádné vaše informace nikdy nebudou přístupny
+    Nezaznamenáváme informace o přístupu k těmto stránkám, a to ani IP adresu. Žádné vaše informace nikdy nebudou
+    přístupny
     třetím stranám.
   </p>
   <p>
-    Tento text byl naposledy změněn 2019-02-10.
+    Tento text byl naposledy změněn 2019-02-11.
   </p>
 </div>
 """);
