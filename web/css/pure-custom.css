@@ -199,3 +199,18 @@ blockquote{
 .tail-icon-image{
     filter: opacity(40%);
 }
+
+
+/* School list */
+.schoolList{
+    padding: 1em;
+}
+
+.schoolListRow{
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    padding: 0.5em;
+    overflow-y: auto;
+    margin: 0.2em;
+}

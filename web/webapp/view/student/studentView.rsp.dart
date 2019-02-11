@@ -40,7 +40,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
             <p>
                 Nemáte zapnutý JavaScript, stránka tedy sama nenačítá
                 přijaté informace. Můžete je načíst manuálně obnovením
-                stránky (<span style="background-color: lightgray">F5</span>)
+                stránky (F5)
             </p>
         </aside>
     </noscript>

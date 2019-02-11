@@ -4,7 +4,6 @@ requestThreshold = 20;
 function update() {
     // http://youmightnotneedjquery.com/
     var request = new XMLHttpRequest();
-    // Do not log access
     request.open('GET', '/student', true);
 
     request.onload = function () {

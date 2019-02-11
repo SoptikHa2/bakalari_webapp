@@ -19,6 +19,7 @@ import 'controller/student/student.dart';
 import 'controller/logout.dart';
 import 'controller/student/subject.dart';
 import 'controller/admin/admin.dart';
+import 'tools/listOfSchools.dart';
 import 'view/general/privacyPolicyView.rsp.dart';
 import 'view/general/restApi.rsp.dart';
 
@@ -33,19 +34,20 @@ class Config {
     "get:/refresh": StudentRefreshInfoController.refresh,
     "get:/lubos": GeneralLubosController.showLubosCites,
     "get:/tor": GeneralTorController.showTorLandingPage,
-
+    
     "post:/student": StudentBaseController.login,
     "get:/student": StudentBaseController.getInfo,
     "get:/student/subject": StudentSubjectController.getList,
-    "get:/student/subject/(identifier:[^/]*)": StudentSubjectController.getSubject,
+    "get:/student/subject/(identifier:[^/]*)":
+        StudentSubjectController.getSubject,
     "post:/student/json": StudentBaseController.loginJson,
     "get:/student/json": StudentBaseController.getInfoJson,
     "get:/student/timetable": StudentTimetableController.displayTimetables,
+
     "get:/schoolList.csv": SchoolListController.returnSchoolListInCsvByQuery,
-
     "get:/contact": GeneralContactController.getContactPage,
-    "post:/contact" : GeneralContactController.postContactPage,
-
+    "post:/contact": GeneralContactController.postContactPage,
+    
     "get:/admin": AdminBaseController.adminRootPage,
     "get:/admin/login": AdminBaseController.loginForm,
     "get:/admin/logout": GeneralLogoutController.logoutAdmin,
@@ -54,16 +56,19 @@ class Config {
     "get:/admin/god/student": AdminGodController.displayStudent,
     "post:/admin": AdminBaseController.verify2FA,
     "post:/admin/shutdown": AdminBaseController.shutdownWebsite,
-    "get:/admin/log/raw/download/(file:[^/]*)": AdminLogController.downloadRawLog,
-    "get:/admin/message" : AdminMessagesController.getMessageList,
+    "get:/admin/log/raw/download/(file:[^/]*)":
+        AdminLogController.downloadRawLog,
+    "get:/admin/message": AdminMessagesController.getMessageList,
     "get:/admin/message/all": AdminMessagesController.getFullMessageList,
     "get:/admin/message/(guid:[^/]*)": AdminMessagesController.getOneMessage,
-    "post:/admin/message/markAsRead/(guid:[^/]*)": AdminMessagesController.setAsCompleted,
-
+    "post:/admin/message/markAsRead/(guid:[^/]*)":
+        AdminMessagesController.setAsCompleted,
     "get:/shutdown": GeneralShutdownController.showShutdown,
     "/.+/": GeneralBaseController.redirectToNoLeadingSlash,
     "/admin/purgeOldData/security/in/obscurity/5432058437104547123501":
         GeneralBaseController.purgeOldData,
+    "/admin/updateListOfSchools/security/in/obscurity/1238942358947290524":
+        ListOfSchools.updateListOfSchools,
   };
   static final filterRouting = {
     "/.*": Filter.process,
@@ -81,7 +86,8 @@ class Config {
   static const int daysHowLongIsClassIdentifierCookieStored = 365;
   static const int twoFAMinutesDuration = 10;
   static const int unsuccessfulLoginThreshold = 5;
-  static final String dbFileLocation = join(dirname(Platform.script.toFilePath()), "main.db");
+  static final String dbFileLocation =
+      join(dirname(Platform.script.toFilePath()), "main.db");
   static final TOTP totp = TOTP("NEOFBAKALARIADMIN");
 
   static String currentTwoFAtoken = null;

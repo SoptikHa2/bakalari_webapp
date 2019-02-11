@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, rootView, for rendering the view. */
-Future rootView(HttpConnect connect, {List<String> urls, String errorDescription, String presetUrl, String presetUsername}) async {
+Future rootView(HttpConnect connect, {String errorDescription, String presetUrl, String presetUsername}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -31,6 +31,11 @@ String nbsp = "\u{00A0}";
 
       </p>
     </aside>
+    <noscript>
+      <aside class="errorBar">
+        <p>Nemáte zapnutý JavaScript, hledání školy dle jména nebude fungovat.</p>
+      </aside>
+    </noscript>
 """);
   } //if
 
@@ -47,38 +52,24 @@ String nbsp = "\u{00A0}";
       <fieldset>
         <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-        <input name="bakawebUrl" type="text" list="schoolUrls" placeholder="bakalari.ceskolipska.cz" """);
+        <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky.</label>
+        <input name="bakawebUrl" id="urlSelectField" type="text" placeholder="Českolipská" """);
 
   response.write(Rsp.nnx(presetUrl !=null
           ? 'value="$presetUrl"' : ''));
 
 
-  response.write("""" />
-        <datalist id="schoolUrls">
-""");
+  response.write(""" />
+        <div id="schoolList" class="schoolList">
 
-  if (urls != null) {
-
-    for (var url in urls) {
-
-      response.write("""          <option>""");
-
-      response.write(Rsp.nnx(url));
-
-
-      response.write("""</option>
-""");
-    } //for
-  } //if
-
-  response.write("""        </datalist>
+        </div>
         <input name="login" type="text" placeholder="Uživatelské jméno" """);
 
   response.write(Rsp.nnx(presetUsername !=null ?
           'value="$presetUsername"' : ''));
 
 
-  response.write("""">
+  response.write(""">
         <input name="password" type="password" placeholder="Heslo">
 
         <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
@@ -124,6 +115,7 @@ String nbsp = "\u{00A0}";
         .then(function () { console.log("Service Worker Registered"); });
     }
   </script>
+  <script src="/js/selectSchoolFromList.js"></script>
 
 """);
 

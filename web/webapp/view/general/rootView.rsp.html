@@ -32,7 +32,7 @@
         <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky.</label>
         <input name="bakawebUrl" id="urlSelectField" type="text" placeholder="Českolipská" [=presetUrl !=null
           ? 'value="$presetUrl"' : '' ] />
-        <div id="schoolList">
+        <div id="schoolList" class="schoolList">
 
         </div>
         <input name="login" type="text" placeholder="Uživatelské jméno" [=presetUsername !=null ?
@@ -82,5 +82,6 @@
         .then(function () { console.log("Service Worker Registered"); });
     }
   </script>
+  <script src="/js/selectSchoolFromList.js"></script>
 
   [:include "/webapp/view/templates/tail.html" /]

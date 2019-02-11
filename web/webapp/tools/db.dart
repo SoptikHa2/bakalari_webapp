@@ -206,7 +206,7 @@ class DB {
             .length ==
         wordsToMatch.length));
     var mappedLines =
-        filteredRecords.then((l) => l.map((r) => r.key + ':' + r.value['url']));
+        filteredRecords.then((l) => l.map((r) => (r.key + '``````' + r.value).toString()));
     return mappedLines;
   }
 }
