@@ -205,7 +205,7 @@ class StudentBaseController {
         ..headers.contentType = ContentType.json
         ..statusCode = 500
         ..write(
-            '{"error":{"type": "unknown", "description":"An error occured while getting content, check if you passed corrent studentID. You can get new one by sending POST request"}}');
+            '{"error":{"type": "unknown", "description":"An error occured while getting content, check if you passed corrent studentID. You can get new one by sending POST request", "error_message":"${result.errorMessage}"}}');
       return;
     }
 

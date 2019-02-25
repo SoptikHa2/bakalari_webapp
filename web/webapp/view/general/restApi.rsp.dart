@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:stream/stream.dart';
 
 /** Template, restApiView, for rendering the view. */
-Future restApiView(HttpConnect connect) async {
+Future restApiView(HttpConnect connect, {String currentApiKey}) async {
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
@@ -51,7 +51,7 @@ Future restApiView(HttpConnect connect) async {
     <h2>GetContent</h2>
     <p>
         <pre>GET /student/json</pre>
-        <pre>x-www-webform-urlencoded</pre>
+        <pre>query params</pre>
         <ul>
             <li>studentID (String)</li>
         </ul>
@@ -64,6 +64,40 @@ Future restApiView(HttpConnect connect) async {
             pokaždé se odešlou zpátky všechny informace, které jsou k dispozici.
 
             Jakmile server vrátí 201 (Created), už vše doběhlo a nemá cenu tento endpoint znovu volat.
+        </p>
+""");
+
+  if (currentApiKey != null) {
+
+    response.write("""        <p>
+            Tento prohlížeč už je přihlášený. Používá tento klíč:
+        </p>
+        <pre>
+            """);
+
+    response.write(Rsp.nnx(currentApiKey));
+
+
+    response.write("""
+
+        </pre>
+""");
+  } //if
+
+  response.write("""    </p>
+    <h2>SchoolList</h2>
+    <p>
+        <pre>GET /schoolList.csv</pre>
+        <pre>query params</pre>
+        <ul>
+            <li>query (String)</li>
+        </ul>
+        <p>
+            Vstup: jméno školy (diakritika a velká/malá písmena ignorována)
+        </p>
+        <p>
+            Výstup: jméno``````urlAdresa
+            (vše na novém řádku)
         </p>
     </p>
 </div>

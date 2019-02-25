@@ -1,8 +1,8 @@
 import 'package:stream/stream.dart';
 
-import '../config.dart';
-import '../view/shutdown/shutdown451.rsp.dart';
-import '../view/shutdown/shutdownPlain.rsp.dart';
+import '../../config.dart';
+import '../../view/shutdown/shutdown451.rsp.dart';
+import '../../view/shutdown/shutdownPlain.rsp.dart';
 
 class GeneralShutdownController {
   static Future showShutdown(HttpConnect connect) async {

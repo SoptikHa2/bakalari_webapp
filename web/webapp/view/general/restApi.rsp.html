@@ -1,4 +1,4 @@
-[:page name="restApiView"]
+[:page name="restApiView" args="String currentApiKey"]
 [:include "/webapp/view/templates/head.html" /]
 <div class="content">
     <h1>Oficiální API</h1>
@@ -37,7 +37,7 @@
     <h2>GetContent</h2>
     <p>
         <pre>GET /student/json</pre>
-        <pre>x-www-webform-urlencoded</pre>
+        <pre>query params</pre>
         <ul>
             <li>studentID (String)</li>
         </ul>
@@ -50,6 +50,27 @@
             pokaždé se odešlou zpátky všechny informace, které jsou k dispozici.
 
             Jakmile server vrátí 201 (Created), už vše doběhlo a nemá cenu tento endpoint znovu volat.
+        </p>
+        [:if currentApiKey != null]
+        <p>
+            Tento prohlížeč už je přihlášený. Používá tento klíč:
+        </p>
+        <pre>[= currentApiKey]</pre>
+        [/if]
+    </p>
+    <h2>SchoolList</h2>
+    <p>
+        <pre>GET /schoolList.csv</pre>
+        <pre>query params</pre>
+        <ul>
+            <li>query (String)</li>
+        </ul>
+        <p>
+            Vstup: jméno školy (diakritika a velká/malá písmena ignorována)
+        </p>
+        <p>
+            Výstup: jméno``````urlAdresa
+            (vše na novém řádku)
         </p>
     </p>
 </div>

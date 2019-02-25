@@ -5,23 +5,23 @@ import 'package:path/path.dart';
 import 'controller/admin/adminMessages.dart';
 import 'controller/admin/godStudent.dart';
 import 'controller/admin/log.dart';
-import 'controller/contact.dart';
+import 'controller/general/contact.dart';
 import 'controller/general.dart';
 import 'controller/lubos.dart';
 import 'controller/schoolList.dart';
 import 'controller/student/refreshStudentInfo.dart';
-import 'controller/shutdown.dart';
+import 'controller/general/shutdown.dart';
 import 'controller/student/timetable.dart';
-import 'controller/tor.dart';
+import 'controller/general/tor.dart';
 import 'tools/filter.dart';
-import 'controller/root.dart';
+import 'controller/general/root.dart';
 import 'controller/student/student.dart';
 import 'controller/logout.dart';
 import 'controller/student/subject.dart';
 import 'controller/admin/admin.dart';
+import 'controller/general/api.dart';
 import 'tools/listOfSchools.dart';
 import 'view/general/privacyPolicyView.rsp.dart';
-import 'view/general/restApi.rsp.dart';
 
 import 'package:dotp/dotp.dart';
 
@@ -29,7 +29,7 @@ class Config {
   static final routing = {
     "get:/": GeneralRootController.root,
     "get:/privacy_policy": privacyPolicyView,
-    "get:/api": restApiView,
+    "get:/api": GeneralApiController.showRestApiView,
     "get:/logout": GeneralLogoutController.logoutUser,
     "get:/refresh": StudentRefreshInfoController.refresh,
     "get:/lubos": GeneralLubosController.showLubosCites,

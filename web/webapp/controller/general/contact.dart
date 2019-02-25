@@ -2,9 +2,9 @@ import 'package:rikulo_commons/io.dart';
 import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
 
-import '../model/message.dart';
-import '../tools/db.dart';
-import '../view/general/contact.rsp.dart';
+import '../../model/message.dart';
+import '../../tools/db.dart';
+import '../../view/general/contact.rsp.dart';
 
 class GeneralContactController {
   static Future getContactPage(HttpConnect connect) {

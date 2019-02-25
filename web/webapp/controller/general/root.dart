@@ -1,7 +1,6 @@
 import 'package:stream/stream.dart';
-import '../tools/tools.dart';
-import '../view/general/rootView.rsp.dart';
-import '../tools/db.dart';
+import '../../tools/tools.dart';
+import '../../view/general/rootView.rsp.dart';
 
 class GeneralRootController {
   static Map<String, String> _errors = {
