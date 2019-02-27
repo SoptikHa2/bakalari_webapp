@@ -38,6 +38,10 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
   response.write(""" nebo dokud se neodhlásíte.
   </p>
   <p>
+    Informace přijaté ze serveru školy, jako třeba známky nebo rozvrh, jsou bezpečně zašifrované - nikdo kromě vás se k
+    nim nedostane.
+  </p>
+  <p>
     Po přihlášení uložíme do vašeho prohlížeče URI bakalářů vaší školy a vaše přihlašovací jméno, takže nemusíte při
     každém přihlášení znovu tyto informace zadávat. Tyto informace budou po každém novém přihlášení uloženy na """);
 
@@ -51,8 +55,8 @@ var classCookieLength = Tools.daysToStringWithUnit(Config.daysHowLongIsClassIden
     váš email, pokud ho vyplníte.
   </p>
   <p>
-    Nezaznamenáváme informace o přístupu k těmto stránkám, a to ani IP adresu. Žádné vaše informace nikdy nebudou
-    přístupny třetím stranám (vyjma systému vaší školy).
+    Zaznamenáváme anonymní informace o připojení se na tento web z důvodu tvorby hezkých barevných grafů. Žádné vaše
+    informace nikdy nebudou přístupny třetím stranám (vyjma systému vaší školy).
   </p>
   <p>
     Tento text byl naposledy změněn 2019-02-27.

@@ -26,7 +26,6 @@ newMessagesString = '<span style="color: black">($numberOfNormalMessages | <span
     <h1>Administrační sekce</h1>
     <ul>
         <li><a href="/admin/log">Log</a></li>
-        <li><a href="/admin/god">Debug</a></li>
         <li><a href="/admin/message">Messages """);
 
   response.write(Rsp.nnx(newMessagesString, encode: 'none'));

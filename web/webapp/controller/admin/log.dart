@@ -92,9 +92,6 @@ class AdminLogController {
       case 'logStudentLogin':
         fileContent = await DB.getStudentLoginLogsInJson();
       break;
-      case 'logStudentInfo':
-        fileContent = await DB.getStudentsInJson();
-      break;
     }
 
     if(fileContent == null){

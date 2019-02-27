@@ -1,9 +1,11 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:bakalari/definitions.dart';
 import 'package:uuid/uuid.dart';
 import 'package:pointycastle/pointycastle.dart';
+import 'package:encrypt/encrypt.dart';
 
 import '../config.dart';
 import '../model/complexStudent.dart';
@@ -48,7 +50,7 @@ class Tools {
   }
 
   static String fromMapToStringyJson(Map<String, dynamic> json) {
-    if (json == null) return 'null';
+    /*if (json == null) return 'null';
     String result = "{";
     for (var key in json.keys) {
       result += '"' + key.replaceAll('"', '\'') + '":';
@@ -72,7 +74,8 @@ class Tools {
         result += ",";
       }
     }
-    return result + "}";
+    return result + "}";*/
+    return JsonEncoder().convert(json);
   }
 
   static String fromListToStringyJson(List<dynamic> json) {
@@ -99,6 +102,10 @@ class Tools {
       if (item != json.last) result += ",";
     }
     return result + "]";
+  }
+
+  static Map<String, dynamic> fromStringyJsonToMap(String json) {
+    return JsonDecoder().convert(json) as Map<String, dynamic>;
   }
 
   static T maxWhere<T>(Iterable<T> list, double score(T source)) {
@@ -199,11 +206,15 @@ class Tools {
     if (!cookies.any((c) => c.name == "studentID")) {
       return LoginStatus(false, false, 'not_logged_in', null);
     }
+    if(!cookies.any((c) => c.name == "encryptionKey")){
+      return LoginStatus(false, true, "not_logged_in", null);
+    }
 
     try {
       String guid = cookies.singleWhere((c) => c.name == 'studentID').value;
+      String key = cookies.singleWhere((c) => c.name == 'encryptionKey').value;
 
-      ComplexStudent student = await DB.getStudent(guid);
+      ComplexStudent student = await DB.getStudent(guid, key);
       return LoginStatus(true, false, '', student);
     } catch (e) {
       print(e);
@@ -231,10 +242,10 @@ class Tools {
           (now.hour == todayLatestHourEnd_Hour &&
               now.minute >= todayLatestHourEnd_Minute)) {
         // Tomorrow
-        if(now.weekday + 1 > timetable.days.length){
+        if (now.weekday + 1 > timetable.days.length) {
           // Next week
           selectedDay = nextWeekTimetable.days[0];
-        }else{
+        } else {
           selectedDay = timetable.days[now.weekday];
         }
       } else {
@@ -303,7 +314,7 @@ class Tools {
   }
 
   /// Take string, remove diacritics, set to uppercase and return
-  static String normalizeString(String str){
+  static String normalizeString(String str) {
     str = str.toLowerCase();
     String diacritics = 'ěščřžýáíéůúóöäëü';
     String normalChars = 'escrzyaieuuooaeu';
@@ -312,6 +323,45 @@ class Tools {
       str = str.replaceAll(diacritics[i], normalChars[i]);
     }
     return str;
+  }
+
+  static String encryptStudentData(String data, String key) {
+    // Truncate key to 32 characters
+    if (key.length < 32) {
+      throw new ArgumentError(
+          "Error: encryptStudentData: Key needs to be at least 32 characters long. Key was ${key.length} characters long.");
+    }
+    key = key.substring(0, 32);
+
+    final encKey = Key.fromUtf8(key);
+    final iv = IV.fromLength(16);
+
+    final encrypter = Encrypter(AES(encKey, iv));
+
+    return encrypter.encrypt(data).base64;
+  }
+
+  static String decryptStudentData(String data, String key) {
+    final encKey = Key.fromUtf8(key);
+    final iv = IV.fromLength(16);
+
+    final encrypter = Encrypter(AES(encKey, iv));
+
+    return encrypter.decrypt(Encrypted.fromBase64(data));
+  }
+
+  static String generateEncryptionKey([int length = 32]) {
+    String key = "";
+    var rand = Random.secure();
+    for (var i = 0; i < length; i++) {
+      var secureInteger = rand.nextInt(50);
+      if (secureInteger < 25) {
+        key += String.fromCharCode(secureInteger + 97);
+      } else {
+        key += String.fromCharCode((secureInteger % 25) + 65);
+      }
+    }
+    return key;
   }
 }
 

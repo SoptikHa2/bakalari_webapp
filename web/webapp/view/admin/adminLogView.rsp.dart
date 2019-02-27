@@ -5,7 +5,6 @@ library adminLogView_rsp;
 import 'dart:async';
 import 'dart:io';
 import 'package:stream/stream.dart';
-import '../../config.dart';
 
 /** Template, adminLogView, for rendering the view. */
 Future adminLogView(HttpConnect connect) async {
@@ -22,12 +21,6 @@ Future adminLogView(HttpConnect connect) async {
     <p>Vše bude ve formátu JSON.</p>
     <h2>Log přihlášení studentů</h2>
     <form class="pure-form" action="/admin/log/raw/download/logStudentLogin" method="GET">
-        <fieldset>
-            <button type="submit" class="pure-button pure-button-primary">Stáhnout</button>
-        </fieldset>
-    </form>
-    <h2>Informace o studentech</h2>
-    <form class="pure-form" action="/admin/log/raw/download/logStudentInfo" method="GET">
         <fieldset>
             <button type="submit" class="pure-button pure-button-primary">Stáhnout</button>
         </fieldset>

@@ -17,40 +17,5 @@
         API školního systému Bakaláři je shrnuto v <a href="https://github.com/bakalari-api/bakalari-api">tomto
             repozitáři.</a>
     </p>
-    <h1>Neoficiální API</h1>
-    <p>
-        Data můžete získávat i z této webové aplikace.
-    </p>
-    <h2>Login</h2>
-    <p>
-        <pre>POST /student/json</pre>
-        <pre>x-www-webform-urlencoded</pre>
-        <ul>
-            <li>bakawebUrl (String)</li>
-            <li>login (String)</li>
-            <li>password (String)</li>
-        </ul>
-        <p>
-            Odpověď: GUID, které je nutné pro přístup k informacím o studentovi.
-        </p>
-    </p>
-    <h2>GetContent</h2>
-    <p>
-        <pre>GET /student/json</pre>
-        <pre>x-www-webform-urlencoded</pre>
-        <ul>
-            <li>studentID (String)</li>
-        </ul>
-        <p>
-            Vstup: studentID je GUID, které jde získat z předchozího endpointu.
-        </p>
-        <p>
-            Výstup: Kompletní údaje o studentovi (JSON). Tyto informace chvíli trvá získat,
-            takže je dobrý nápad chvíli po přihlášení počkat. Je možné tuto žádost poslat několikrát,
-            pokaždé se odešlou zpátky všechny informace, které jsou k dispozici.
-
-            Jakmile server vrátí 201 (Created), už vše doběhlo a nemá cenu tento endpoint znovu volat.
-        </p>
-    </p>
 </div>
 [:include "/webapp/view/templates/tail.html" /]

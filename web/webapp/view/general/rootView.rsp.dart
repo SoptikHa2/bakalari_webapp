@@ -11,120 +11,122 @@ Future rootView(HttpConnect connect, {String errorDescription, String presetUrl,
   HttpResponse response = connect.response;
   if (!Rsp.init(connect, "text/html; charset=utf-8"))
     return null;
-String nbsp = "\u{00A0}";
 
   await connect.include("/webapp/view/templates/head.html");
 
-  response.write("""  <div class="content">
+  response.write("""<div class="content">
 """);
 
   if (errorDescription != null) {
 
-    response.write("""    <aside class="errorBar">
-      <p>
-        """);
+    response.write("""  <aside class="errorBar">
+    <p>
+      """);
 
     response.write(Rsp.nnx(errorDescription));
 
 
     response.write("""
 
-      </p>
+    </p>
+  </aside>
+  <noscript>
+    <aside class="errorBar">
+      <p>Nemáte zapnutý JavaScript, hledání školy dle jména nebude fungovat.</p>
     </aside>
-    <noscript>
-      <aside class="errorBar">
-        <p>Nemáte zapnutý JavaScript, hledání školy dle jména nebude fungovat.</p>
-      </aside>
-    </noscript>
+  </noscript>
 """);
   } //if
 
   response.write("""
 
-    <h1>
-      Bakaláři
-    </h1>
-    <p>
-      A tentokrát lépe.
-    </p>
+  <h1>
+    Bakaláři
+  </h1>
+  <p>
+    A tentokrát lépe.
+  </p>
 
-    <form class="pure-form" action="/student" method="POST">
-      <fieldset>
-        <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
+  <form class="pure-form" action="/student" method="POST">
+    <fieldset>
+      <legend>Přihlásit se (<a href="/privacy_policy">zpracování osobních údajů</a>)</legend>
 
-        <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky</label>
-        <input name="bakawebUrl" id="urlSelectField" type="text" placeholder="Českolipská" """);
+      <label for="urlSelectField">Zadejte jméno školy nebo URL přihlašovací stránky</label>
+      <input name="bakawebUrl" id="urlSelectField" type="text" placeholder="Českolipská" """);
 
   response.write(Rsp.nnx(presetUrl !=null
-          ? 'value=$presetUrl' : ''));
+        ? 'value=$presetUrl' : ''));
 
 
   response.write(""" />
-        <div id="schoolList" class="schoolList">
+      <div id="schoolList" class="schoolList">
 
-        </div>
-        <input name="login" type="text" placeholder="Uživatelské jméno" """);
+      </div>
+      <input name="login" type="text" placeholder="Uživatelské jméno" """);
 
-  response.write(Rsp.nnx(presetUsername !=null ?
-          'value=$presetUsername' : ''));
+  response.write(Rsp.nnx(presetUsername !=null ? 'value=$presetUsername'
+        : ''));
 
 
   response.write(""">
-        <input name="password" type="password" placeholder="Heslo">
+      <input name="password" type="password" placeholder="Heslo">
 
-        <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
-      </fieldset>
-    </form>
+      <button type="submit" class="pure-button pure-button-primary">Přihlásit</button>
+    </fieldset>
+  </form>
 
-    <section>
-      <h2>Bohaté funkce</h2>
-      <p>
-        Tento web poskytuje bohaté funkce, které mohou být jinak běžnému uživateli systému Bakaláři nepřístupné. 
-        Jedná se zejména o průměr známek, který mnoho škol skrývá. Tato webová aplikace dokáže zjistit skutečné váhy
-        známek ze systému Bakaláři a spočítat průměr. Také nabízí možnost se podívat, jak by která známka
-        z dalšího testu ovlivnila průměr.
-      </p>
-      <h2>Dokonce i offline</h2>
-      <p>
-        Mnoho škol má wifi buď pomalou, nebo vůbec žádnou, a studenti jsou nuceni používat mobilní data, které jsou
-        v České republice drahé a pomalé. Tato aplikace na to myslí. Jakmile alespoň jednou načtete stránku - 
-        například rozvrh, tato stránka se uloží ve vašem prohlížeči. Takže pokud budete bez připojení internetu,
-        budete si moci pořád vychutnávat tento web bez jakýchkoli omezení. Nic vám nebrání o přestávce rychle
-        vytáhnout telefon a bez nutnosti čekat na připojení se rychle podívat na rozvrh, nebo si třeba spočítat průměr.
-      </p>
-      <h2>Bezpečnost a soukromí</h2>
-      <p>
-        Ceníme si vašeho soukromí. Žádné údaje o Vás nikdy neopustí tento server, vyjma přihlašování k serverům školy.
-        Vaše údaje, jako je třeba přihlašovací jméno nebo heslo, na serveru neskladujeme a ihned po přihlášení jsou
-        trvale smazány. Všechny údaje přijaté ze serveru školy budou zašifrovány bezpečným šifrováním - a nikdo kromě
-        vás nemá klíče. Díky tomuto opatření si můžete být jisti, že není technicky možné se dostat k vašim údajům.
-        Podrobně vše popisujeme v <a href="/privacy_policy" target="_blank">dokumentu o zpracování osobních údajů</a>.
-      </p>
-      <h2>Technické podrobnosti</h2>
-      <p>
-        Projekt vychází z původního projektu Václava Šraiera <a href="https://bakaweb.tk" target="_blank">Bakaweb.tk</a>, který už
-        dlouho před tímto projektem uměl zobrazovat průměry u všech předmětů. Díky jeho knihovně <a href="https://github.com/vakabus/pybakalib/" target="_blank">pybakalib</a>
-        bylo možné tohoto dosáhnout. Pokud máte zájem o podrobnější informace o tom, jak protokol Bakalářů funguje, v
-        repozitáři <a href="https://github.com/bakalari-api/bakalari-api">bakalari-api</a>
-        je komunikace s webovou službou podrobně popsána.
-      </p>
-      <p>
-        V případě jakýchkoli žádostí, otázek, nebo návrhů, je možné mě kontaktovat <a href="/contact">zde</a>, nebo na <a href="https://github.com/soptikha2/bakalari" target="_blank">GitHubu</a>.
-      </p>
-      <p>
-        Petr Šťastný
-      </p>
-    </section>
-  </div>
+  <section>
+    <h2>Bohaté funkce</h2>
+    <p>
+      Tento web poskytuje bohaté funkce, které mohou být jinak běžnému uživateli systému Bakaláři nepřístupné.
+      Jedná se zejména o průměr známek, který mnoho škol skrývá. Tato webová aplikace dokáže zjistit skutečné váhy
+      známek ze systému Bakaláři a spočítat průměr. Také nabízí možnost se podívat, jak by která známka
+      z dalšího testu ovlivnila průměr.
+    </p>
+    <h2>Dokonce i offline</h2>
+    <p>
+      Mnoho škol má wifi buď pomalou, nebo vůbec žádnou, a studenti jsou nuceni používat mobilní data, které jsou
+      v České republice drahé a pomalé. Tato aplikace na to myslí. Jakmile alespoň jednou načtete stránku -
+      například rozvrh, tato stránka se uloží ve vašem prohlížeči. Takže pokud budete bez připojení internetu,
+      budete si moci pořád vychutnávat tento web bez jakýchkoli omezení. Nic vám nebrání o přestávce rychle
+      vytáhnout telefon a bez nutnosti čekat na připojení se rychle podívat na rozvrh, nebo si třeba spočítat průměr.
+    </p>
+    <h2>Bezpečnost a soukromí</h2>
+    <p>
+      Ceníme si vašeho soukromí. Žádné údaje o Vás nikdy neopustí tento server, vyjma přihlašování k serverům školy.
+      Vaše údaje, jako je třeba přihlašovací jméno nebo heslo, na serveru neskladujeme a ihned po přihlášení jsou
+      trvale smazány. Všechny údaje přijaté ze serveru školy jsou zašifrovány bezpečným šifrováním - a nikdo kromě
+      vás nemá klíče. Díky tomuto opatření si můžete být jisti, že není technicky možné se dostat k vašim údajům.
+      Podrobně vše popisujeme v <a href="/privacy_policy" target="_blank">dokumentu o zpracování osobních údajů</a>.
+    </p>
+    <h2>Technické podrobnosti</h2>
+    <p>
+      Projekt vychází z původního projektu Václava Šraiera <a href="https://bakaweb.tk" target="_blank">Bakaweb.tk</a>,
+      který už
+      dlouho před tímto projektem uměl zobrazovat průměry u všech předmětů. Díky jeho knihovně <a
+        href="https://github.com/vakabus/pybakalib/" target="_blank">pybakalib</a>
+      bylo možné tohoto dosáhnout. Pokud máte zájem o podrobnější informace o tom, jak protokol Bakalářů funguje, v
+      repozitáři <a href="https://github.com/bakalari-api/bakalari-api">bakalari-api</a>
+      je komunikace s webovou službou podrobně popsána.
+    </p>
+    <p>
+      V případě jakýchkoli žádostí, otázek, nebo návrhů, je možné mě kontaktovat <a href="/contact">zde</a>, nebo na <a
+        href="https://github.com/soptikha2/bakalari" target="_blank">GitHubu</a>.
+    </p>
+    <p>
+      Petr Šťastný
+    </p>
+  </section>
+</div>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/offlineServiceWorker.js')
-        .then(function () { console.log("Service Worker Registered"); });
-    }
-  </script>
-  <script src="/js/selectSchoolFromList.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('/offlineServiceWorker.js')
+      .then(function () { console.log("Service Worker Registered"); });
+  }
+</script>
+<script src="/js/selectSchoolFromList.js"></script>
 
 """);
 

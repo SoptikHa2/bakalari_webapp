@@ -1,7 +1,6 @@
 import 'package:stream/stream.dart';
 import '../../tools/tools.dart';
 import '../../view/student/refreshStudentInfoView.rsp.dart';
-import '../../tools/db.dart';
 
 class StudentRefreshInfoController {
   static Map<String, String> _errors = {
