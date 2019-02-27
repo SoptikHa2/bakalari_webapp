@@ -26,12 +26,6 @@ Future adminLogView(HttpConnect connect) async {
             <button type="submit" class="pure-button pure-button-primary">Stáhnout</button>
         </fieldset>
     </form>
-    <h2>Informace o studentech</h2>
-    <form class="pure-form" action="/admin/log/raw/download/logStudentInfo" method="GET">
-        <fieldset>
-            <button type="submit" class="pure-button pure-button-primary">Stáhnout</button>
-        </fieldset>
-    </form>
 </div>
 """);
 
