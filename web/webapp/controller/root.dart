@@ -1,7 +1,6 @@
 import 'package:stream/stream.dart';
 import '../tools/tools.dart';
 import '../view/general/rootView.rsp.dart';
-import '../tools/db.dart';
 
 class GeneralRootController {
   static Map<String, String> _errors = {
@@ -9,6 +8,8 @@ class GeneralRootController {
         "Ještě jednou zkontrolujte zadané údaje v formuláři, něco jste vyplnili špatně.",
     "cannot_connect":
         "Nepodařilo se připojit k webu školy. Zkontrolujte URl, jméno a heslo.",
+    "not_logged_in":
+        "Přihlaste se a zkuste to znovu."
   };
 
   static Future root(HttpConnect connect) async {

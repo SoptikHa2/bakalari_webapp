@@ -12,6 +12,12 @@ class StudentRefreshInfoController {
   };
 
   static Future refresh(HttpConnect connect) async {
+
+    var loggedInStudent = await Tools.loginAsStudent(connect.request.cookies);
+    if(!loggedInStudent.success){
+      return connect.redirect("/?error=not_logged_in");
+    }
+
     String errorMessage = null;
     if (connect.request.uri.queryParameters.containsKey('error')) {
       if (_errors.containsKey(connect.request.uri.queryParameters['error']))

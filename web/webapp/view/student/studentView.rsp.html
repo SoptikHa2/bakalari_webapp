@@ -29,6 +29,12 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
             </p>
         </aside>
     </div>
+    [:if lastRefresh != null]
+    <p style="text-align: center">
+        To co vidíte na této stránce je [= lastRefresh] staré.
+        <a href="/student/refresh"><button class="pure-button">Obnovit</button></a>
+    </p>
+    [/if]
     <div class="pure-g" id="main">
         <div class="pure-u-1 pure-u-md-1-2" id="timetable">
             [:if timetableRow == null]
@@ -108,7 +114,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
                 </li>
                 <hr />
                 <li>
-                    <a href="/refresh">Načíst nejnovější data</a>
+                    <a href="/student/refresh">Načíst nejnovější data</a>
                 </li>
                 <li>
                     <a href="/logout">Odhlásit se</a>
@@ -117,12 +123,6 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
         </div>
     </div>
 </div>
-[:if lastRefresh != null]
-<p style="text-align: center">
-    To co vidíte na této stránce je [= lastRefresh] staré.
-    <a href="/refresh"><button class="pure-button">Obnovit</button></a>
-</p>
-[/if]
 
 <script>
     if ('serviceWorker' in navigator) {

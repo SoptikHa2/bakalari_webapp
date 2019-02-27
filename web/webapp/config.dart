@@ -31,7 +31,6 @@ class Config {
     "get:/privacy_policy": privacyPolicyView,
     "get:/api": restApiView,
     "get:/logout": GeneralLogoutController.logoutUser,
-    "get:/refresh": StudentRefreshInfoController.refresh,
     "get:/lubos": GeneralLubosController.showLubosCites,
     "get:/tor": GeneralTorController.showTorLandingPage,
     
@@ -43,6 +42,7 @@ class Config {
     "post:/student/json": StudentBaseController.loginJson,
     "get:/student/json": StudentBaseController.getInfoJson,
     "get:/student/timetable": StudentTimetableController.displayTimetables,
+    "get:/student/refresh": StudentRefreshInfoController.refresh,
 
     "get:/schoolList.csv": SchoolListController.returnSchoolListInCsvByQuery,
     "get:/contact": GeneralContactController.getContactPage,
