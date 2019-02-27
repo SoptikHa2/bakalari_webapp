@@ -203,7 +203,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
                     <a href="/student/timetable">Rozvrh</a>
                 </li>
                 <li>
-                    <a href="/student/message">Přehled zpráv</a>
+                    Přehled zpráv
                     """);
 
   response.write(Rsp.nnx(lastMailInfo == null ? '' : '(poslední zpráva $lastMailInfo)'));
@@ -213,7 +213,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
                 </li>
                 <li>
-                    <a href="/student/absention">Přehled absencí</a>
+                    Přehled absencí
                     """);
 
   response.write(Rsp.nnx(urgentAbsence == null ? '' : urgentAbsence));
@@ -223,7 +223,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
                 </li>
                 <li>
-                    <a href="/student/homework">Přehled domácích úkolů</a>
+                    Přehled domácích úkolů
                     """);
 
   response.write(Rsp.nnx(urgentHomeworks == null ? '' : urgentHomeworks));
