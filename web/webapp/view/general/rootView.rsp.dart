@@ -77,21 +77,30 @@ String nbsp = "\u{00A0}";
     </form>
 
     <section>
-      <h2>O projektu</h2>
+      <h2>Bohaté funkce</h2>
       <p>
-        Tento projekt byl vytvořen jako reakce na stav Bakalářů, především aplikací pro přístup
-        k tomuto systému. Tato webová stránka umožňuje (nebo bude v blízké době umožňovat) přehledné
-        zobrazení rozvrhu, zobrazení známek - a to i s průměry u všech předmětů, přehled zpráv a možnost
-        jejich spravování, nebo třeba absence. Při troše štěstí dojde i na integraci systému Strava, který
-        mnohé školy používají pro výběr jídel ve školní jídelně - stránka by tak zobrazovala, co bude dnes
-        k obědu.
+        Tento web poskytuje bohaté funkce, které mohou být jinak běžnému uživateli systému Bakaláři nepřístupné. 
+        Jedná se zejména o průměr známek, který mnoho škol skrývá. Tato webová aplikace dokáže zjistit skutečné váhy
+        známek ze systému Bakaláři a spočítat průměr. Také nabízí možnost se podívat, jak by která známka
+        z dalšího testu ovlivnila průměr.
       </p>
+      <h2>Dokonce i offline</h2>
       <p>
-        Jednou z prioritních funkcí, která aplikace zatím postrádá, je možnost ji prohlížet kompletně offline.
-        Bude tedy stačit, abyste web třeba ráno jednou načetli, a poté pokaždé když se podíváte na tuto stránku -
-        a to i bez připojení k itnernetu - uvidíte rozvrh a známky, a budete moci plně interagovat s touto webovou
-        aplikací.
+        Mnoho škol má wifi buď pomalou, nebo vůbec žádnou, a studenti jsou nuceni používat mobilní data, které jsou
+        v České republice drahé a pomalé. Tato aplikace na to myslí. Jakmile alespoň jednou načtete stránku - 
+        například rozvrh, tato stránka se uloží ve vašem prohlížeči. Takže pokud budete bez připojení internetu,
+        budete si moci pořád vychutnávat tento web bez jakýchkoli omezení. Nic vám nebrání o přestávce rychle
+        vytáhnout telefon a bez nutnosti čekat na připojení se rychle podívat na rozvrh, nebo si třeba spočítat průměr.
       </p>
+      <h2>Bezpečnost a soukromí</h2>
+      <p>
+        Ceníme si vašeho soukromí. Žádné údaje o Vás nikdy neopustí tento server, vyjma přihlašování k serverům školy.
+        Vaše údaje, jako je třeba přihlašovací jméno nebo heslo, na serveru neskladujeme a ihned po přihlášení jsou
+        trvale smazány. Všechny údaje přijaté ze serveru školy budou zašifrovány bezpečným šifrováním - a nikdo kromě
+        vás nemá klíče. Díky tomuto opatření si můžete být jisti, že není technicky možné se dostat k vašim údajům.
+        Podrobně vše popisujeme v <a href="/privacy_policy" target="_blank">dokumentu o zpracování osobních údajů</a>.
+      </p>
+      <h2>Technické podrobnosti</h2>
       <p>
         Projekt vychází z původního projektu Václava Šraiera <a href="https://bakaweb.tk" target="_blank">Bakaweb.tk</a>, který už
         dlouho před tímto projektem uměl zobrazovat průměry u všech předmětů. Díky jeho knihovně <a href="https://github.com/vakabus/pybakalib/" target="_blank">pybakalib</a>
@@ -100,7 +109,7 @@ String nbsp = "\u{00A0}";
         je komunikace s webovou službou podrobně popsána.
       </p>
       <p>
-        V případě jakýchkoli žádostí, otázek, nebo návrhů, je možné mě kontaktovat <a href="/contact">zde</a>, nebo na <a href="https://github.com/soptikha2/" target="_blank">GitHubu</a>.
+        V případě jakýchkoli žádostí, otázek, nebo návrhů, je možné mě kontaktovat <a href="/contact">zde</a>, nebo na <a href="https://github.com/soptikha2/bakalari" target="_blank">GitHubu</a>.
       </p>
       <p>
         Petr Šťastný
