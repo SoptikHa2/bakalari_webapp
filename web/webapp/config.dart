@@ -40,8 +40,6 @@ class Config {
     "get:/student/subject": StudentSubjectController.getList,
     "get:/student/subject/(identifier:[^/]*)":
         StudentSubjectController.getSubject,
-    "post:/student/json": StudentBaseController.loginJson,
-    "get:/student/json": StudentBaseController.getInfoJson,
     "get:/student/timetable": StudentTimetableController.displayTimetables,
 
     "get:/schoolList.csv": SchoolListController.returnSchoolListInCsvByQuery,
