@@ -77,6 +77,13 @@ class StudentBaseController {
 
   // GET
   static Future getInfo(HttpConnect connect) async {
+    if (connect.request.uri.queryParameters.containsKey('refresh') &&
+        connect.request.uri.queryParameters['refresh'] == '1') {
+          // Redirect to no-refresh URL, as the refresh was successful and to cache mess things up
+          // when we don't do this.
+          return connect.redirect('/student');
+        }
+
     var result = await Tools.loginAsStudent(connect.request.cookies);
     ComplexStudent student = null;
     if (result.success) {
