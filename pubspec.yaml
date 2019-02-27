@@ -5,13 +5,14 @@ homepage: https://github.com/SoptikHa2/bakalari_webapp
 environment:
         sdk: '>=2.1.0 <3.0.0'
 dependencies:
-        bakalari: ^0.3.0
-        stream: ^2.1.0
-        sembast: ^1.12.0+1
-        uuid: ^1.0.3
-        markdown: ^2.0.2
+        bakalari: ^0.3.0 # The library for querying school servers
+        stream: ^2.1.0 # Web framework
+        sembast: ^1.12.0+1 # Web framework
+        uuid: ^1.0.3 # UUID generator
+        markdown: ^2.0.2 # For conversion from markdown to html (contact)
+        encrypt: ^2.0.0 # For encryption of student data
+        dotp: ^1.0.2 # For 2fa verification
+        json_serializable: ^2.0.1 # For serialization to/from JSON (DB, api)
 
 dev_dependencies:
-        json_serializable: ^2.0.1
         build_runner: ^1.1.2
-        dotp: ^1.0.2
