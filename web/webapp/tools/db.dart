@@ -57,31 +57,40 @@ class DB {
   /// Once you retrieve more info, run this again.
   /// If the object `student` has the same `student.guid`,
   /// it's value in database will be updated.
-  static Future<String> saveStudentInfo(ComplexStudent student) async {
-    return await _students.put({'student': student.toJson()}, student.guid);
+  static Future<String> saveStudentInfo(
+      ComplexStudent student, String key) async {
+    String encryptedContent = Tools.encryptStudentData(
+        Tools.fromMapToStringyJson(student.toJson()), key);
+    return await _students.put({'student': encryptedContent}, student.guid);
   }
 
-  static Future updateStudentInfo(
-      String guid, ComplexStudent updateStudent(ComplexStudent student)) async {
+  static Future updateStudentInfo(String guid,
+      ComplexStudent updateStudent(ComplexStudent student), String key) async {
     await _db.transaction((txn) async {
       var studentsStore = txn.getStore('students');
-      var student = ComplexStudent.fromJson(
-          (await studentsStore.getRecord(guid)).value['student']);
+      var encryptedStudent =
+          (await studentsStore.getRecord(guid)).value['student'];
+      var decryptedStudent = Tools.decryptStudentData(encryptedStudent, key);
+      var student =
+          ComplexStudent.fromJson(Tools.fromStringyJsonToMap(decryptedStudent));
       student = updateStudent(student);
-      await studentsStore.put({'student': student.toJson()}, guid);
+      String encryptedContent = Tools.encryptStudentData(
+          Tools.fromMapToStringyJson(student.toJson()), key);
+      await studentsStore.put({'student': encryptedContent}, guid);
     });
   }
 
-  static Future<ComplexStudent> getStudent(String guid) async {
+  static Future<ComplexStudent> getStudent(String guid, String key) async {
     var record = await _students.findRecord(Finder(filter: Filter.byKey(guid)));
     var value = record.value['student'];
-    return ComplexStudent.fromJson(value);
+    var decryptedStudent = Tools.decryptStudentData(value, key);
+    return ComplexStudent.fromJson(
+        Tools.fromStringyJsonToMap(decryptedStudent));
   }
 
   static Future<void> logLogin(
       Student student, School school, String studentGuid) async {
     await _logStudent.put({
-      'studentName': student.name,
       'studentClass': student.schoolClass,
       'school': school.name,
       'studentGuid': studentGuid,
@@ -102,52 +111,6 @@ class DB {
       print(
           '${DateTime.now().toIso8601String()}:Purged ${recordsToDelete.length} students from cache');
     });
-  }
-
-  static Future<List<ComplexStudent>> getAllUniqueStudents() async {
-    var allStudents = (await _students.findRecords(Finder()))
-        .map((r) => ComplexStudent.fromJson(r.value['student']));
-    var students = Map<String, ComplexStudent>();
-    for (var student in allStudents) {
-      String identifier = student.studentInfo.name +
-          ':' +
-          student.studentInfo.schoolClass +
-          ':' +
-          student.schoolInfo.name;
-
-      if (students.containsKey(identifier)) {
-        var savedRecord = students[identifier];
-        if (savedRecord.refresh.isBefore(student.refresh)) {
-          students[identifier] = student;
-        }
-      } else {
-        students[identifier] = student;
-      }
-    }
-
-    var studentsList = List<ComplexStudent>();
-    for (var key in students.keys) {
-      studentsList.add(students[key]);
-    }
-
-    return studentsList;
-  }
-
-  static Future<ComplexStudent> getLatestStudentBy(
-      bool condition(ComplexStudent student)) async {
-    var allStudents = (await _students.findRecords(Finder()))
-        .map((r) => ComplexStudent.fromJson(r.value['student']))
-        .where((s) => condition(s));
-    DateTime last = null;
-    ComplexStudent selectedStudent = null;
-    for (var student in allStudents) {
-      if (last == null || student.refresh.isAfter(last)) {
-        last = student.refresh;
-        selectedStudent = student;
-      }
-    }
-
-    return selectedStudent;
   }
 
   static Future<Iterable<Message>> getAllMessages() async {
@@ -192,8 +155,8 @@ class DB {
                 .contains(Tools.normalizeString(w)))
             .length ==
         wordsToMatch.length));
-    var mappedLines =
-        filteredRecords.then((l) => l.map((r) => (r.key + '``````' + r.value).toString()));
+    var mappedLines = filteredRecords
+        .then((l) => l.map((r) => (r.key + '``````' + r.value).toString()));
     return mappedLines;
   }
 }

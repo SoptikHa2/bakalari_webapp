@@ -50,7 +50,7 @@ class Tools {
   }
 
   static String fromMapToStringyJson(Map<String, dynamic> json) {
-    if (json == null) return 'null';
+    /*if (json == null) return 'null';
     String result = "{";
     for (var key in json.keys) {
       result += '"' + key.replaceAll('"', '\'') + '":';
@@ -74,7 +74,8 @@ class Tools {
         result += ",";
       }
     }
-    return result + "}";
+    return result + "}";*/
+    return JsonEncoder().convert(json);
   }
 
   static String fromListToStringyJson(List<dynamic> json) {
@@ -101,6 +102,10 @@ class Tools {
       if (item != json.last) result += ",";
     }
     return result + "]";
+  }
+
+  static Map<String, dynamic> fromStringyJsonToMap(String json) {
+    return JsonDecoder().convert(json) as Map<String, dynamic>;
   }
 
   static T maxWhere<T>(Iterable<T> list, double score(T source)) {
@@ -201,11 +206,15 @@ class Tools {
     if (!cookies.any((c) => c.name == "studentID")) {
       return LoginStatus(false, false, 'not_logged_in', null);
     }
+    if(!cookies.any((c) => c.name == "encryptionKey")){
+      return LoginStatus(false, true, "not_logged_in", null);
+    }
 
     try {
       String guid = cookies.singleWhere((c) => c.name == 'studentID').value;
+      String key = cookies.singleWhere((c) => c.name == 'encryptionKey').value;
 
-      ComplexStudent student = await DB.getStudent(guid);
+      ComplexStudent student = await DB.getStudent(guid, key);
       return LoginStatus(true, false, '', student);
     } catch (e) {
       print(e);
@@ -325,7 +334,7 @@ class Tools {
     key = key.substring(0, 32);
 
     final encKey = Key.fromUtf8(key);
-    final iv = IV.fromLength(64);
+    final iv = IV.fromLength(16);
 
     final encrypter = Encrypter(AES(encKey, iv));
 
@@ -334,7 +343,7 @@ class Tools {
 
   static String decryptStudentData(String data, String key) {
     final encKey = Key.fromUtf8(key);
-    final iv = IV.fromLength(64);
+    final iv = IV.fromLength(16);
 
     final encrypter = Encrypter(AES(encKey, iv));
 

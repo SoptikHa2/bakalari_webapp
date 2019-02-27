@@ -30,24 +30,26 @@ class StudentBaseController {
       bakaweb = new Bakalari(post.bakawebUrl);
       await bakaweb.logIn(post.login, post.password);
       // refresh info, write it into DB and add access token into cookies
+      String encryptionKey = Tools.generateEncryptionKey();
       var guid = await DB.saveStudentInfo(
-          ComplexStudent.create(bakaweb.student, bakaweb.school));
+          ComplexStudent.create(bakaweb.student, bakaweb.school),
+          encryptionKey);
       DB.logLogin(bakaweb.student, bakaweb.school, guid);
 
       bakaweb.getTimetable().then((t) => DB.updateStudentInfo(
-          guid, ((student) => student.update(timetable: t))));
+          guid, ((student) => student.update(timetable: t)), encryptionKey));
       bakaweb.getTimetablePermanent().then((t) => DB.updateStudentInfo(
-          guid, ((student) => student.update(permTimetable: t))));
+          guid, ((student) => student.update(permTimetable: t)), encryptionKey));
       bakaweb.getNextWeekTimetable().then((t) => DB.updateStudentInfo(
-          guid, ((student) => student.update(nextWeekTimetable: t))));
+          guid, ((student) => student.update(nextWeekTimetable: t)), encryptionKey));
       bakaweb.getGrades().then((g) =>
-          DB.updateStudentInfo(guid, ((student) => student.update(grades: g))));
+          DB.updateStudentInfo(guid, ((student) => student.update(grades: g)), encryptionKey));
       bakaweb.getSubjects().then((s) => DB.updateStudentInfo(
-          guid, ((student) => student.update(subjects: s))));
+          guid, ((student) => student.update(subjects: s)), encryptionKey));
       bakaweb.getHomework().then((h) => DB.updateStudentInfo(
-          guid, ((student) => student.update(homework: h))));
+          guid, ((student) => student.update(homework: h)), encryptionKey));
       bakaweb.getMessages().then((m) => DB.updateStudentInfo(
-          guid, ((student) => student.update(messages: m))));
+          guid, ((student) => student.update(messages: m)), encryptionKey));
 
       connect.response.cookies.add(Cookie("studentID", guid)
         ..expires = DateTime.now()
@@ -60,10 +62,9 @@ class StudentBaseController {
           "schoolURI", Tools.encodeCookieValue(bakaweb.school.bakawebLink))
         ..expires = DateTime.now().add(
             Duration(days: Config.daysHowLongIsClassIdentifierCookieStored)));
-      connect.response.cookies.add(
-          Cookie("encryptionKey", Tools.generateEncryptionKey())
-            ..expires = DateTime.now()
-                .add(Duration(days: Config.daysHowLongIsSessionCookieStored)));
+      connect.response.cookies.add(Cookie("encryptionKey", encryptionKey)
+        ..expires = DateTime.now()
+            .add(Duration(days: Config.daysHowLongIsSessionCookieStored)));
     } catch (e) {
       print(e);
       if (connect.request.uri.queryParameters.keys.contains('refresh') &&
