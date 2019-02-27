@@ -38,19 +38,6 @@ class DB {
     return result + ']';
   }
 
-  static Future<String> getStudentsInJson() async {
-    var file = File(Config.dbFileLocation);
-    var lines = await file.readAsLines().then((List<String> lines) =>
-        lines.where((l) => l.contains(',"store":"students","value":{')));
-    lines = lines.toList(growable: false);
-    var result = '[';
-    for (var line in lines) {
-      result += line;
-      if (line != lines.last) result += ',';
-    }
-    return result + ']';
-  }
-
   static Future<String> getStudentLoginLogsInJson() async {
     var file = File(Config.dbFileLocation);
     var lines = await file.readAsLines().then((List<String> lines) =>

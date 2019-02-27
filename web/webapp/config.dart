@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 import 'controller/admin/adminMessages.dart';
-import 'controller/admin/godStudent.dart';
 import 'controller/admin/log.dart';
 import 'controller/contact.dart';
 import 'controller/general.dart';
@@ -50,8 +49,6 @@ class Config {
     "get:/admin/login": AdminBaseController.loginForm,
     "get:/admin/logout": GeneralLogoutController.logoutAdmin,
     "get:/admin/log": AdminLogController.showLogPage,
-    "get:/admin/god": AdminGodController.displayForm,
-    "get:/admin/god/student": AdminGodController.displayStudent,
     "post:/admin": AdminBaseController.verify2FA,
     "post:/admin/shutdown": AdminBaseController.shutdownWebsite,
     "get:/admin/log/raw/download/(file:[^/]*)":
