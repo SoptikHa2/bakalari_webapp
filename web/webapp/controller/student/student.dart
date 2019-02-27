@@ -60,6 +60,10 @@ class StudentBaseController {
           "schoolURI", Tools.encodeCookieValue(bakaweb.school.bakawebLink))
         ..expires = DateTime.now().add(
             Duration(days: Config.daysHowLongIsClassIdentifierCookieStored)));
+      connect.response.cookies.add(
+          Cookie("encryptionKey", Tools.generateEncryptionKey())
+            ..expires = DateTime.now()
+                .add(Duration(days: Config.daysHowLongIsSessionCookieStored)));
     } catch (e) {
       print(e);
       if (connect.request.uri.queryParameters.keys.contains('refresh') &&
