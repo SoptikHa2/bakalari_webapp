@@ -5,7 +5,6 @@ library adminLogView_rsp;
 import 'dart:async';
 import 'dart:io';
 import 'package:stream/stream.dart';
-import '../../config.dart';
 
 /** Template, adminLogView, for rendering the view. */
 Future adminLogView(HttpConnect connect) async {

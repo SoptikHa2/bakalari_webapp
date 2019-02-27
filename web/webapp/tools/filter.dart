@@ -1,6 +1,5 @@
 import 'package:stream/stream.dart';
 import '../config.dart';
-import 'db.dart';
 
 class Filter {
   static Future process(HttpConnect connect, Future chain(HttpConnect conn)) async {

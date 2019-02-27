@@ -61,7 +61,10 @@ class DB {
       ComplexStudent student, String key) async {
     String encryptedContent = Tools.encryptStudentData(
         Tools.fromMapToStringyJson(student.toJson()), key);
-    return await _students.put({'student': encryptedContent}, student.guid);
+    return await _students.put({
+      'student': encryptedContent,
+      'timestamp': DateTime.now().millisecondsSinceEpoch.toString()
+    }, student.guid);
   }
 
   static Future updateStudentInfo(String guid,
@@ -103,8 +106,8 @@ class DB {
     await _db.transaction((txn) async {
       var studentsStore = txn.getStore('students');
       var recordsToDelete = (await _students.findRecords(Finder()))
-          .map((r) => ComplexStudent.fromJson(r.value['student']))
-          .where((s) => s.refresh
+          .map((r) => r.value['timestamp'])
+          .where((s) => DateTime.fromMillisecondsSinceEpoch(s)
               .add(Duration(days: Config.daysHowLongIsSessionCookieStored))
               .isBefore(DateTime.now()));
       studentsStore.deleteAll(recordsToDelete.map((s) => s.guid));
