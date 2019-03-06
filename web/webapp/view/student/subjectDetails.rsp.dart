@@ -51,19 +51,20 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
 
 
     response.write("""</h2>
-  <table class="grades-table">
-    <tr>
-      <th>Datum</th>
-      <th>Titulek</th>
-      <th>Známka</th>
-      <th>Váha</th>
-    </tr>
+  <div class="smallscreen-div-y-scrollable">
+    <table class="grades-table">
+      <tr>
+        <th>Datum</th>
+        <th>Titulek</th>
+        <th>Známka</th>
+        <th>Váha</th>
+      </tr>
 """);
 
     for (var grade in grades) {
 
-      response.write("""  <tr class="grades">
-    <td>""");
+      response.write("""      <tr class="grades">
+        <td>""");
 
       response.write(Rsp.nnx(grade.date.day));
 
@@ -74,35 +75,39 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
 
 
       response.write("""</td>
-    <td>""");
+        <td>""");
 
       response.write(Rsp.nnx(grade.caption));
 
 
       response.write("""</td>
-    <td name="value">""");
+        <td name="value">""");
 
-      response.write(Rsp.nnx(grade.numericValue == null ? grade.value : (grade.numericValue.round() == grade.numericValue ? grade.numericValue.toInt() : grade.numericValue.floor().toString() + '-')));
+      response.write(Rsp.nnx(grade.numericValue == null ? grade.value : (grade.numericValue.round() == grade.numericValue
+          ? grade.numericValue.toInt() : grade.numericValue.floor().toString() + '-')));
 
 
       response.write("""</td>
-    <td name="weight">""");
+        <td name="weight">""");
 
       response.write(Rsp.nnx(grade.weight));
 
 
       response.write("""</td>
-  </tr>
+      </tr>
 """);
     } //for
 
-    response.write("""  </table>
+    response.write("""    </table>
+  </div>
   <form class="pure-form">
     <fieldset>
       <label for="new-grade">Známka</label>
-      <input name="new-grade" id="new-grade" type="text" placeholder="2-" autocomplete="off" onkeyup="updateSubjectAverage();">
+      <input name="new-grade" id="new-grade" type="text" placeholder="2-" autocomplete="off"
+        onkeyup="updateSubjectAverage();">
       <label for="new-weight">Váha</label>
-      <input name="new-weight" id="new-weight" type="number" value="4" autocomplete="off" min="1" max="12" onchange="updateSubjectAverage();">
+      <input name="new-weight" id="new-weight" type="number" value="4" autocomplete="off" min="1" max="12"
+        onchange="updateSubjectAverage();">
     </fieldset>
   </form>
   <p id="average"></p>

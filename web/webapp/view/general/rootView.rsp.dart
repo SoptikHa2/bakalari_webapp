@@ -96,7 +96,7 @@ Future rootView(HttpConnect connect, {String errorDescription, String presetUrl,
       Ceníme si vašeho soukromí. Žádné údaje o Vás nikdy neopustí tento server, vyjma přihlašování k serverům školy.
       Vaše údaje, jako je třeba přihlašovací jméno nebo heslo, na serveru neskladujeme a ihned po přihlášení jsou
       trvale smazány. Všechny údaje přijaté ze serveru školy jsou zašifrovány bezpečným šifrováním - a nikdo kromě
-      vás nemá klíče. Díky tomuto opatření si můžete být jisti, že není technicky možné se dostat k vašim údajům.
+      vás nemá klíče. Díky tomuto opatření si můžete být jisti, že nikdo kromě vás se k vašim údajům dostat ani nemůže.
       Podrobně vše popisujeme v <a href="/privacy_policy" target="_blank">dokumentu o zpracování osobních údajů</a>.
     </p>
     <h2>Technické podrobnosti</h2>

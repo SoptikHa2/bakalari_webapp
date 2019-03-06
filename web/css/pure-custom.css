@@ -43,7 +43,7 @@
     font-size: 0.5em;
 }
 
-.lesson-change{
+.background-alert{
     background-color: rgb(255, 214, 241) !important;
 }
 
@@ -52,7 +52,7 @@ tr{
 }
 
 @media (max-width: 64em) {
-    .timetable-div-scrollable{
+    .smallscreen-div-y-scrollable{
         overflow-y: auto;
     }
 }

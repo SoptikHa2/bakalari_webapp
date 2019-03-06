@@ -54,7 +54,23 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
             </p>
         </aside>
     </div>
-    <div class="pure-g" id="main">
+""");
+
+  if (lastRefresh != null) {
+
+    response.write("""    <p style="text-align: center">
+        To co vidíte na této stránce je """);
+
+    response.write(Rsp.nnx(lastRefresh));
+
+
+    response.write(""" staré.
+        <a href="/student/refresh"><button class="pure-button">Obnovit</button></a>
+    </p>
+""");
+  } //if
+
+  response.write("""    <div class="pure-g" id="main">
         <div class="pure-u-1 pure-u-md-1-2" id="timetable">
 """);
 
@@ -85,7 +101,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
         response.write("""                        <tr class=\"""");
 
-        response.write(Rsp.nnx(lesson.change != null && lesson.change != '' ? 'lesson-change' : ''));
+        response.write(Rsp.nnx(lesson.change != null && lesson.change != '' ? 'background-alert' : ''));
 
 
         response.write("""">
@@ -177,7 +193,12 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
 
       response.write("""</a>
                         </td>
-                        <td>
+                        <td """);
+
+      response.write(Rsp.nnx(averages[subject] >= 4.5 ? 'class=background-alert' : ''));
+
+
+      response.write(""">
                             """);
 
       response.write(Rsp.nnx(averages[subject].toStringAsPrecision(3)));
@@ -234,7 +255,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
                 </li>
                 <hr />
                 <li>
-                    <a href="/refresh">Načíst nejnovější data</a>
+                    <a href="/student/refresh">Načíst nejnovější data</a>
                 </li>
                 <li>
                     <a href="/logout">Odhlásit se</a>
@@ -243,23 +264,6 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
         </div>
     </div>
 </div>
-""");
-
-  if (lastRefresh != null) {
-
-    response.write("""<p style="text-align: center">
-    To co vidíte na této stránce je """);
-
-    response.write(Rsp.nnx(lastRefresh));
-
-
-    response.write(""" staré.
-    <a href="/refresh"><button class="pure-button">Obnovit</button></a>
-</p>
-""");
-  } //if
-
-  response.write("""
 
 <script>
     if ('serviceWorker' in navigator) {

@@ -33,7 +33,7 @@ String nbsp = "\u{00A0}";
 
   if (timetable != null) {
 
-    response.write("""    <div class="timetable-div-scrollable">
+    response.write("""    <div class="smallscreen-div-y-scrollable">
         <table class="pure-table" id="tabletoday">
             <thead>
                 <tr></tr>
@@ -90,7 +90,7 @@ String nbsp = "\u{00A0}";
 
           response.write("""                        <div class="table-cell-standalone """);
 
-          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
+          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'background-alert' : ''));
 
 
           response.write("""">
@@ -136,7 +136,7 @@ String nbsp = "\u{00A0}";
 
   if (nextWeekTimetable != null) {
 
-    response.write("""    <div class="timetable-div-scrollable">
+    response.write("""    <div class="smallscreen-div-y-scrollable">
         <table class="pure-table" id="tabletomorrow">
             <thead>
                 <tr></tr>
@@ -193,7 +193,7 @@ String nbsp = "\u{00A0}";
 
           response.write("""                        <div class="table-cell-standalone """);
 
-          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
+          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'background-alert' : ''));
 
 
           response.write("""">
@@ -239,7 +239,7 @@ String nbsp = "\u{00A0}";
 
   if (permanentTimetable != null) {
 
-    response.write("""    <div class="timetable-div-scrollable">
+    response.write("""    <div class="smallscreen-div-y-scrollable">
         <table class="pure-table" id="tablepermanent">
             <thead>
                 <tr></tr>
@@ -296,7 +296,7 @@ String nbsp = "\u{00A0}";
 
           response.write("""                        <div class="table-cell-standalone """);
 
-          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'lesson-change' : ''));
+          response.write(Rsp.nnx((lesson.change != null && lesson.change != '') ? 'background-alert' : ''));
 
 
           response.write("""">

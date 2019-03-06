@@ -16,7 +16,7 @@ String nbsp = "\u{00A0}";
     <button class="pure-button pure-button-secondary" onclick="switchtimetableDisplay('tabletomorrow')">Příští týden</button>
     <button class="pure-button pure-button-secondary" onclick="switchtimetableDisplay('tablepermanent')">Trvalý rozvrh</button>
     [:if timetable != null]
-    <div class="timetable-div-scrollable">
+    <div class="smallscreen-div-y-scrollable">
         <table class="pure-table" id="tabletoday">
             <thead>
                 <tr></tr>
@@ -36,7 +36,7 @@ String nbsp = "\u{00A0}";
                     [:for lessons in day.lessons]
                     <td class="table-cell-small">
                         [:for lesson in lessons]
-                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'background-alert' : '']">
                             <div class="table-cell-main">[= lesson.subjectShort ]</div>
                             <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
                                 null
@@ -54,7 +54,7 @@ String nbsp = "\u{00A0}";
     </div>
     [/if]
     [:if nextWeekTimetable != null]
-    <div class="timetable-div-scrollable">
+    <div class="smallscreen-div-y-scrollable">
         <table class="pure-table" id="tabletomorrow">
             <thead>
                 <tr></tr>
@@ -74,7 +74,7 @@ String nbsp = "\u{00A0}";
                     [:for lessons in day.lessons]
                     <td class="table-cell-small">
                         [:for lesson in lessons]
-                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'background-alert' : '']">
                             <div class="table-cell-main">[= lesson.subjectShort ]</div>
                             <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
                                 null
@@ -92,7 +92,7 @@ String nbsp = "\u{00A0}";
     </div>
     [/if]
     [:if permanentTimetable != null]
-    <div class="timetable-div-scrollable">
+    <div class="smallscreen-div-y-scrollable">
         <table class="pure-table" id="tablepermanent">
             <thead>
                 <tr></tr>
@@ -112,7 +112,7 @@ String nbsp = "\u{00A0}";
                     [:for lessons in day.lessons]
                     <td class="table-cell-small">
                         [:for lesson in lessons]
-                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'lesson-change' : '']">
+                        <div class="table-cell-standalone [= (lesson.change != null && lesson.change != '') ? 'background-alert' : '']">
                             <div class="table-cell-main">[= lesson.subjectShort ]</div>
                             <span class="table-cell-secondary">[= lesson.teacherShort ][= (lesson.teacherShort ==
                                 null

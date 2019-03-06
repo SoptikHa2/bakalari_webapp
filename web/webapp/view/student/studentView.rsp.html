@@ -49,7 +49,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
                     <tbody>
                         [:for multipleLessons in timetableRow.lessons]
                         [:for lesson in multipleLessons]
-                        <tr class="[= lesson.change != null && lesson.change != '' ? 'lesson-change' : '']">
+                        <tr class="[= lesson.change != null && lesson.change != '' ? 'background-alert' : '']">
                             <td>
                                 [= lesson.lessonTime.caption]
                             </td>
@@ -85,7 +85,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks"]
                         <td>
                             <a href="/student/subject/[= subject]">[= subject]</a>
                         </td>
-                        <td>
+                        <td [= averages[subject] >= 4.5 ? 'class=background-alert' : '' ]>
                             [= averages[subject].toStringAsPrecision(3)]
                         </td>
                     </tr>
