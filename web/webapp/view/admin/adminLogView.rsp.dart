@@ -83,7 +83,7 @@ var myChart = new Chart(ctx, {
 
     response.write(""" ],
         datasets: [{
-            label: "Unique per day",
+            label: "Unique hits per day",
             data: [ """);
 
     response.write(Rsp.nnx(accessesPerDay.keys.map((key) => accessesPerDay[key]).toList().join(', '), encode: 'none'));

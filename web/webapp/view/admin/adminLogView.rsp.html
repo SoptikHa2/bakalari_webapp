@@ -48,7 +48,7 @@ var myChart = new Chart(ctx, {
     data: {
         labels: [ [= accessesPerDay.keys.map((key) => '"$key"').toList().join(', '), encode: 'none'] ],
         datasets: [{
-            label: "Unique per day",
+            label: "Unique hits per day",
             data: [ [= accessesPerDay.keys.map((key) => accessesPerDay[key]).toList().join(', '), encode: 'none']],
         }]
     }
