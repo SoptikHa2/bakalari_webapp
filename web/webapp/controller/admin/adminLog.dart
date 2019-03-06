@@ -8,23 +8,24 @@ import '../../tools/securityTools.dart';
 import '../../view/admin/adminLogView.rsp.dart';
 
 class AdminLogController {
-  static void showLogPage(HttpConnect connect) {
+  static Future showLogPage(HttpConnect connect) async {
     /* LOGIN */
     var loginResult = SecurityTools.verifyAsAdmin(connect);
 
     if (loginResult == AdminLoginStatus.Ratelimit) {
       connect.response.cookies.add(Cookie('twoFAtoken', 'deleted')..maxAge = 0);
-      return connect.redirect('/admin/login?error=too_many_login_attempts');
+      connect.redirect('/admin/login?error=too_many_login_attempts');
+      return;
     }
     if (loginResult == AdminLoginStatus.InvalidRequest) {
-      return connect.redirect('/admin/login');
+      connect.redirect('/admin/login');
+      return;
     }
     if (loginResult == AdminLoginStatus.NoAuthGiven) {
       connect.response
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        // ignore: mixed_return_types
         return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
@@ -32,18 +33,17 @@ class AdminLogController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-      // ignore: mixed_return_types
       return;
     }
     if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
-      return connect.redirect('/admin/login');
+      connect.redirect('/admin/login');
+      return;
     }
 
     Config.unsuccessfulAdminLoginsInARow = 0;
     /* LOGGED IN */
     
-    // ignore: return_of_invalid_type, mixed_return_types
-    return adminLogView(connect);
+    await adminLogView(connect);
   }
 
     static Future downloadRawLog(HttpConnect connect) async {
@@ -62,7 +62,6 @@ class AdminLogController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        // ignore: mixed_return_types
         return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
@@ -70,7 +69,6 @@ class AdminLogController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-      // ignore: mixed_return_types
       return;
     }
     if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
@@ -93,8 +91,7 @@ class AdminLogController {
       return connect.redirect('/admin/log?error=bad_structure');
     }
 
-    // ignore: mixed_return_types
-    return connect.response
+    connect.response
       ..headers.contentType = ContentType.json
       ..write(fileContent)
       ..close();

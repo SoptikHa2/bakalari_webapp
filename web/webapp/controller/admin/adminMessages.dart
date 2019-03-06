@@ -25,7 +25,6 @@ class AdminMessagesController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        // ignore: mixed_return_types
         return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
@@ -33,7 +32,6 @@ class AdminMessagesController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-      // ignore: mixed_return_types
       return;
     }
     if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
@@ -45,8 +43,7 @@ class AdminMessagesController {
 
 
     var messages = await DB.getAllMessages();
-    // ignore: mixed_return_types
-    return adminMessageListView(connect,
+    await adminMessageListView(connect,
         countOfNew: messages.where((m) => !m.isImportant).length,
         countOfImportant: messages.where((m) => m.isImportant).length,
         messages: messages);
@@ -68,7 +65,6 @@ class AdminMessagesController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        // ignore: mixed_return_types
         return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
@@ -76,7 +72,6 @@ class AdminMessagesController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-      // ignore: mixed_return_types
       return;
     }
     if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
@@ -88,8 +83,7 @@ class AdminMessagesController {
 
     
     var messages = (await DB.getAllMessages()).where((m) => !m.isClosed);
-    // ignore: mixed_return_types
-    return adminMessageListView(connect,
+    await adminMessageListView(connect,
         countOfNew: messages.where((m) => !m.isImportant).length,
         countOfImportant: messages.where((m) => m.isImportant).length,
         messages: messages);
@@ -111,7 +105,6 @@ class AdminMessagesController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        // ignore: mixed_return_types
         return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
@@ -119,7 +112,6 @@ class AdminMessagesController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-      // ignore: mixed_return_types
       return;
     }
     if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
@@ -133,10 +125,9 @@ class AdminMessagesController {
     try {
       String identifier = Uri.decodeComponent(connect.dataset['guid']);
       var message = await DB.getOneMessage(identifier);
-      // ignore: mixed_return_types
-      return adminMessageView(connect, message: message);
+      await adminMessageView(connect, message: message);
     } catch (e) {
-      return connect.redirect('/admin/message');
+      connect.redirect('/admin/message');
     }
   }
 
@@ -156,7 +147,6 @@ class AdminMessagesController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        // ignore: mixed_return_types
         return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
@@ -164,7 +154,6 @@ class AdminMessagesController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-      // ignore: mixed_return_types
       return;
     }
     if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
@@ -177,6 +166,6 @@ class AdminMessagesController {
 
     String identifier = Uri.decodeComponent(connect.dataset['guid']);
     await DB.markMessageAsDone(identifier);
-    return connect.redirect('/admin/message');
+    connect.redirect('/admin/message');
   }
 }

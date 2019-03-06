@@ -74,17 +74,18 @@ class AdminBaseController {
 
     if (loginResult == AdminLoginStatus.Ratelimit) {
       connect.response.cookies.add(Cookie('twoFAtoken', 'deleted')..maxAge = 0);
-      return connect.redirect('/admin/login?error=too_many_login_attempts');
+      connect.redirect('/admin/login?error=too_many_login_attempts');
+      return;
     }
     if (loginResult == AdminLoginStatus.InvalidRequest) {
-      return connect.redirect('/admin/login');
+      connect.redirect('/admin/login');
+      return;
     }
     if (loginResult == AdminLoginStatus.NoAuthGiven) {
       connect.response
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        // ignore: mixed_return_types
         return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
@@ -92,7 +93,6 @@ class AdminBaseController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-      // ignore: mixed_return_types
       return;
     }
     if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
@@ -105,8 +105,7 @@ class AdminBaseController {
     var messages = (await DB.getAllMessages()).where((m) => !m.isClosed);
     int countOfNormalMessages = messages.where((m) => !m.isImportant).length;
     int countOfImprotantMessages = messages.length - countOfNormalMessages;
-    // ignore: mixed_return_types
-    return adminRootView(connect,
+    await adminRootView(connect,
         numberOfNormalMessages: countOfNormalMessages,
         numberOfImprotantMessages: countOfImprotantMessages);
   }
@@ -136,7 +135,6 @@ class AdminBaseController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        // ignore: mixed_return_types
         return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
@@ -144,7 +142,6 @@ class AdminBaseController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-      // ignore: mixed_return_types
       return;
     }
     if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
@@ -166,7 +163,7 @@ class AdminBaseController {
 
     Config.siteShutdownReason = post.reason;
 
-    return connect.redirect('/admin?shutdown=true');
+    connect.redirect('/admin?shutdown=true');
   }
 }
 
