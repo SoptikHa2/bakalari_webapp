@@ -86,7 +86,7 @@ class AdminBaseController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        return;
+      return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
       connect.response
@@ -117,7 +117,7 @@ class AdminBaseController {
     var post = ShutdownPostParams();
     ObjectUtil.inject(post, postParameters);
     if (!post.validate()) {
-      return connect.redirect("/admin");
+      return connect.redirect("/admin?error=invalid_structure");
     }
 
     /* LOGIN */
@@ -135,7 +135,7 @@ class AdminBaseController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        return;
+      return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
       connect.response
@@ -151,7 +151,10 @@ class AdminBaseController {
     Config.unsuccessfulAdminLoginsInARow = 0;
     /* LOGGED IN */
 
-    
+    if (!SecurityTools.verifyAdmin2FA(post.twofa)) {
+      return connect.redirect('/admin?error=2fa_error');
+    }
+
     switch (post.shutdownType) {
       case "emptyTemplate":
         Config.siteShutdownType = ShutdownTemplate.TemplateEmpty;
@@ -183,6 +186,7 @@ class ShutdownPostParams {
   bool validate() {
     return twofa != null &&
         reason != null &&
+        reason != "" &&
         (shutdownType == "emptyTemplate" || shutdownType == "451template");
   }
 }

@@ -96,6 +96,12 @@ class SecurityTools {
     return null;
   }
 
+  /// Verify 2FA. This does NOT overwrite old 2FA. If you want to generate new 2FA key,
+  /// use `loginAsAdmin2FA`.
+  static bool verifyAdmin2FA(String twoFA) {
+    return Config.totp.verify(twoFA.replaceAll(' ', ''));
+  }
+
   /* ############################################ */
   /* #                                          # */
   /* #              E N C R Y P T               # */
