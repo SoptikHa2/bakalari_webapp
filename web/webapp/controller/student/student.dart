@@ -35,16 +35,16 @@ class StudentBaseController {
       var guid = await DB.saveStudentInfo(
           ComplexStudent.create(bakaweb.student, bakaweb.school),
           encryptionKey);
-      DB.logLogin(bakaweb.student, bakaweb.school, guid);
+      DB.logLogin(bakaweb.student, bakaweb.school);
 
       bakaweb.getTimetable().then((t) => DB.updateStudentInfo(
           guid, ((student) => student.update(timetable: t)), encryptionKey));
-      bakaweb.getTimetablePermanent().then((t) => DB.updateStudentInfo(
-          guid, ((student) => student.update(permTimetable: t)), encryptionKey));
-      bakaweb.getNextWeekTimetable().then((t) => DB.updateStudentInfo(
-          guid, ((student) => student.update(nextWeekTimetable: t)), encryptionKey));
-      bakaweb.getGrades().then((g) =>
-          DB.updateStudentInfo(guid, ((student) => student.update(grades: g)), encryptionKey));
+      bakaweb.getTimetablePermanent().then((t) => DB.updateStudentInfo(guid,
+          ((student) => student.update(permTimetable: t)), encryptionKey));
+      bakaweb.getNextWeekTimetable().then((t) => DB.updateStudentInfo(guid,
+          ((student) => student.update(nextWeekTimetable: t)), encryptionKey));
+      bakaweb.getGrades().then((g) => DB.updateStudentInfo(
+          guid, ((student) => student.update(grades: g)), encryptionKey));
       bakaweb.getSubjects().then((s) => DB.updateStudentInfo(
           guid, ((student) => student.update(subjects: s)), encryptionKey));
       bakaweb.getHomework().then((h) => DB.updateStudentInfo(

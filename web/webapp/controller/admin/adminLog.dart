@@ -26,7 +26,7 @@ class AdminLogController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        return;
+      return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
       connect.response
@@ -42,11 +42,30 @@ class AdminLogController {
 
     Config.unsuccessfulAdminLoginsInARow = 0;
     /* LOGGED IN */
-    
-    await adminLogView(connect);
+
+    // Load data to visualise
+    var loginsPerDayData = await DB.getLogins(Duration(days: 30));
+    var loginsPerDayTransformedData = Map<String, int>();
+    for (var key in loginsPerDayData.keys) {
+      var value = loginsPerDayData[key];
+      var transformedKey =
+          "${DateTime.fromMillisecondsSinceEpoch(key).month}-${DateTime.fromMillisecondsSinceEpoch(key).day}";
+      loginsPerDayTransformedData[transformedKey] = value;
+    }
+    var accessesPerDayData = await DB.getUniqueDailyAccess(Duration(days: 30));
+    var accessesPerDayTransformedData = Map<String, int>();
+    for (var key in accessesPerDayData.keys) {
+      var value = accessesPerDayData[key];
+      var transformedKey =
+          "${DateTime.fromMillisecondsSinceEpoch(key).month}-${DateTime.fromMillisecondsSinceEpoch(key).day}";
+      accessesPerDayTransformedData[transformedKey] = value;
+    }
+
+    // Logins per month: Map<String (date), int (number of visitors)>.
+    await adminLogView(connect, loginsPerDay: loginsPerDayTransformedData, accessesPerDay: accessesPerDayTransformedData);
   }
 
-    static Future downloadRawLog(HttpConnect connect) async {
+  static Future downloadRawLog(HttpConnect connect) async {
     /* LOGIN */
     var loginResult = SecurityTools.verifyAsAdmin(connect);
 
@@ -62,7 +81,7 @@ class AdminLogController {
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
         ..statusCode = 401;
-        return;
+      return;
     }
     if (loginResult == AdminLoginStatus.PasswordIncorrect) {
       connect.response
@@ -81,13 +100,13 @@ class AdminLogController {
     String identifier = Uri.decodeComponent(connect.dataset['file']);
 
     String fileContent = null;
-    switch(identifier){
+    switch (identifier) {
       case 'logStudentLogin':
         fileContent = await DB.getStudentLoginLogsInJson();
-      break;
+        break;
     }
 
-    if(fileContent == null){
+    if (fileContent == null) {
       return connect.redirect('/admin/log?error=bad_structure');
     }
 

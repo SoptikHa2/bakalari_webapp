@@ -17,13 +17,15 @@ class DB {
   static Store _logStudent;
   static Store _messages;
   static Store _schools;
+  static Store _logAccess;
 
   static Future<void> initializeDb() async {
     _db = await databaseFactoryIo.openDatabase(Config.dbFileLocation);
     _students = _db.getStore('students'); // Students data
     _logStudent = _db.getStore('logStudent'); // Student login logs
     _messages = _db.getStore('messages'); // Messages sent to admin
-    _schools = _db.getStore('schools');
+    _schools = _db.getStore('schools'); // List of school names and URLs
+    _logAccess = _db.getStore('logAccess'); // Anonymised access logs
   }
 
   static Future<String> getMessagesInJson() async {
@@ -74,7 +76,8 @@ class DB {
       var studentsStore = txn.getStore('students');
       var encryptedStudent =
           (await studentsStore.getRecord(guid)).value['student'];
-      var decryptedStudent = SecurityTools.decryptStudentData(encryptedStudent, key);
+      var decryptedStudent =
+          SecurityTools.decryptStudentData(encryptedStudent, key);
       var student =
           ComplexStudent.fromJson(Tools.fromStringyJsonToMap(decryptedStudent));
       student = updateStudent(student);
@@ -92,14 +95,76 @@ class DB {
         Tools.fromStringyJsonToMap(decryptedStudent));
   }
 
-  static Future<void> logLogin(
-      Student student, School school, String studentGuid) async {
+  static Future<void> logAccess(HttpRequest request) async {
+    await _logAccess.put({
+      'IP':
+          SecurityTools.obfuscateIpAddress(request.headers.value('X-Real-IP')),
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  static Future<void> logLogin(Student student, School school) async {
     await _logStudent.put({
       'studentClass': student.schoolClass,
       'school': school.name,
-      'studentGuid': studentGuid,
       'timestamp': DateTime.now().millisecondsSinceEpoch
     });
+  }
+
+  /// Returns: timestamp and number of logins for it (Numbers are grouped to days)
+  static Future<Map<int, int>> getLogins(Duration maximumAge) async {
+    var records = await _logStudent.findRecords(Finder(
+        filter: Filter.greaterThanOrEquals('timestamp',
+            DateTime.now().subtract(maximumAge).millisecondsSinceEpoch)));
+    records.sort((r1, r2) =>
+        (r1.value['timestamp'] as int).compareTo(r2.value['timestamp'] as int));
+    var result = Map<int, int>();
+    for (var record in records) {
+      var key = record.value['timestamp'] as int;
+      var today = DateTime.fromMillisecondsSinceEpoch(key);
+      today = DateTime(today.year, today.month, today.day);
+      if (result.containsKey(today.millisecondsSinceEpoch)) {
+        result[today.millisecondsSinceEpoch]++;
+      } else {
+        result[today.millisecondsSinceEpoch] = 1;
+      }
+    }
+
+    return result;
+  }
+
+  /// Returns: timestamp for day and number of unique accesses that day. (Numbers are grouped to days.)
+  static Future<Map<int, int>> getUniqueDailyAccess(Duration maximumAge) async {
+    var records = await _logAccess.findRecords(Finder(
+        filter: Filter.greaterThanOrEquals('timestamp',
+            DateTime.now().subtract(maximumAge).millisecondsSinceEpoch)));
+    records.sort((r1, r2) =>
+        (r1.value['timestamp'] as int).compareTo(r2.value['timestamp'] as int));
+    var result = Map<int, int>();
+    var usedIpAddresses = Map<int, List<String>>();
+    for (var record in records) {
+      var key = record.value['timestamp'] as int;
+      var today = DateTime.fromMillisecondsSinceEpoch(key);
+      today = DateTime(today.year, today.month, today.day);
+      // Check for validity
+      bool valid = true;
+      if (usedIpAddresses.containsKey(today.millisecondsSinceEpoch)) {
+        valid = !usedIpAddresses[today.millisecondsSinceEpoch]
+            .contains(record['IP']);
+      } else {
+        usedIpAddresses[today.millisecondsSinceEpoch] = List<String>();
+      }
+      if (valid) {
+        if (result.keys.contains(today.millisecondsSinceEpoch)) {
+          result[today.millisecondsSinceEpoch]++;
+        } else {
+          result[today.millisecondsSinceEpoch] = 1;
+        }
+        usedIpAddresses[today.millisecondsSinceEpoch].add(record.value['IP']);
+      }
+    }
+
+    return result;
   }
 
   static Future<void> purgeSavedData() async {

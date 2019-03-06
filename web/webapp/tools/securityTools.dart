@@ -100,6 +100,8 @@ class SecurityTools {
   /* #                                          # */
   /* #              E N C R Y P T               # */
   /* #                                          # */
+  /* #                 H A S H                  # */
+  /* #                                          # */
   /* ############################################ */
 
   static String encryptStudentData(String data, String key) {
@@ -141,7 +143,11 @@ class SecurityTools {
     return key;
   }
 
-
+  static String obfuscateIpAddress(String ipAddress) {
+    if (ipAddress == null) return '[unknown]';
+    return base64.encode(_sha256
+        .process(_sha256.process(utf8.encode('ipAddressIs' + ipAddress))));
+  }
 
   /* ############################################ */
   /* #                                          # */

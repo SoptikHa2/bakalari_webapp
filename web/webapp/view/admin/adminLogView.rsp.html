@@ -1,8 +1,16 @@
-[:page name="adminLogView"]
+[:page name="adminLogView" args="dynamic loginsPerDay, dynamic accessesPerDay"]
 [:include "/webapp/view/templates/adminHead.html" /]
 <div class="content">
     <h1>Vizualizace</h1>
-    
+    <p>
+        <canvas id="hitsPerDay" width="400" height="200"></canvas>
+    </p>
+    <p>
+        <canvas id="loginsPerDay" width="400" height="200"></canvas>
+    </p>
+    <p>
+        <canvas id="schoolsPerDay" width="400" height="200"></canvas>
+    </p>
     <h1>Ke stažení</h1>
     <p>Vše bude ve formátu JSON.</p>
     <h2>Log přihlášení studentů</h2>
@@ -12,4 +20,40 @@
         </fieldset>
     </form>
 </div>
+
+<!-- Load chart.js library -->
+<script src="/js/Chart.bundle.min.js"></script>
+[:if loginsPerDay != null]
+<script>
+/* LOGINS PER DAY VISUALISATION */
+var ctx = document.getElementById("loginsPerDay");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [ [= loginsPerDay.keys.map((key) => '"$key"').toList().join(', '), encode: 'none'] ],
+        datasets: [{
+            label: "Logins per day",
+            data: [ [= loginsPerDay.keys.map((key) => loginsPerDay[key]).toList().join(', '), encode: 'none']],
+        }]
+    }
+});
+</script>
+[/if]
+[:if accessesPerDay != null]
+<script>
+/* HITS PER DAY VISUALISATION */
+var ctx = document.getElementById("hitsPerDay");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [ [= accessesPerDay.keys.map((key) => '"$key"').toList().join(', '), encode: 'none'] ],
+        datasets: [{
+            label: "Unique per day",
+            data: [ [= accessesPerDay.keys.map((key) => accessesPerDay[key]).toList().join(', '), encode: 'none']],
+        }]
+    }
+});
+</script>
+[/if]
+
 [:include "/webapp/view/templates/tail.html" /]
