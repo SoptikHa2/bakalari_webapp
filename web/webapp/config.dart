@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 import 'controller/admin/adminMessages.dart';
-import 'controller/admin/log.dart';
+import 'controller/admin/adminLog.dart';
 import 'controller/contact.dart';
 import 'controller/general.dart';
 import 'controller/lubos.dart';

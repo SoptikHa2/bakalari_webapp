@@ -5,6 +5,7 @@ import 'package:rikulo_commons/mirrors.dart';
 import 'package:stream/stream.dart';
 import '../../config.dart';
 import '../../model/complexStudent.dart';
+import '../../tools/securityTools.dart';
 import '../../tools/tools.dart';
 import '../../view/student/studentView.rsp.dart';
 import 'package:bakalari/bakalari.dart';
@@ -89,7 +90,7 @@ class StudentBaseController {
       return connect.redirect('/student');
     }
 
-    var result = await Tools.loginAsStudent(connect.request.cookies);
+    var result = await SecurityTools.loginAsStudent(connect.request.cookies);
     ComplexStudent student = null;
     if (result.success) {
       student = result.result;

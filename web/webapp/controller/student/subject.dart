@@ -1,6 +1,7 @@
 import 'package:stream/stream.dart';
 
 import '../../model/complexStudent.dart';
+import '../../tools/securityTools.dart';
 import '../../tools/tools.dart';
 import '../../view/student/subjectDetails.rsp.dart';
 import '../../view/student/subjectListView.rsp.dart';
@@ -13,7 +14,7 @@ import '../../view/student/subjectListView.rsp.dart';
 /// /student/subject/XX -> display subject XX
 class StudentSubjectController {
   static Future getList(HttpConnect connect) async {
-    var result = await Tools.loginAsStudent(connect.request.cookies);
+    var result = await SecurityTools.loginAsStudent(connect.request.cookies);
     ComplexStudent student = null;
     if (result.success) {
       student = result.result;
@@ -37,7 +38,7 @@ class StudentSubjectController {
 
   static Future getSubject(HttpConnect connect) async {
     String identifier = Uri.decodeComponent(connect.dataset['identifier']);
-    var result = await Tools.loginAsStudent(connect.request.cookies);
+    var result = await SecurityTools.loginAsStudent(connect.request.cookies);
     ComplexStudent student = null;
     if (result.success) {
       student = result.result;

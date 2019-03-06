@@ -6,6 +6,7 @@ import 'package:stream/stream.dart';
 
 import '../../config.dart';
 import '../../tools/db.dart';
+import '../../tools/securityTools.dart';
 import '../../tools/tools.dart';
 import '../../view/admin/adminLoginView.rsp.dart';
 import '../../view/admin/adminRootView.rsp.dart';
@@ -70,36 +71,24 @@ class AdminBaseController {
 
   static Future adminRootPage(HttpConnect connect) async {
     /* LOGIN */
+    var loginResult = SecurityTools.verifyAsAdmin(connect);
 
-    // Check if there weren't five invalid logins in a row
-    if (Config.unsuccessfulAdminLoginsInARow >=
-        Config.unsuccessfulLoginThreshold) {
+    if (loginResult == AdminLoginStatus.Ratelimit) {
       connect.response.cookies.add(Cookie('twoFAtoken', 'deleted')..maxAge = 0);
-      Config.currentTwoFAtoken = null;
-      Config.last2FAattempt = DateTime.now();
-      Config.unsuccessfulAdminLoginsInARow = 0;
       return connect.redirect('/admin/login?error=too_many_login_attempts');
     }
-
-    String twoFAtoken = null;
-    try {
-      if (connect.request.cookies.any((c) => c.name == "twoFAtoken")) {
-        twoFAtoken = connect.request.cookies
-            .singleWhere((c) => c.name == "twoFAtoken")
-            .value;
-      }
-      if (connect.response.cookies.any((c) => c.name == "twoFAtoken")) {
-        twoFAtoken = connect.response.cookies
-            .singleWhere((c) => c.name == "twoFAtoken")
-            .value;
-      }
-    } catch (e) {}
-
-    if (twoFAtoken == null) {
+    if (loginResult == AdminLoginStatus.InvalidRequest) {
       return connect.redirect('/admin/login');
     }
-
-    if (connect.request.headers.value('Authorization') == null) {
+    if (loginResult == AdminLoginStatus.NoAuthGiven) {
+      connect.response
+        ..headers
+            .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
+        ..statusCode = 401;
+        // ignore: mixed_return_types
+        return;
+    }
+    if (loginResult == AdminLoginStatus.PasswordIncorrect) {
       connect.response
         ..headers
             .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
@@ -107,20 +96,7 @@ class AdminBaseController {
       // ignore: mixed_return_types
       return;
     }
-
-    var authResult = Tools.verifyAsAdmin(
-        connect.request.headers.value('Authorization'), twoFAtoken);
-
-    if (authResult == AdminLoginStatus.PasswordIncorrect) {
-      Config.unsuccessfulAdminLoginsInARow++;
-      connect.response
-        ..headers
-            .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
-        ..statusCode = 401;
-      // ignore: mixed_return_types
-      return;
-    }
-    if (authResult == AdminLoginStatus.TwoFAIncorrect) {
+    if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
       return connect.redirect('/admin/login');
     }
 
@@ -146,46 +122,40 @@ class AdminBaseController {
       return connect.redirect("/admin");
     }
 
-    String twoFAtoken = null;
-    try {
-      if (connect.request.cookies.any((c) => c.name == "twoFAtoken")) {
-        twoFAtoken = connect.request.cookies
-            .singleWhere((c) => c.name == "twoFAtoken")
-            .value;
-      }
-    } catch (e) {}
+    /* LOGIN */
+    var loginResult = SecurityTools.verifyAsAdmin(connect);
 
-    if (twoFAtoken == null) {
+    if (loginResult == AdminLoginStatus.Ratelimit) {
+      connect.response.cookies.add(Cookie('twoFAtoken', 'deleted')..maxAge = 0);
+      return connect.redirect('/admin/login?error=too_many_login_attempts');
+    }
+    if (loginResult == AdminLoginStatus.InvalidRequest) {
+      return connect.redirect('/admin/login');
+    }
+    if (loginResult == AdminLoginStatus.NoAuthGiven) {
+      connect.response
+        ..headers
+            .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
+        ..statusCode = 401;
+        // ignore: mixed_return_types
+        return;
+    }
+    if (loginResult == AdminLoginStatus.PasswordIncorrect) {
+      connect.response
+        ..headers
+            .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
+        ..statusCode = 401;
+      // ignore: mixed_return_types
+      return;
+    }
+    if (loginResult == AdminLoginStatus.TwoFAIncorrect) {
       return connect.redirect('/admin/login');
     }
 
-    if (connect.request.headers.value('Authorization') == null) {
-      connect.response
-        ..headers
-            .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
-        ..statusCode = 401;
-      return;
-    }
-
-    var authResult = Tools.verifyAsAdmin(
-        connect.request.headers.value('Authorization'), twoFAtoken);
-
-    if (authResult == AdminLoginStatus.PasswordIncorrect) {
-      connect.response
-        ..headers
-            .set('WWW-Authenticate', 'Basic realm="admin", charset="UTF-8"')
-        ..statusCode = 401;
-      return;
-    }
-    if (authResult == AdminLoginStatus.TwoFAIncorrect) {
-      return connect.redirect('/admin/login?error=2fa');
-    }
-
-    if (!Config.totp.verify(post.twofa.replaceAll(' ', ''))) {
-      return connect.redirect('/admin?error=2fa');
-    }
-
+    Config.unsuccessfulAdminLoginsInARow = 0;
     /* LOGGED IN */
+
+    
     switch (post.shutdownType) {
       case "emptyTemplate":
         Config.siteShutdownType = ShutdownTemplate.TemplateEmpty;

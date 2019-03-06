@@ -202,26 +202,6 @@ class Tools {
     return "$days dní";
   }
 
-  static Future<LoginStatus> loginAsStudent(List<Cookie> cookies) async {
-    if (!cookies.any((c) => c.name == "studentID")) {
-      return LoginStatus(false, false, 'not_logged_in', null);
-    }
-    if(!cookies.any((c) => c.name == "encryptionKey")){
-      return LoginStatus(false, true, "not_logged_in", null);
-    }
-
-    try {
-      String guid = cookies.singleWhere((c) => c.name == 'studentID').value;
-      String key = cookies.singleWhere((c) => c.name == 'encryptionKey').value;
-
-      ComplexStudent student = await DB.getStudent(guid, key);
-      return LoginStatus(true, false, '', student);
-    } catch (e) {
-      print(e);
-      return LoginStatus(false, true, 'unknown', null);
-    }
-  }
-
   static Day whichDayShouldIShowInOneDayTimetable(
       Timetable timetable, Timetable nextWeekTimetable) {
     Day selectedDay = null;
@@ -270,48 +250,7 @@ class Tools {
     return null;
   }
 
-  static bool _verify2FAtoken(String twoFAguid) {
-    if (Config.currentTwoFAtokenValid.isBefore(DateTime.now())) {
-      Config.currentTwoFAtoken = null;
-      return false;
-    }
-    if (Config.currentTwoFAtoken == twoFAguid) {
-      return true;
-    }
-    return false;
-  }
 
-  static final Digest _sha256 = Digest("SHA-256");
-  static String hashPassword(String password, String username) {
-    return base64.encode(
-        _sha256.process(utf8.encode(password + username + "dartlangislove")));
-  }
-
-  /// Verify username and password. twoFAguid has to be passed from cookie as proof that 2fa was successful.
-  static AdminLoginStatus _verifyAsAdmin(
-      String username, String password, String twoFAguid) {
-    bool twoFACorrect = _verify2FAtoken(twoFAguid);
-    if (!twoFACorrect) {
-      return AdminLoginStatus.TwoFAIncorrect;
-    } else {
-      if (username == "Petr Šťastný" &&
-          hashPassword(password, username) ==
-              "wtkuDB/iOI3wkla2uvKTNJSdlal14yLZa8I6wfZB5z4=") {
-        return AdminLoginStatus.OK;
-      }
-      return AdminLoginStatus.PasswordIncorrect;
-    }
-  }
-
-  static AdminLoginStatus verifyAsAdmin(
-      String authHeaderValue, String twoFAguid) {
-    var nameColonPassword = authHeaderValue.replaceFirst('Basic ', '');
-    var unbase64ed = utf8.decode(base64.decode(nameColonPassword));
-    var username = unbase64ed.split(':')[0];
-    var password = unbase64ed.split(':')[1];
-
-    return _verifyAsAdmin(username, password, twoFAguid);
-  }
 
   /// Take string, remove diacritics, set to uppercase and return
   static String normalizeString(String str) {
@@ -365,13 +304,3 @@ class Tools {
   }
 }
 
-class LoginStatus {
-  bool success;
-  bool requestLogout;
-  String errorMessage;
-  ComplexStudent result;
-
-  LoginStatus(this.success, this.requestLogout, this.errorMessage, this.result);
-}
-
-enum AdminLoginStatus { OK, TwoFAIncorrect, PasswordIncorrect }
