@@ -7,7 +7,6 @@ import 'package:stream/stream.dart';
 import '../../config.dart';
 import '../../tools/db.dart';
 import '../../tools/securityTools.dart';
-import '../../tools/tools.dart';
 import '../../view/admin/adminLoginView.rsp.dart';
 import '../../view/admin/adminRootView.rsp.dart';
 
@@ -55,7 +54,7 @@ class AdminBaseController {
       return connect.redirect("/admin/login?error=invalid_structure");
     }
 
-    String twoFAToken = Tools.loginAsAdmin2FA(post.twofa);
+    String twoFAToken = SecurityTools.loginAsAdmin2FA(post.twofa);
 
     if (twoFAToken == null) {
       Config.last2FAattempt = now;

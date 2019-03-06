@@ -8,6 +8,7 @@ import '../config.dart';
 import '../model/complexStudent.dart';
 import '../model/message.dart';
 import './tools.dart';
+import 'securityTools.dart';
 
 /// Class that takes care of Database
 class DB {
@@ -59,7 +60,7 @@ class DB {
   /// it's value in database will be updated.
   static Future<String> saveStudentInfo(
       ComplexStudent student, String key) async {
-    String encryptedContent = Tools.encryptStudentData(
+    String encryptedContent = SecurityTools.encryptStudentData(
         Tools.fromMapToStringyJson(student.toJson()), key);
     return await _students.put({
       'student': encryptedContent,
@@ -73,11 +74,11 @@ class DB {
       var studentsStore = txn.getStore('students');
       var encryptedStudent =
           (await studentsStore.getRecord(guid)).value['student'];
-      var decryptedStudent = Tools.decryptStudentData(encryptedStudent, key);
+      var decryptedStudent = SecurityTools.decryptStudentData(encryptedStudent, key);
       var student =
           ComplexStudent.fromJson(Tools.fromStringyJsonToMap(decryptedStudent));
       student = updateStudent(student);
-      String encryptedContent = Tools.encryptStudentData(
+      String encryptedContent = SecurityTools.encryptStudentData(
           Tools.fromMapToStringyJson(student.toJson()), key);
       await studentsStore.put({'student': encryptedContent}, guid);
     });
@@ -86,7 +87,7 @@ class DB {
   static Future<ComplexStudent> getStudent(String guid, String key) async {
     var record = await _students.findRecord(Finder(filter: Filter.byKey(guid)));
     var value = record.value['student'];
-    var decryptedStudent = Tools.decryptStudentData(value, key);
+    var decryptedStudent = SecurityTools.decryptStudentData(value, key);
     return ComplexStudent.fromJson(
         Tools.fromStringyJsonToMap(decryptedStudent));
   }

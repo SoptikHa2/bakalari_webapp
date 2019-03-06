@@ -1,14 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
+import 'package:encrypt/encrypt.dart';
 import 'package:pointycastle/api.dart';
 import 'package:stream/stream.dart';
+import 'package:uuid/uuid.dart';
 
 import '../config.dart';
 import '../model/complexStudent.dart';
 import 'db.dart';
 
 class SecurityTools {
+  /* ############################################ */
+  /* #                                          # */
+  /* #                 L O G I N                # */
+  /* #                                          # */
+  /* ############################################ */
+
   static AdminLoginStatus verifyAsAdmin(HttpConnect connect) {
     /* LOGIN */
 
@@ -73,6 +82,73 @@ class SecurityTools {
     }
   }
 
+  /// Verify 2FA. If correct, return guid that can be used as proof that 2fa was successful.
+  static String loginAsAdmin2FA(String twoFA) {
+    if (Config.totp.verify(twoFA.replaceAll(' ', ''))) {
+      String guid = Uuid().v4();
+      Config.currentTwoFAtoken = guid;
+      DateTime selectedDateTime = DateTime.now();
+      selectedDateTime =
+          selectedDateTime.add(Duration(minutes: Config.twoFAMinutesDuration));
+      Config.currentTwoFAtokenValid = selectedDateTime;
+      return guid;
+    }
+    return null;
+  }
+
+  /* ############################################ */
+  /* #                                          # */
+  /* #              E N C R Y P T               # */
+  /* #                                          # */
+  /* ############################################ */
+
+  static String encryptStudentData(String data, String key) {
+    // Truncate key to 32 characters
+    if (key.length < 32) {
+      throw new ArgumentError(
+          "Error: encryptStudentData: Key needs to be at least 32 characters long. Key was ${key.length} characters long.");
+    }
+    key = key.substring(0, 32);
+
+    final encKey = Key.fromUtf8(key);
+    final iv = IV.fromLength(16);
+
+    final encrypter = Encrypter(AES(encKey, iv));
+
+    return encrypter.encrypt(data).base64;
+  }
+
+  static String decryptStudentData(String data, String key) {
+    final encKey = Key.fromUtf8(key);
+    final iv = IV.fromLength(16);
+
+    final encrypter = Encrypter(AES(encKey, iv));
+
+    return encrypter.decrypt(Encrypted.fromBase64(data));
+  }
+
+  static String generateEncryptionKey([int length = 32]) {
+    String key = "";
+    var rand = Random.secure();
+    for (var i = 0; i < length; i++) {
+      var secureInteger = rand.nextInt(50);
+      if (secureInteger < 25) {
+        key += String.fromCharCode(secureInteger + 97);
+      } else {
+        key += String.fromCharCode((secureInteger % 25) + 65);
+      }
+    }
+    return key;
+  }
+
+
+
+  /* ############################################ */
+  /* #                                          # */
+  /* #              HELPER METHODS              # */
+  /* #                                          # */
+  /* ############################################ */
+
   static bool _verify2FAtoken(String twoFAguid) {
     if (Config.currentTwoFAtokenValid.isBefore(DateTime.now())) {
       Config.currentTwoFAtoken = null;
@@ -85,7 +161,7 @@ class SecurityTools {
   }
 
   static final Digest _sha256 = Digest("SHA-256");
-  static String hashPassword(String password, String username) {
+  static String _hashPassword(String password, String username) {
     return base64.encode(
         _sha256.process(utf8.encode(password + username + "dartlangislove")));
   }
@@ -98,7 +174,7 @@ class SecurityTools {
       return AdminLoginStatus.TwoFAIncorrect;
     } else {
       if (username == "Petr Šťastný" &&
-          hashPassword(password, username) ==
+          _hashPassword(password, username) ==
               "wtkuDB/iOI3wkla2uvKTNJSdlal14yLZa8I6wfZB5z4=") {
         Config.unsuccessfulAdminLoginsInARow = 0;
         return AdminLoginStatus.OK;

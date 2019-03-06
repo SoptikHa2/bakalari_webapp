@@ -31,7 +31,7 @@ class StudentBaseController {
       bakaweb = new Bakalari(post.bakawebUrl);
       await bakaweb.logIn(post.login, post.password);
       // refresh info, write it into DB and add access token into cookies
-      String encryptionKey = Tools.generateEncryptionKey();
+      String encryptionKey = SecurityTools.generateEncryptionKey();
       var guid = await DB.saveStudentInfo(
           ComplexStudent.create(bakaweb.student, bakaweb.school),
           encryptionKey);
