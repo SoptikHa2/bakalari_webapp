@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 
 import '../config.dart';
 import '../model/complexStudent.dart';
+import '../secret.dart';
 import 'db.dart';
 
 class SecurityTools {
@@ -151,8 +152,8 @@ class SecurityTools {
 
   static String obfuscateIpAddress(String ipAddress) {
     if (ipAddress == null) return '[unknown]';
-    return base64.encode(_sha256
-        .process(_sha256.process(utf8.encode('ipAddressIs' + ipAddress))));
+    return base64
+        .encode((_sha256.process(utf8.encode(Secret.ipAddressSalt + ipAddress))));
   }
 
   /* ############################################ */
@@ -175,7 +176,7 @@ class SecurityTools {
   static final Digest _sha256 = Digest("SHA-256");
   static String _hashPassword(String password, String username) {
     return base64.encode(
-        _sha256.process(utf8.encode(password + username + "dartlangislove")));
+        _sha256.process(utf8.encode(password + username + Secret.sha256salt)));
   }
 
   /// Verify username and password. twoFAguid has to be passed from cookie as proof that 2fa was successful.
@@ -185,9 +186,7 @@ class SecurityTools {
     if (!twoFACorrect) {
       return AdminLoginStatus.TwoFAIncorrect;
     } else {
-      if (username == "Petr Šťastný" &&
-          _hashPassword(password, username) ==
-              "wtkuDB/iOI3wkla2uvKTNJSdlal14yLZa8I6wfZB5z4=") {
+      if (_hashPassword(password, username) == Secret.adminHash) {
         Config.unsuccessfulAdminLoginsInARow = 0;
         return AdminLoginStatus.OK;
       }

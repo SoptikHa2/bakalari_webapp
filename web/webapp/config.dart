@@ -21,6 +21,7 @@ import 'controller/admin/admin.dart';
 import 'tools/listOfSchools.dart';
 import 'view/general/privacyPolicyView.rsp.dart';
 import 'view/general/restApi.rsp.dart';
+import 'secret.dart';
 
 import 'package:dotp/dotp.dart';
 
@@ -32,7 +33,6 @@ class Config {
     "get:/logout": GeneralLogoutController.logoutUser,
     "get:/lubos": GeneralLubosController.showLubosCites,
     "get:/tor": GeneralTorController.showTorLandingPage,
-    
     "post:/student": StudentBaseController.login,
     "get:/student": StudentBaseController.getInfo,
     "get:/student/subject": StudentSubjectController.getList,
@@ -40,11 +40,9 @@ class Config {
         StudentSubjectController.getSubject,
     "get:/student/timetable": StudentTimetableController.displayTimetables,
     "get:/student/refresh": StudentRefreshInfoController.refresh,
-
     "get:/schoolList.csv": SchoolListController.returnSchoolListInCsvByQuery,
     "get:/contact": GeneralContactController.getContactPage,
     "post:/contact": GeneralContactController.postContactPage,
-    
     "get:/admin": AdminBaseController.adminRootPage,
     "get:/admin/login": AdminBaseController.loginForm,
     "get:/admin/logout": GeneralLogoutController.logoutAdmin,
@@ -60,10 +58,8 @@ class Config {
         AdminMessagesController.setAsCompleted,
     "get:/shutdown": GeneralShutdownController.showShutdown,
     "/.+/": GeneralBaseController.redirectToNoLeadingSlash,
-    "/admin/purgeOldData/security/in/obscurity/5432058437104547123501":
-        GeneralBaseController.purgeOldData,
-    "/admin/updateListOfSchools/security/in/obscurity/1238942358947290524":
-        ListOfSchools.updateListOfSchools,
+    Secret.purgeConfigUrl: GeneralBaseController.purgeOldData,
+    Secret.updateSchoolUrl: ListOfSchools.updateListOfSchools,
   };
   static final filterRouting = {
     "/.*": Filter.process,
@@ -83,7 +79,7 @@ class Config {
   static const int unsuccessfulLoginThreshold = 5;
   static final String dbFileLocation =
       join(dirname(Platform.script.toFilePath()), "main.db");
-  static final TOTP totp = TOTP("NEOFBAKALARIADMIN");
+  static final TOTP totp = TOTP(Secret.twoFaKey);
 
   static String currentTwoFAtoken = null;
   static DateTime currentTwoFAtokenValid = DateTime.now();
