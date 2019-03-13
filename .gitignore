@@ -10,5 +10,8 @@ pubspec.lock
 # Directory created by dartdoc
 doc/api/
 
-# I don't want to upload database to git
+# I don't want to save database in git
 *.db
+
+# Secret things (like hashes and 2FA keys)
+secret.dart
