@@ -3,6 +3,9 @@ import 'package:stream/stream.dart';
 import 'db.dart';
 
 class ListOfSchools {
+  /// Load list of cities from Bakalari, and for each city,
+  /// get list of school. When it's done, save everything in
+  /// database.
   static void updateListOfSchools(HttpConnect connect) async {
     var cities = await Bakalari.getListOfCities();
     var schoolsAndUrls = Map<String, String>();
