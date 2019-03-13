@@ -10,7 +10,7 @@
   </noscript>
   <h1>[= subject.subjectLong ]</h1>
   <a href="/student">Zpět</a>
-  <p>[= subject.teacherName] ([= subject.teacherEmail])</p>
+  <p>[= subject.teacherName] <a href="mailto:[= subject.teacherEmail]">[= subject.teacherEmail]</a></p>
   [:if grades != null]
   <h2>Průměr: [= prumer]</h2>
   <div class="smallscreen-div-y-scrollable">
