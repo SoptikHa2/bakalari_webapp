@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'package:bakalari/definitions.dart';
 
 class Tools {
+
+  // Take grades, list of subjects, and generate
+  // list of SubjectName:SubjectAverage. (average grade for each subject)
   static LinkedHashMap<String, double> gradesToSubjectAverages(
       List<Grade> grades, List<Subject> listOfSubjects) {
     // Custom groupby
@@ -41,6 +44,7 @@ class Tools {
     return result / list.length;
   }
 
+  /// Convert map to json
   static String fromMapToStringyJson(Map<String, dynamic> json) {
     /*if (json == null) return 'null';
     String result = "{";
@@ -70,6 +74,7 @@ class Tools {
     return JsonEncoder().convert(json);
   }
 
+  /// Convert list to json
   static String fromListToStringyJson(List<dynamic> json) {
     if (json == null) return 'null';
     String result = "[";
@@ -96,10 +101,13 @@ class Tools {
     return result + "]";
   }
 
+  /// Convert json to map
   static Map<String, dynamic> fromStringyJsonToMap(String json) {
     return JsonDecoder().convert(json) as Map<String, dynamic>;
   }
 
+  /// From a list of items T, and score function that takes an item T and returns score as double,
+  /// find item T with maximum score.
   static T maxWhere<T>(Iterable<T> list, double score(T source)) {
     T value = null;
     double currentScore = double.negativeInfinity;
@@ -113,6 +121,7 @@ class Tools {
     return value;
   }
 
+  /// Some values are not permitted in cookies. Encode them.
   static Map<String, String> _cookieValueEncoding = {
     ",": "AAAAAAACARKAAAAAAAA",
     ".": "AAAAAAATECKAAAAAAAA",
@@ -158,6 +167,7 @@ class Tools {
     "Ö": "AAAAAAAOPVAAAAAAA",
     "Ü": "AAAAAAAUPVAAAAAAA"
   };
+  /// Encode forbidden characters in cookies
   static String encodeCookieValue(String value) {
     String encoded = value;
     for (var key in _cookieValueEncoding.keys) {
@@ -168,6 +178,7 @@ class Tools {
     return encoded;
   }
 
+  /// Decode cookie to recover forbidden characters
   static String decodeCookieValue(String value) {
     String encoded = value;
     for (var key in _cookieValueEncoding.keys) {
@@ -178,6 +189,7 @@ class Tools {
     return encoded;
   }
 
+  /// Get string representation in czech of N hours
   static String hoursToStringWithUnit(int hours) {
     if (hours == 0) return "$hours hodin";
     if (hours == 1) return "$hours hodina";
@@ -186,6 +198,7 @@ class Tools {
     return "$hours hodin";
   }
 
+  /// Get string representation in czech of N days
   static String daysToStringWithUnit(int days) {
     if (days == 0) return "$days dní";
     if (days == 1) return "$days den";
@@ -194,6 +207,11 @@ class Tools {
     return "$days dní";
   }
 
+  /// At main page, there is only one day showed.
+  /// Here, we decide which one is it.
+  /// 
+  /// If there are still some lessons today, show today.
+  /// Else, show next working day.
   static Day whichDayShouldIShowInOneDayTimetable(
       Timetable timetable, Timetable nextWeekTimetable) {
     Day selectedDay = null;
