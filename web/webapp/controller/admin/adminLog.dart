@@ -8,6 +8,7 @@ import '../../tools/securityTools.dart';
 import '../../view/admin/adminLogView.rsp.dart';
 
 class AdminLogController {
+  /// Show page with logs and visualisation
   static Future showLogPage(HttpConnect connect) async {
     /* LOGIN */
     var loginResult = SecurityTools.verifyAsAdmin(connect);
