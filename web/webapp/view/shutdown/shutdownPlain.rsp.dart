@@ -19,7 +19,7 @@ Future shutdownPlainView(HttpConnect connect, {reason}) async {
     <p>
         """);
 
-  response.write(Rsp.nnx(reason));
+  response.write(Rsp.nnx(reason, encode: 'none'));
 
 
   response.write("""

@@ -16,10 +16,11 @@ Future shutdown451View(HttpConnect connect, {reason}) async {
 
   response.write("""<div class="content">
     <h1>Unavailable For Legal Reasons</h1>
-    <a href="https://en.wikipedia.org/wiki/HTTP_451"><img src="/other/fahrenheit-451-burning-books.jpg" title="Source: teemingbrain.com" /></a>
+    <a href="https://en.wikipedia.org/wiki/HTTP_451"><img src="/other/fahrenheit-451-burning-books.jpg"
+            title="Source: teemingbrain.com" /></a>
     <p>""");
 
-  response.write(Rsp.nnx(reason));
+  response.write(Rsp.nnx(reason, encode: 'none'));
 
 
   response.write("""</p>
