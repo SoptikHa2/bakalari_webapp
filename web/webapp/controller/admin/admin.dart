@@ -22,6 +22,7 @@ class AdminBaseController {
         "Zkusili jste se několikrát neúspěšně přihlásit. Počkejte než bude vygenerován nový kód a zkuste to znovu."
   };
 
+  /// Show login form (with error, as described in [_errors])
   static Future loginForm(HttpConnect connect) async {
     String errorMessage = null;
     if (connect.request.uri.queryParameters.containsKey('error')) {
@@ -32,7 +33,9 @@ class AdminBaseController {
     return adminLoginView(connect, error: errorMessage);
   }
 
-  // Post
+  /// User POSTed 2fa code. Verify it, and either rate-limit user, or
+  /// mark that user passed 2fa test and send him to /admin, where he will
+  /// be asked for password.
   static Future verify2FA(HttpConnect connect) async {
     // Check ratelimit
     var now = DateTime.now();
@@ -68,6 +71,8 @@ class AdminBaseController {
     return await adminRootPage(connect);
   }
 
+  /// Show main admin page. If user is not logged in,
+  /// show him login form.
   static Future adminRootPage(HttpConnect connect) async {
     /* LOGIN */
     var loginResult = SecurityTools.verifyAsAdmin(connect);
@@ -110,7 +115,7 @@ class AdminBaseController {
         numberOfImprotantMessages: countOfImprotantMessages);
   }
 
-  // Post
+  // Verify 2fa and shutdown website, if user succeeds.
   static Future shutdownWebsite(HttpConnect connect) async {
     // Decode
     var postParameters = await HttpUtil.decodePostedParameters(connect.request);

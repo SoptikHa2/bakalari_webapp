@@ -28,6 +28,7 @@ class DB {
     _logAccess = _db.getStore('logAccess'); // Anonymised access logs
   }
 
+  /// Get messages sent to admin in JSON format
   static Future<String> getMessagesInJson() async {
     var file = File(Config.dbFileLocation);
     var lines = await file.readAsLines().then((List<String> lines) =>
@@ -41,6 +42,7 @@ class DB {
     return result + ']';
   }
 
+  /// Get log of all student login actions in JSON format
   static Future<String> getStudentLoginLogsInJson() async {
     var file = File(Config.dbFileLocation);
     var lines = await file.readAsLines().then((List<String> lines) =>
@@ -70,6 +72,8 @@ class DB {
     }, student.guid);
   }
 
+  /// Update student info in DB. This is probably called when new
+  /// information from school arvies.
   static Future updateStudentInfo(String guid,
       ComplexStudent updateStudent(ComplexStudent student), String key) async {
     await _db.transaction((txn) async {
@@ -87,6 +91,7 @@ class DB {
     });
   }
 
+  /// Get student with [guid] and decrypt data with [key].
   static Future<ComplexStudent> getStudent(String guid, String key) async {
     var record = await _students.findRecord(Finder(filter: Filter.byKey(guid)));
     var value = record.value['student'];
@@ -95,6 +100,8 @@ class DB {
         Tools.fromStringyJsonToMap(decryptedStudent));
   }
 
+  /// Log access to any page, except for static sources like .png, .jpg, ...
+  /// Log timestamp and obfuscated (hashed) IP address (so I can detect count of unique visitors).
   static Future<void> logAccess(HttpRequest request) async {
     await _logAccess.put({
       'IP':
@@ -103,6 +110,7 @@ class DB {
     });
   }
 
+  /// Log this when student logs in. Log student's class, school, and timestamp.
   static Future<void> logLogin(Student student, School school) async {
     await _logStudent.put({
       'studentClass': student.schoolClass,
@@ -167,6 +175,10 @@ class DB {
     return result;
   }
 
+  /// Purge old data.
+  /// 
+  /// For example students data (the encrypted ones) are
+  /// removed by default after 7 days. 
   static Future<void> purgeSavedData() async {
     // Purge student data
     await _db.transaction((txn) async {
@@ -182,28 +194,39 @@ class DB {
     });
   }
 
+  /// Get all messages to admin
   static Future<Iterable<Message>> getAllMessages() async {
     var messages = (await _messages.findRecords(Finder()))
         .map((r) => Message.fromJson(r.value['message']));
     return messages;
   }
 
+  /// Get one message to admin by ID
   static Future<Message> getOneMessage(String guid) async {
     return Message.fromJson(
         (await _messages.findRecord(Finder(filter: Filter.byKey(guid))))
             .value['message']);
   }
 
+  /// Send message to admin
   static Future saveMessage(Message message) async {
     await _messages.put({'message': message.toJson()}, message.guid);
   }
 
+  /// Mark message sent to admin as done, therefore disappearing from the main list
+  /// (it can still be viewed in an archive)
   static Future markMessageAsDone(String guid) async {
     var message = await getOneMessage(guid);
     message.isClosed = true;
     await _messages.update({'message': message.toJson()}, guid);
   }
 
+  /// Update school info DB.
+  /// 
+  /// The school info DB contains school name, and each name
+  /// has one URL. This is downloaded from bakalari API
+  /// and is used to provide friendly way to log in.
+  /// User doesn't need to provide the URL, just the school name.
   static Future updateSchoolInfoDB(
       Map<String, String> schoolNamesAndUrls) async {
     await _schools.clear();
@@ -214,7 +237,9 @@ class DB {
     }
   }
 
-  /// Takes list of words to match, normalizes it, and searches for schools from list
+  /// Takes list of words to match, normalizes it, and searches for schools from list.
+  /// 
+  /// Normalization converts string to uppercase and strips diacritics.
   static Future<Iterable<String>> getSchoolInfoFromQuery(
       List<String> wordsToMatch) async {
     var allRecords = _schools.findRecords(Finder());

@@ -12,6 +12,8 @@ class GeneralRootController {
         "Přihlaste se a zkuste to znovu."
   };
 
+  /// Show main page. If user is logged in as student,
+  /// forward him to /student.
   static Future root(HttpConnect connect) async {
     if (connect.request.cookies.any((c) => c.name == "studentID")) {
       return connect.redirect('student');

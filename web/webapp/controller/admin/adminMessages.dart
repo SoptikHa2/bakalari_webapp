@@ -9,6 +9,7 @@ import '../../view/admin/adminMessageListView.rsp.dart';
 import '../../view/admin/adminMessageView.rsp.dart';
 
 class AdminMessagesController {
+  /// Get full list of messages and show them.
   static Future getFullMessageList(HttpConnect connect) async {
     /* LOGIN */
     var loginResult = SecurityTools.verifyAsAdmin(connect);
@@ -49,6 +50,7 @@ class AdminMessagesController {
         messages: messages);
   }
 
+  /// Get only messages that are not set as closed.
   static Future getMessageList(HttpConnect connect) async {
     /* LOGIN */
     var loginResult = SecurityTools.verifyAsAdmin(connect);
@@ -89,6 +91,7 @@ class AdminMessagesController {
         messages: messages);
   }
 
+  /// Show detailed view of one message.
   static Future getOneMessage(HttpConnect connect) async {
     /* LOGIN */
     var loginResult = SecurityTools.verifyAsAdmin(connect);
@@ -131,6 +134,7 @@ class AdminMessagesController {
     }
   }
 
+  /// Close message (or set as completed)
   static Future setAsCompleted(HttpConnect connect) async {
     /* LOGIN */
     var loginResult = SecurityTools.verifyAsAdmin(connect);
