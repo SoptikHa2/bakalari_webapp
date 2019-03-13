@@ -19,18 +19,21 @@ class SecurityTools {
   /* #                                          # */
   /* ############################################ */
 
+  /// User tried to login as admin. Verify everything
+  /// and return result as AdminLoginStatus enum.
   static AdminLoginStatus verifyAsAdmin(HttpConnect connect) {
-    /* LOGIN */
-
     // Check if there weren't five invalid logins in a row
     if (Config.unsuccessfulAdminLoginsInARow >=
         Config.unsuccessfulLoginThreshold) {
+      // Set invalid logins to 0, reset 2fa token, and return
+      // rate limit error.
       Config.currentTwoFAtoken = null;
       Config.last2FAattempt = DateTime.now();
       Config.unsuccessfulAdminLoginsInARow = 0;
       return AdminLoginStatus.Ratelimit;
     }
 
+    // Load 2fa token. If this doesn't succeed, the request is invalid.
     String twoFAtoken = null;
     try {
       if (connect.request.cookies.any((c) => c.name == "twoFAtoken")) {
@@ -49,10 +52,13 @@ class SecurityTools {
       return AdminLoginStatus.InvalidRequest;
     }
 
+    // Check if user provided authorization. If not, request it.
     if (connect.request.headers.value('Authorization') == null) {
       return AdminLoginStatus.NoAuthGiven;
     }
 
+    // Load username, password, and further verify it.
+    // If loading fails, the request is invalid.
     String username = '';
     String password = '';
     try{
@@ -66,9 +72,12 @@ class SecurityTools {
       return AdminLoginStatus.InvalidRequest;
     }
 
+    // Call helper method that verifies everything. So far we just
+    // loaded data from headers/cookies.
     return _verifyAsAdmin(username, password, twoFAtoken);
   }
 
+  /// Try to login as student
   static Future<LoginStatus> loginAsStudent(List<Cookie> cookies) async {
     if (!cookies.any((c) => c.name == "studentID")) {
       return LoginStatus(false, false, 'not_logged_in', null);
