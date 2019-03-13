@@ -53,12 +53,18 @@ class SecurityTools {
       return AdminLoginStatus.NoAuthGiven;
     }
 
+    String username = '';
+    String password = '';
+    try{
     var nameColonPassword = connect.request.headers
         .value('Authorization')
         .replaceFirst('Basic ', '');
     var unbase64ed = utf8.decode(base64.decode(nameColonPassword));
-    var username = unbase64ed.split(':')[0];
-    var password = unbase64ed.split(':')[1];
+    username = unbase64ed.split(':')[0];
+    password = unbase64ed.split(':')[1];
+    }catch(e){
+      return AdminLoginStatus.InvalidRequest;
+    }
 
     return _verifyAsAdmin(username, password, twoFAtoken);
   }
