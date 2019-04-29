@@ -24,7 +24,7 @@ Poté spusťte soubor `generate-secret-file.dart` a plňte instrukce, které bud
 $ dart generate-secret-file.dart > web/webapp/secret.dart
 ```
 
-Poté stačí spustit soubor `web/webapp/secret.main.dart` a server se spustí na portu `8080`.
+Poté stačí spustit soubor `web/webapp/main.dart` a server se spustí na portu `8080`.
 
 ## Jak to funguje uvnitř
 
