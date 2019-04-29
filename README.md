@@ -45,3 +45,5 @@ Ve složce model jsou jednotlivé objekty, se kterými webová aplikace pracuje,
 Administrátor může dočasně vypnout server. Po přihlášení je v dolní části stránky formulář. Po vyplnění důvodu, který bude zobrazen všem uživatelům a znovu zadáním dvoufaktorového kódu budou všechny žádosti (včetně těch na administrátorský panel) přesměrovány na chybovou stránku. Momentálně jsou dvě, jedna prázdná (pouze s textem od administrátora) a druhá s předpřiveným obrázkem v případě nutnosti použít status [451](https://en.wikipedia.org/wiki/HTTP_451).
 
 Administrátor může na těchto stránkách používat libovolné HTML.
+
+Tato změna bude trvat až do manuálního restartu serveru. Může být učiněna permanentním, ale je nutné v souboru `config.dart` změnit několik hodnot (konkrétně `siteShutdownType` a `siteShutdownReason`).
