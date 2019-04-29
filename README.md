@@ -2,7 +2,7 @@
 
 Toto je kompletní kód webové aplikace. Tato webová aplikace slouží jako alternativní metoda přístupu k systému Bakaláři. Umí zobrazovat váhy předmětů, počítat průměr, zobrazovat denní rozvrh, a dokonce funguje i offline.
 
-Tato webová aplikace je momentálně dostupná na [bakaweb.ga](https://bakaweb.ga/). Certifikát prozatím není validní, vše hostuji domu a používám sebou podepsaný certifikát.
+Tato webová aplikace je momentálně dostupná na [bakaweb.ga](https://bakaweb.ga/). Certifikát prozatím není validní, vše hostuji doma a používám sebou podepsaný certifikát.
 
 Tato webová aplikace používá knihovnu kterou jsem napsal: [soptikha2/bakalari](https://github.com/soptikha2/bakalari).
 
