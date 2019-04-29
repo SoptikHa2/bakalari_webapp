@@ -50,7 +50,7 @@ class StudentSubjectController {
       }
     }
     if (!student.subjects.any((s) => s.subjectLong == identifier)) {
-      throw new Http404(uri: connect.request.uri);
+      throw new Http404();
     }
 
     Map<String, double> averages = null;
