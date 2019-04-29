@@ -46,4 +46,4 @@ Administrátor může dočasně vypnout server. Po přihlášení je v dolní č
 
 Administrátor může na těchto stránkách používat libovolné HTML.
 
-Tato změna bude trvat až do manuálního restartu serveru. Může být učiněna permanentním, ale je nutné v souboru `config.dart` změnit několik hodnot (konkrétně `siteShutdownType` a `siteShutdownReason`).
+Tato změna bude trvat až do manuálního restartu serveru. Může být učiněna permanentní, ale je nutné v souboru `config.dart` změnit několik hodnot (konkrétně `siteShutdownType` a `siteShutdownReason`).
