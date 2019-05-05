@@ -52,6 +52,11 @@ class SecurityTools {
       return AdminLoginStatus.InvalidRequest;
     }
 
+    // Check if user provided valid 2fa token
+    if (twoFAtoken != Config.currentTwoFAtoken) {
+      return AdminLoginStatus.TwoFAIncorrect;
+    }
+
     // Check if user provided authorization. If not, request it.
     if (connect.request.headers.value('Authorization') == null) {
       return AdminLoginStatus.NoAuthGiven;
