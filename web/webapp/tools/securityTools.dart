@@ -128,7 +128,7 @@ class SecurityTools {
       if (Config.totp.verify(twofa, verifyTime)) {
         return true;
       } else {
-        verifyTime.add(Duration(seconds: 30));
+        verifyTime = verifyTime.add(Duration(seconds: 30));
       }
     }
 

@@ -32,7 +32,6 @@ newMessagesString = '<span style="color: black">($numberOfNormalMessages | <span
 
 
   response.write("""</a></li>
-        <li><a href="/admin/logout">Logout (!)</a></li>
     </ul>
     <h2>Pozastavení stránky</h2>
     <p>
