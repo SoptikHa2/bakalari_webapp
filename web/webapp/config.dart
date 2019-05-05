@@ -67,13 +67,32 @@ class Config {
     "500": "/html/500.html"
   };
 
+  /// When user starts typing school name, some schools with
+  /// simmilar name will be displayed to user. This controls
+  /// how many of them will be displayed.
   static const int numberOfSchoolsInListSearch = 5;
+  /// How long wait until refresh button on main page is shown.
+  /// If user was last logged in more than X hours, there will
+  /// be big annoying button telling him to refresh.
+  /// TOOD: Automate this, we might save password hash in localstorage
   static const int hoursUntilRefreshButtonIsShown = 8;
+  /// User will be logged out after X days
   static const int daysHowLongIsSessionCookieStored = 7;
-  static const int daysHowLongIsRawLoginLogStored = 3;
+  /// How long will be username stored after last login, so user
+  /// doesn't have to input it again and again
   static const int daysHowLongIsClassIdentifierCookieStored = 365;
-  static const int twoFAMinutesDuration = 10;
+  /// How long can be admin logged in without being asked for another
+  /// 2fa authorization..
+  static const int twoFAMinutesDuration = 30;
+  /// How many unsuccessful logins can user make without being forced
+  /// to try verify 2fa.
   static const int unsuccessfulLoginThreshold = 5;
+  /// Time segment tolerance for 2fa. Due to time skew, it might
+  /// be difficult to verify 2fa, especially since one can only try
+  /// once per time interval. If this is set to higher than 0,
+  /// it will allow +-[interval] to verify as well. So this
+  /// makes the auth window larger by x*60s.
+  static const int twoFATimeSegmentTolerance = 1;
   static final String dbFileLocation =
       join(dirname(Platform.script.toFilePath()), "main.db");
   static final TOTP totp = TOTP(Secret.twoFaKey);

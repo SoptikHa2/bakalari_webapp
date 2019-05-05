@@ -66,14 +66,14 @@ class SecurityTools {
     // If loading fails, the request is invalid.
     String username = '';
     String password = '';
-    try{
-    var nameColonPassword = connect.request.headers
-        .value('Authorization')
-        .replaceFirst('Basic ', '');
-    var unbase64ed = utf8.decode(base64.decode(nameColonPassword));
-    username = unbase64ed.split(':')[0];
-    password = unbase64ed.split(':')[1];
-    }catch(e){
+    try {
+      var nameColonPassword = connect.request.headers
+          .value('Authorization')
+          .replaceFirst('Basic ', '');
+      var unbase64ed = utf8.decode(base64.decode(nameColonPassword));
+      username = unbase64ed.split(':')[0];
+      password = unbase64ed.split(':')[1];
+    } catch (e) {
       return AdminLoginStatus.InvalidRequest;
     }
 
@@ -105,7 +105,7 @@ class SecurityTools {
 
   /// Verify 2FA. If correct, return guid that can be used as proof that 2fa was successful.
   static String loginAsAdmin2FA(String twoFA) {
-    if (Config.totp.verify(twoFA.replaceAll(' ', ''))) {
+    if (_verify2fa(twoFA.replaceAll(' ', ''))) {
       String guid = Uuid().v4();
       Config.currentTwoFAtoken = guid;
       DateTime selectedDateTime = DateTime.now();
@@ -117,10 +117,28 @@ class SecurityTools {
     return null;
   }
 
+  static bool _verify2fa(String twofa) {
+    DateTime verifyTime = DateTime.now()
+        .subtract(Duration(seconds: 30 * Config.twoFATimeSegmentTolerance));
+    DateTime maxTime = DateTime.now()
+        .add(Duration(seconds: 30 * Config.twoFATimeSegmentTolerance));
+
+    while (
+        verifyTime.isBefore(maxTime) || verifyTime.isAtSameMomentAs(maxTime)) {
+      if (Config.totp.verify(twofa, verifyTime)) {
+        return true;
+      } else {
+        verifyTime.add(Duration(seconds: 30));
+      }
+    }
+
+    return false;
+  }
+
   /// Verify 2FA. This does NOT overwrite old 2FA. If you want to generate new 2FA key,
   /// use `loginAsAdmin2FA`.
   static bool verifyAdmin2FA(String twoFA) {
-    return Config.totp.verify(twoFA.replaceAll(' ', ''));
+    return _verify2fa(twoFA.replaceAll(' ', ''));
   }
 
   /* ############################################ */
@@ -172,8 +190,8 @@ class SecurityTools {
 
   static String obfuscateIpAddress(String ipAddress) {
     if (ipAddress == null) return '[unknown]';
-    return base64
-        .encode((_sha256.process(utf8.encode(Secret.ipAddressSalt + ipAddress))));
+    return base64.encode(
+        (_sha256.process(utf8.encode(Secret.ipAddressSalt + ipAddress))));
   }
 
   /* ############################################ */
