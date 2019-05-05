@@ -5,8 +5,8 @@ import 'package:stream/stream.dart';
 import '../../config.dart';
 import '../../tools/db.dart';
 import '../../tools/securityTools.dart';
-import '../../view/admin/adminMessageListView.rsp.dart';
-import '../../view/admin/adminMessageView.rsp.dart';
+import '../../view/admin/messageListView.rsp.dart';
+import '../../view/admin/messageView.rsp.dart';
 
 class AdminMessagesController {
   /// Get full list of messages and show them.
@@ -44,7 +44,7 @@ class AdminMessagesController {
 
 
     var messages = await DB.getAllMessages();
-    await adminMessageListView(connect,
+    await messageListView(connect,
         countOfNew: messages.where((m) => !m.isImportant).length,
         countOfImportant: messages.where((m) => m.isImportant).length,
         messages: messages);
@@ -85,7 +85,7 @@ class AdminMessagesController {
 
     
     var messages = (await DB.getAllMessages()).where((m) => !m.isClosed);
-    await adminMessageListView(connect,
+    await messageListView(connect,
         countOfNew: messages.where((m) => !m.isImportant).length,
         countOfImportant: messages.where((m) => m.isImportant).length,
         messages: messages);
@@ -128,7 +128,7 @@ class AdminMessagesController {
     try {
       String identifier = Uri.decodeComponent(connect.dataset['guid']);
       var message = await DB.getOneMessage(identifier);
-      await adminMessageView(connect, message: message);
+      await messageView(connect, message: message);
     } catch (e) {
       connect.redirect('/admin/message');
     }

@@ -1,4 +1,4 @@
-[:page name="adminMessageListView" args="int countOfNew, int countOfImportant, Iterable<dynamic> messages"]
+[:page name="messageListView" args="int countOfNew, int countOfImportant, Iterable<dynamic> messages"]
     [:include "/webapp/view/templates/adminHead.html" /]
     <div class="content">
         <h1>Messages</h1>
@@ -6,7 +6,7 @@
         <p style="color: red">Important messages: [= countOfImportant]</p>
         [/if]
         [:if countOfNew != 0]
-        <p>New messages: [= countOfNew]</p>
+        <p>Messages: [= countOfNew]</p>
         [/if]
         <p>
             <a href="/admin/message">Show only new messages</a> <br />

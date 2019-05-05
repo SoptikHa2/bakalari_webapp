@@ -35,12 +35,17 @@ Future subjectDetailsView(HttpConnect connect, {dynamic subject, dynamic grades,
   response.write(Rsp.nnx(subject.teacherName));
 
 
-  response.write(""" (""");
+  response.write(""" <a href="mailto:""");
 
   response.write(Rsp.nnx(subject.teacherEmail));
 
 
-  response.write(""")</p>
+  response.write("""">""");
+
+  response.write(Rsp.nnx(subject.teacherEmail));
+
+
+  response.write("""</a></p>
 """);
 
   if (grades != null) {
