@@ -99,7 +99,7 @@ Future messageListView(HttpConnect connect, {int countOfNew, int countOfImportan
 
       response.write(""" """);
 
-      response.write(Rsp.nnx(message.text.substring(0, 120).getMarkdownInHtml(), encode: 'none'));
+      response.write(Rsp.nnx(message.text.substring(0, 120), encode: 'none'));
 
 
       response.write(""" ... """);

@@ -30,7 +30,7 @@
                 </tr>
             </table>
             <p>
-                [:if message.text.length <= 120] [=message.getMarkdownInHtml(), encode: 'none'] [:else] [=message.text.substring(0, 120).getMarkdownInHtml(), encode: 'none'] ... [/if] </p>
+                [:if message.text.length <= 120] [=message.getMarkdownInHtml(), encode: 'none'] [:else] [=message.text.substring(0, 120), encode: 'none'] ... [/if] </p>
                     <p>
                     <a href="/admin/message/[= message.guid]">View</a>
             </p>
