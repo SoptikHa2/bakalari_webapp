@@ -6,7 +6,6 @@ import 'controller/admin/adminMessages.dart';
 import 'controller/admin/adminLog.dart';
 import 'controller/contact.dart';
 import 'controller/general.dart';
-import 'controller/lubos.dart';
 import 'controller/schoolList.dart';
 import 'controller/student/refreshStudentInfo.dart';
 import 'controller/shutdown.dart';
@@ -31,7 +30,6 @@ class Config {
     "get:/privacy_policy": privacyPolicyView,
     "get:/api": restApiView,
     "get:/logout": GeneralLogoutController.logoutUser,
-    "get:/lubos": GeneralLubosController.showLubosCites,
     "get:/tor": GeneralTorController.showTorLandingPage,
     "post:/student": StudentBaseController.login,
     "get:/student": StudentBaseController.getInfo,

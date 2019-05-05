@@ -5,7 +5,7 @@ import 'package:stream/stream.dart';
 import '../../config.dart';
 import '../../tools/db.dart';
 import '../../tools/securityTools.dart';
-import '../../view/admin/adminLogView.rsp.dart';
+import '../../view/admin/logView.rsp.dart';
 
 class AdminLogController {
   /// Show page with logs and visualisation
@@ -63,7 +63,7 @@ class AdminLogController {
     }
 
     // Logins per month: Map<String (date), int (number of visitors)>.
-    await adminLogView(connect, loginsPerDay: loginsPerDayTransformedData, accessesPerDay: accessesPerDayTransformedData);
+    await logView(connect, loginsPerDay: loginsPerDayTransformedData, accessesPerDay: accessesPerDayTransformedData);
   }
 
   static Future downloadRawLog(HttpConnect connect) async {

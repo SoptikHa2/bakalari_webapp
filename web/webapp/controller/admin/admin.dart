@@ -7,8 +7,8 @@ import 'package:stream/stream.dart';
 import '../../config.dart';
 import '../../tools/db.dart';
 import '../../tools/securityTools.dart';
-import '../../view/admin/adminLoginView.rsp.dart';
-import '../../view/admin/adminRootView.rsp.dart';
+import '../../view/admin/loginView.rsp.dart';
+import '../../view/admin/rootView.rsp.dart';
 
 class AdminBaseController {
   static Map<String, String> _errors = {
@@ -30,7 +30,7 @@ class AdminBaseController {
         errorMessage = _errors[connect.request.uri.queryParameters['error']];
     }
 
-    return adminLoginView(connect, error: errorMessage);
+    return loginView(connect, error: errorMessage);
   }
 
   /// User POSTed 2fa code. Verify it, and either rate-limit user, or
@@ -110,7 +110,7 @@ class AdminBaseController {
     var messages = (await DB.getAllMessages()).where((m) => !m.isClosed);
     int countOfNormalMessages = messages.where((m) => !m.isImportant).length;
     int countOfImprotantMessages = messages.length - countOfNormalMessages;
-    await adminRootView(connect,
+    await rootView(connect,
         numberOfNormalMessages: countOfNormalMessages,
         numberOfImprotantMessages: countOfImprotantMessages);
   }

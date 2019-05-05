@@ -2,7 +2,7 @@ import 'package:stream/stream.dart';
 
 import '../../model/complexStudent.dart';
 import '../../tools/securityTools.dart';
-import '../../view/student/studentTimetableView.rsp.dart';
+import '../../view/student/timetableView.rsp.dart';
 
 class StudentTimetableController {
   static Future displayTimetables(HttpConnect connect) async {
@@ -22,7 +22,7 @@ class StudentTimetableController {
     var nextWeekTimetable = student.nextWeekTimetable;
     var permanentTimetable = student.permTimetable;
 
-    return studentTimetableView(connect,
+    return timetableView(connect,
         nextWeekTimetable: nextWeekTimetable,
         permanentTimetable: permanentTimetable,
         timetable: timetable);
