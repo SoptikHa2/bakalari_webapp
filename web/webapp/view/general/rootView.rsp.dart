@@ -110,6 +110,11 @@ Future rootView(HttpConnect connect, {String errorDescription, String presetUrl,
       je komunikace s webovou službou podrobně popsána.
     </p>
     <p>
+      Samotný projekt je open source, zdrojový kód webové aplikace je k dispozici na githubu: <a
+        href="https://github.com/soptikha2/bakalari_webapp" target="_blank">soptikha2/bakalari_webapp</a>.
+        Projekt využívá knihovnu <a href="https://github.com/soptikha2/bakalari" target="_blank">soptikha2/bakalari</a>.
+    </p>
+    <p>
       V případě jakýchkoli žádostí, otázek, nebo návrhů, je možné mě kontaktovat <a href="/contact">zde</a>, nebo na <a
         href="https://github.com/soptikha2/bakalari" target="_blank">GitHubu</a>.
     </p>

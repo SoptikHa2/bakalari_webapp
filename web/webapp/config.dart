@@ -43,7 +43,6 @@ class Config {
     "post:/contact": GeneralContactController.postContactPage,
     "get:/admin": AdminBaseController.adminRootPage,
     "get:/admin/login": AdminBaseController.loginForm,
-    "get:/admin/logout": GeneralLogoutController.logoutAdmin,
     "get:/admin/log": AdminLogController.showLogPage,
     "post:/admin": AdminBaseController.verify2FA,
     "post:/admin/shutdown": AdminBaseController.shutdownWebsite,
