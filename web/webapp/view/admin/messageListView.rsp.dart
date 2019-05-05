@@ -31,7 +31,7 @@ Future messageListView(HttpConnect connect, {int countOfNew, int countOfImportan
 
   if (countOfNew != 0) {
 
-    response.write("""        <p>New messages: """);
+    response.write("""        <p>Messages: """);
 
     response.write(Rsp.nnx(countOfNew));
 
