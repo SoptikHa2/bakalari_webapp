@@ -224,7 +224,7 @@ String lastMailInfo, String urgentAbsence, String urgentHomeworks}) async {
                     <a href="/student/timetable">Rozvrh</a>
                 </li>
                 <li>
-                    Přehled zpráv
+                    <a href="/student/message">Přehled zpráv</a>
                     """);
 
   response.write(Rsp.nnx(lastMailInfo == null ? '' : '(poslední zpráva $lastMailInfo)'));
