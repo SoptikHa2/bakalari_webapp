@@ -1,0 +1,26 @@
+[:page name="messageListView" args="List<dynamic> messages, List<String> strippedMessagesContent, List<String> datetimesFormatted, String sendMessageLink"]
+        [:include "/webapp/view/templates/studentHead.html" /]
+        <div class="content">
+            <h1 class="content-subhead">Přijaté zprávy</h1>
+            <a href="[= sendMessageLink ]" target="_blank">Odeslat zprávu z oficiální aplikace</a>
+            [:dart]
+            var i = 0;
+            [/dart]
+            [:for message in messages]
+            <div class="listDiv">
+                <h2 class="content-subhead">[= message.senderName ]</a></h2>
+                <p style="float: right; margin-top: -2.6em;">
+                    [= datetimesFormatted[i]]
+                </p>
+                <article>
+                    <p>
+                        [= strippedMessagesContent[i++] ] 
+                    </p>
+                </article> 
+                    <p>
+                            <a href="/student/message/[= message.id ]"><button class="pure-button">Zobrazit</button></a>
+                    </p>
+            </div>
+            [/for]
+        </div>
+        [:include "/webapp/view/templates/tail.html" /]
