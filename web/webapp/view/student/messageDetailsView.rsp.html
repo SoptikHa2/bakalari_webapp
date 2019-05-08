@@ -1,0 +1,18 @@
+[:page name="messageDetailsView" args="dynamic message, String datetimeFormatted"]
+[:include "/webapp/view/templates/studentHead.html" /]
+<div class="content">
+    <h1 class="content-subhead">[= message.senderName]</h1>
+    <p style="float: right; margin-top: -2.6em;">
+        [= datetimeFormatted ]
+    </p>
+    <article>
+        <p>
+            [= message.content, encode: 'none' ]
+        </p>
+    </article>
+    <p>
+        <a href="/student/message"><button class="pure-button">Zpět</button></a>
+    </p>
+</div>
+</div>
+[:include "/webapp/view/templates/tail.html" /]
