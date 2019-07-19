@@ -14,9 +14,15 @@ Tato aplikace loguje přístupy IP adres, které jsou zahashovány. Toto se pou�
 
 ## Vlastní hostování
 
-Jestli chcete hostovat aplikaci na vlastním serveru, stačí stáhnout zdrojové kódy. Poté je nutné vygenerovat soubor, ve kterém budou uloženy důležité informace jako třeba hash administrátorského hesla.
+Jestli chcete hostovat aplikaci na vlastním serveru, stačí stáhnout zdrojové kódy.
 
-Nejdřív je ale nutné stáhnout pár balíčků, mělo by stačit spustit příkaz `pub get` v složce tohoto projektu.
+```
+$ git clone git@github.com:SoptikHa2/bakalari_webapp.git
+```
+
+Poté nainstaluje programovací jazyk [Dart](dartlang.org).
+
+Poté je nutné stáhnout knihovny potřebné pro běh serveru, mělo by stačit spustit příkaz `pub get` v složce tohoto projektu.
 
 Poté spusťte soubor `generate-secret-file.dart` a plňte instrukce, které budou posílány na `stderr`. `stdout` přesměrujte do cílové lokace souboru, což je relativně `web/webapp/secret.dart`.
 
@@ -24,7 +30,7 @@ Poté spusťte soubor `generate-secret-file.dart` a plňte instrukce, které bud
 $ dart generate-secret-file.dart > web/webapp/secret.dart
 ```
 
-Poté stačí spustit soubor `web/webapp/main.dart` a server se spustí na portu `8080`.
+Poté stačí spustit soubor `run.sh` a server se spustí na portu `8080`.
 
 ## Jak to funguje uvnitř
 
