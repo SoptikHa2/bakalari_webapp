@@ -18,7 +18,7 @@ Tato aplikace loguje přístupy IP adres, které jsou zahashovány. Toto se pou�
 
 Stačí stáhnout zdrojový kód, vygenerovat `secret.dart` který obsahuje věci jako hashe hesla administrátora, a spustit Docker. Je nutné mít nainstalované `base64`, `sha256sum` a `docker`.
 ```
-git clone git@github.com:SoptikHa2/bakalari_webapp.git && cd bakalari_webapp
+git clone https://github.com/SoptikHa2/bakalari_webapp.git && cd bakalari_webapp
 ./generate-secret-file.sh
 docker build -t soptikha2/bakalari_webapp .
 docker run -p 1234:8080 soptikha2/bakalari_webapp # Spusti aplikaci na portu 1234
@@ -34,7 +34,7 @@ curl "http://localhost:1234"$(egrep '/admin/update/[^"]*' web/webapp/secret.dart
 Jestli nechcete instalovat docker, jde to i bez toho. Stáhněte zdrojový kód:
 
 ```
-$ git clone git@github.com:SoptikHa2/bakalari_webapp.git
+$ git clone https://github.com/SoptikHa2/bakalari_webapp.git && cd bakalari_webapp
 ```
 
 Poté nainstaluje programovací jazyk [Dart](dartlang.org).
