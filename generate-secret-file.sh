@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # REQUIRES sha256sum
 if ! [ -x $(command -v sha256sum) ]; then
