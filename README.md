@@ -24,6 +24,11 @@ docker build -t soptikha2/bakalari_webapp .
 docker run -p 1234:8080 soptikha2/bakalari_webapp # Spusti aplikaci na portu 1234
 ```
 
+Aby fungovalo našeptávání je nutné nejdříve načíst seznam škol. Stačí poslat GET request (nebo navštívit stránku v prohlížeči, ale bude to chvíli trvat) na adresu, kterou lze vyčíst v souboru `secret.dart` nebo získat pomocí nástroje grep.
+```
+curl "http://localhost:1234"$(egrep '/admin/update/[^"]*' web/webapp/secret.dart -o) # V pripade portu 1234
+```
+
 ### Manuální instalace
 
 Jestli nechcete instalovat docker, jde to i bez toho. Stáhněte zdrojový kód:
@@ -42,6 +47,11 @@ $ ./generate-secret-file.sh
 ```
 
 Poté stačí spustit soubor `run.sh` a server se spustí na portu `8080`.
+
+Aby fungovalo našeptávání je nutné nejdříve načíst seznam škol. Stačí poslat GET request (nebo navštívit stránku v prohlížeči, ale bude to chvíli trvat) na adresu, kterou lze vyčíst v souboru `secret.dart` nebo získat pomocí nástroje grep.
+```
+curl "http://localhost:8080"$(egrep '/admin/update/[^"]*' web/webapp/secret.dart -o)
+```
 
 ## Jak to funguje uvnitř
 
