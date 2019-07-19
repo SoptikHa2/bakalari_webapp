@@ -32,7 +32,7 @@ read -s password
 admin_hash=$(echo "$(echo "$password$username$admin_hash_salt" | sha256sum)" | base64)
 
 rm web/webapp/secret.dart -f
-mkdir -p web/webappret
+mkdir -p web/webapp
 touch secret.dart
 
 # I'm sorry for this part
